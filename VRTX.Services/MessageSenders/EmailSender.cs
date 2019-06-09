@@ -9,7 +9,7 @@ namespace VRTX.Services.MessageSenders
     public class EmailSender : IEmailSender
     {
         private const string SenderName = "VERTEX DESIGH LTD";
-        private const string SenderEmail = "noreply@vertexdesign.com";
+        private const string SenderEmail = "noreply@vertexdesign.bg";
         private readonly string _sendGridApiKey;
 
         public EmailSender(IConfiguration configuration)
