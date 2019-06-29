@@ -203,12 +203,20 @@ The smaller modifier range has a bigger priority.
 ### MessageRecipient
 
 - Message (Message) [key]
+
 - Recipient (User) [key]
+
 - ReadOn (DateTime)
 
+  
+
+[VXP Project Repository](https://github.com/TsvetanRaykov/SoftUniAspDotNetCoreMvc "Github repository of the project")
+
+[VXP Database Model](https://github.com/TsvetanRaykov/SoftUniAspDotNetCoreMvc/blob/master/VxpDatabase.png?raw=true "Database diagram 4589x3089")
 
 
-[VXP Database Diagram](https://drive.google.com/file/d/1QI3JmO1xsP_0wIktFimKgReohj-A0jiw/view?usp=sharing "Raykov's google drive")
 
 
+
+![VXP Database Model](https://github.com/TsvetanRaykov/SoftUniAspDotNetCoreMvc/blob/master/VxpDatabase.png?raw=true)
 
