@@ -10,7 +10,7 @@ A web platform to manage relationships between Vendor (brand), its partners (dis
 
 The platform will support the following roles: **Administrator**, **Vendor**, **Distributor** and **Customer**.
 
-A administrator will be initially created.
+An administrator will be initially created.
 Administrator can register users in all roles.
 Vendor can only register distributors. 
 Distributor can only generate distributor keys and provide them to its customers.
