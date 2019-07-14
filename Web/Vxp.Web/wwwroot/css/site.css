@@ -16,3 +16,11 @@
 #privacy-section p{
     text-align: justify;
 }
+
+#button-login {
+    margin-top: -6px;
+}
+
+.w-33 {
+    width: 33% !important;
+}

@@ -1,10 +1,7 @@
-﻿namespace Vxp.Web.Areas.Identity.Pages.Account
-{
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Threading.Tasks;
+﻿using Vxp.Common;
 
+namespace Vxp.Web.Areas.Identity.Pages.Account
+{
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -12,6 +9,10 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.Extensions.Logging;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Threading.Tasks;
     using Vxp.Data.Models;
 
     [AllowAnonymous]
@@ -19,15 +20,15 @@
     public class LoginModel : PageModel
 #pragma warning restore SA1649 // File name should match first type name
     {
-        private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly ILogger<LoginModel> logger;
-        private readonly IEmailSender emailSender;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ILogger<LoginModel> _logger;
+        private readonly IEmailSender _emailSender;
 
         public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, IEmailSender emailSender)
         {
-            this.signInManager = signInManager;
-            this.logger = logger;
-            this.emailSender = emailSender;
+            this._signInManager = signInManager;
+            this._logger = logger;
+            this._emailSender = emailSender;
         }
 
         [BindProperty]
@@ -52,7 +53,7 @@
             // Clear the existing external cookie to ensure a clean login process
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             this.ReturnUrl = returnUrl;
         }
@@ -65,10 +66,17 @@
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await this.signInManager.PasswordSignInAsync(this.Input.Email, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: true);
+                var result = await this._signInManager.PasswordSignInAsync(this.Input.Email, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    this.logger.LogInformation("User logged in.");
+                    this._logger.LogInformation("User logged in.");
+
+                    if (this.User.IsInRole(GlobalConstants.Roles.AdministratorRoleName))
+                    {
+                        return this.RedirectToAction("Index","Dashboard");
+                    }
+
+
                     return this.LocalRedirect(returnUrl);
                 }
 
@@ -79,7 +87,7 @@
 
                 if (result.IsLockedOut)
                 {
-                    this.logger.LogWarning("User account locked out.");
+                    this._logger.LogWarning("User account locked out.");
                     return this.RedirectToPage("./Lockout");
                 }
                 else
