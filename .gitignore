@@ -347,5 +347,6 @@ MigrationBackup/
 
 # Custom ignores
 appsettings.Production.json
-*.min.css
-*.min.js
+#*.min.css
+#*.min.js
+/Web/Vxp.Web/New Text Document.txt

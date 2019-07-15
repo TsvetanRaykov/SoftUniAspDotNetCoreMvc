@@ -13,7 +13,7 @@
     margin-top: 30pt;
 }
 
-#privacy-section p{
+#privacy-section p {
     text-align: justify;
 }
 
@@ -23,4 +23,20 @@
 
 .w-33 {
     width: 33% !important;
+}
+
+#cookieConsentWrapper {
+    margin-top: 100pt;
+}
+#cookieConsentWrapper > div {
+    z-index: 1000;
+    width: 90%;
+    margin: 0 auto;
+    -ms-opacity:0.6;
+    opacity:0.6;
+}
+
+.vxp-section {
+    padding: 7rem 0;
+    position: relative;
 }

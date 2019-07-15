@@ -7,6 +7,8 @@
 
     <environment names="Development">
 
+        <link rel="icon" href="@Url.Content("~/images/favicon.png")" />
+
         <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
 
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" asp-append-version="true" rel="stylesheet">
@@ -63,6 +65,7 @@
     </environment>
 </head>
 <body>
+    <partial name="_CookieConsentPartial" />
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target"
              id="ftco-navbar">
@@ -77,18 +80,18 @@
 
                 <div class="collapse navbar-collapse" id="ftco-nav">
 
-                    
+
                     <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
     </header>
-    <main>
-        <partial name="_CookieConsentPartial" />
+    <main id="main">
         @this.RenderBody()
     </main>
-
+    <partial name="_CookieConsentPartial" />
     <partial name="_FooterPartial" />
+
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>

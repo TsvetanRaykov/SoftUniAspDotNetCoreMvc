@@ -3,20 +3,249 @@
     this.ViewData["Title"] = "Admin dashboard";
 }
 
-@*<h1>@this.ViewData["Title"]</h1>
-Settings: @this.Model.SettingsCount*@
+@*<section class="vxp-section js-full-height bg-dark text-white-50">
+    <div class="container">
+        dash
+    </div>
+</section>*@
+<section class="vxp-section js-full-height ftco-no-pb ftco-services" id="practice-section">
+    <div class="container-fluid">
+        @*<div class="row justify-content-center pb-5">
+            <div class="col-md-10 heading-section text-center ftco-animate">
+                <span class="subheading">Practice Areas</span>
+                <h2 class="mb-4">Practice Areas</h2>
+                <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+            </div>
+        </div>*@
+        <div class="row no-gutters">
+            <div class="col-md-5 col-lg-2 ftco-animate py-4 nav-link-wrap">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link px-4 py-1 active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true"><span class="mr-3 flaticon-ideas"></span> Users</a>
+                    <a class="nav-link px-4 py-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false"><span class="mr-3 flaticon-flasks"></span> Settings</a>
+                    @*<a class="nav-link px-4 py-1 active" id="v-pills-1-tab" data-toggle="pill" href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true"><span class="mr-3 flaticon-ideas"></span> Family Law</a>
+
+        <a class="nav-link px-4 py-1" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2" role="tab" aria-controls="v-pills-2" aria-selected="false"><span class="mr-3 flaticon-flasks"></span> Business Law</a>
+
+        <a class="nav-link px-4 py-1" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab" aria-controls="v-pills-3" aria-selected="false"><span class="mr-3 flaticon-analysis"></span> Insurance Law</a>
+
+        <a class="nav-link px-4 py-1" id="v-pills-4-tab" data-toggle="pill" href="#v-pills-4" role="tab" aria-controls="v-pills-4" aria-selected="false"><span class="mr-3 flaticon-web-design"></span> Criminal Law</a>
 
 
-    <section class="hero-wrap js-full-height" style="background-image: url('@Url.Content("~/images/bg_2_.jpg")');" data-section="home">
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="row no-gutters slider-text js-full-height align-items-center justify-content-end"
-                 data-scrollax-parent="true">
+        <a class="nav-link px-4 py-1" id="v-pills-5-tab" data-toggle="pill" href="#v-pills-5" role="tab" aria-controls="v-pills-5" aria-selected="false"><span class="mr-3 flaticon-innovation"></span> Employment Law</a>
 
+        <a class="nav-link px-4 py-1" id="v-pills-6-tab" data-toggle="pill" href="#v-pills-6" role="tab" aria-controls="v-pills-6" aria-selected="false"><span class="mr-3 flaticon-idea"></span> Fire Accident</a>
 
-                
+        <a class="nav-link px-4 py-1" id="v-pills-7-tab" data-toggle="pill" href="#v-pills-7" role="tab" aria-controls="v-pills-7" aria-selected="false"><span class="mr-3 flaticon-idea"></span> Financial Law</a>
 
+        <a class="nav-link px-4 py-1" id="v-pills-8-tab" data-toggle="pill" href="#v-pills-8" role="tab" aria-controls="v-pills-8" aria-selected="false"><span class="mr-3 flaticon-idea"></span> Drug Offenses</a>
 
+        <a class="nav-link px-4 py-1" id="v-pills-9-tab" data-toggle="pill" href="#v-pills-9" role="tab" aria-controls="v-pills-9" aria-selected="false"><span class="mr-3 flaticon-idea"></span> Sexual Offenses</a>
+
+        <a class="nav-link px-4 py-1" id="v-pills-10-tab" data-toggle="pill" href="#v-pills-10" role="tab" aria-controls="v-pills-10" aria-selected="false"><span class="mr-3 flaticon-ux-design"></span> Property Law</a>*@
+                </div>
+            </div>
+            <div class="col-md-7 col-lg-10 ftco-animate p-4 p-md-5 d-flex align-items-center">
+
+                <div class="tab-content pl-lg-4" id="v-pills-tabContent">
+                    
+                    <div class="tab-pane fade py-0 py-lg-5 show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block icon-users"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Users</h2>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">First</th>
+                                            <th scope="col">Last</th>
+                                            <th scope="col">Handle</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">1</th>
+                                            <td>Mark</td>
+                                            <td>Otto</td>
+                                            <td>mdo</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">2</th>
+                                            <td>Jacob</td>
+                                            <td>Thornton</td>
+                                            <td>fat</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">3</th>
+                                            <td colspan="2">Larry the Bird</td>
+                                            <td>twitter</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane fade py-0 py-lg-5" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block icon-settings"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Business Law</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="tab-pane fade show active py-0 py-lg-5" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block flaticon-family"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Family Law</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>*@
+
+                    @*<div class="tab-pane fade py-0 py-lg-5" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-2-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block flaticon-auction"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Business Law</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>*@
+
+                    <div class="tab-pane fade py-0 py-lg-5" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-3-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block flaticon-shield"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Insurance Law</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade py-0 py-lg-5" id="v-pills-4" role="tabpanel" aria-labelledby="v-pills-4-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block flaticon-handcuffs"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Criminal Law</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade py-0 py-lg-5" id="v-pills-5" role="tabpanel" aria-labelledby="v-pills-5-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block flaticon-employee"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Employment Law</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade py-0 py-lg-5" id="v-pills-6" role="tabpanel" aria-labelledby="v-pills-6-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block flaticon-fire"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Fire Accident</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade py-0 py-lg-5" id="v-pills-7" role="tabpanel" aria-labelledby="v-pills-7-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block flaticon-money"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Financial Law</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade py-0 py-lg-5" id="v-pills-8" role="tabpanel" aria-labelledby="v-pills-8-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block flaticon-medicine"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Drug Offenses</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade py-0 py-lg-5" id="v-pills-9" role="tabpanel" aria-labelledby="v-pills-9-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block flaticon-handcuffs"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Sexual Offenses</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade py-0 py-lg-5" id="v-pills-10" role="tabpanel" aria-labelledby="v-pills-10-tab">
+                        <div class="d-lg-flex">
+                            <div class="icon-law mr-md-4 mr-lg-5">
+                                <span class="icon mb-3 d-block flaticon-house"></span>
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-4">Property Law</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt voluptate, quibusdam sunt iste dolores consequatur</p>
+                                <p>Inventore fugit error iure nisi reiciendis fugiat illo pariatur quam sequi quod iusto facilis officiis nobis sit quis molestias asperiores rem, blanditiis! Commodi exercitationem vitae deserunt qui nihil ea, tempore et quam natus quaerat doloremque.</p>
+                                <p><a href="#" class="btn btn-primary px-4 py-3">Learn More</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>

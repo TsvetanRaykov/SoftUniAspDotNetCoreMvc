@@ -31,5 +31,10 @@ namespace Vxp.Web.Controllers
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() => this.View();
+
+        public IActionResult Technology()
+        {
+            return this.View();
+        }
     }
 }
