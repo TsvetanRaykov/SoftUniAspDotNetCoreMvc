@@ -4,7 +4,7 @@
 
     using Vxp.Data.Common.Models;
 
-    public class MessageRecipient : BaseModel<int>
+    public class MessageRecipient : BaseDeletableModel<int>
     {
         public int MessageId { get; set; }
 

@@ -2,7 +2,7 @@
 {
     using Vxp.Data.Common.Models;
 
-    public class ProductImage : BaseModel<int>
+    public class ProductImage : BaseDeletableModel<int>
     {
         public string Url { get; set; }
 

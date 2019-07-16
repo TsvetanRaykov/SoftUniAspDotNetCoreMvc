@@ -5,7 +5,7 @@
     using Vxp.Data.Common.Enums;
     using Vxp.Data.Common.Models;
 
-    public class Document : BaseModel<int>
+    public class Document : BaseDeletableModel<int>
     {
 
         public DocumentType Type { get; set; }

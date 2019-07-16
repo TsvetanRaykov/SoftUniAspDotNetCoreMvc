@@ -2,7 +2,7 @@
 {
     using Vxp.Data.Common.Models;
 
-    public class ProductDetail : BaseModel<int>
+    public class ProductDetail : BaseDeletableModel<int>
     {
         public string Type { get; set; }
 

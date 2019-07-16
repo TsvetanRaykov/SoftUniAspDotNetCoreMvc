@@ -1,5 +1,8 @@
 ﻿// ReSharper disable VirtualMemberCallInConstructor
 // ReSharper disable ClassWithVirtualMembersNeverInherited.Global
+
+using System.ComponentModel.DataAnnotations;
+
 namespace Vxp.Data.Models
 {
     using System;
@@ -35,10 +38,12 @@ namespace Vxp.Data.Models
 
         public DateTime? DeletedOn { get; set; }
 
+        [Required]
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
+        [Required]
         public virtual Address ContactAddress { get; set; }
 
         public int? CompanyId { get; set; }

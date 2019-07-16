@@ -5,7 +5,7 @@ namespace Vxp.Data.Models
 
     using Vxp.Data.Common.Models;
 
-    public class ProductCategory : BaseModel<int>
+    public class ProductCategory : BaseDeletableModel<int>
     {
         public ProductCategory()
         {

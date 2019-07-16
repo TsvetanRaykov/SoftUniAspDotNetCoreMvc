@@ -7,7 +7,7 @@ namespace Vxp.Data.Models
     using Vxp.Data.Common.Enums;
     using Vxp.Data.Common.Models;
 
-    public class Order : BaseModel<int>
+    public class Order : BaseDeletableModel<int>
     {
         public Order()
         {

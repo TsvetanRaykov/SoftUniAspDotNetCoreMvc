@@ -10,14 +10,14 @@ using Vxp.Data;
 namespace Vxp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190707124345_AddVxpModels")]
-    partial class AddVxpModels
+    [Migration("20190716093715_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -113,23 +113,33 @@ namespace Vxp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AddressLocation");
+                    b.Property<string>("AddressLocation")
+                        .IsRequired();
 
-                    b.Property<string>("City");
+                    b.Property<string>("City")
+                        .IsRequired();
 
-                    b.Property<int?>("CountryId");
+                    b.Property<int>("CountryId");
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<string>("Email");
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("Phone");
+                    b.Property<string>("Phone")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
+
+                    b.HasIndex("IsDeleted");
 
                     b.ToTable("Addresses");
                 });
@@ -180,7 +190,7 @@ namespace Vxp.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<int?>("ContactAddressId");
+                    b.Property<int>("ContactAddressId");
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -191,7 +201,8 @@ namespace Vxp.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
                     b.Property<bool>("IsDeleted");
 
@@ -258,6 +269,10 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("OwnerId")
@@ -266,6 +281,8 @@ namespace Vxp.Data.Migrations
                     b.Property<string>("SwiftCode");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("OwnerId");
 
@@ -285,6 +302,10 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("Name")
@@ -295,6 +316,8 @@ namespace Vxp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ContactAddressId");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ShippingAddressId");
 
@@ -309,13 +332,21 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<string>("Language");
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("Language")
+                        .IsRequired();
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.ToTable("Countries");
                 });
@@ -330,6 +361,10 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<Guid>("KeyCode");
 
                     b.Property<DateTime?>("ModifiedOn");
@@ -337,6 +372,8 @@ namespace Vxp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BankAccountId");
+
+                    b.HasIndex("IsDeleted");
 
                     b.ToTable("DistributorKeys");
                 });
@@ -362,9 +399,13 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
                     b.Property<string>("Description");
 
                     b.Property<DateTime>("DocumentDate");
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<string>("Location")
                         .IsRequired();
@@ -376,6 +417,8 @@ namespace Vxp.Data.Migrations
                     b.Property<int>("Type");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProjectId");
 
@@ -395,6 +438,10 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<int>("TopicId");
@@ -402,6 +449,8 @@ namespace Vxp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("TopicId")
                         .IsUnique();
@@ -417,7 +466,11 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
                     b.Property<int>("Id");
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -426,6 +479,8 @@ namespace Vxp.Data.Migrations
                     b.HasKey("MessageId", "RecipientId");
 
                     b.HasAlternateKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("RecipientId");
 
@@ -444,6 +499,10 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("Deadline");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("Note");
@@ -457,6 +516,8 @@ namespace Vxp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BuyerId");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProjectId");
 
@@ -473,6 +534,10 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<int>("NewStatus");
@@ -482,6 +547,8 @@ namespace Vxp.Data.Migrations
                     b.Property<int?>("OrderId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("OrderId");
 
@@ -496,6 +563,10 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<int>("OrderId");
@@ -505,6 +576,8 @@ namespace Vxp.Data.Migrations
                     b.Property<int>("Quantity");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("OrderId");
 
@@ -524,7 +597,11 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
                     b.Property<string>("Description");
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -544,6 +621,8 @@ namespace Vxp.Data.Migrations
 
                     b.HasIndex("BuyerId");
 
+                    b.HasIndex("IsDeleted");
+
                     b.HasIndex("SellerId");
 
                     b.ToTable("PriceModifiers");
@@ -559,9 +638,13 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
                     b.Property<string>("Description");
 
                     b.Property<bool>("IsAvailable");
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -572,6 +655,8 @@ namespace Vxp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProductImageId")
                         .IsUnique();
@@ -587,11 +672,17 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.ToTable("ProductCategories");
                 });
@@ -604,6 +695,10 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<string>("Name");
@@ -615,6 +710,8 @@ namespace Vxp.Data.Migrations
                     b.Property<string>("Value");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProductId");
 
@@ -631,6 +728,10 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<int>("ProductId");
@@ -640,6 +741,8 @@ namespace Vxp.Data.Migrations
                     b.Property<string>("Url");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProductId");
 
@@ -654,7 +757,11 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
                     b.Property<string>("Description");
+
+                    b.Property<bool>("IsDeleted");
 
                     b.Property<DateTime?>("ModifiedOn");
 
@@ -665,6 +772,8 @@ namespace Vxp.Data.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("OwnerId");
 
@@ -745,7 +854,8 @@ namespace Vxp.Data.Migrations
                 {
                     b.HasOne("Vxp.Data.Models.Country", "Country")
                         .WithMany()
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Vxp.Data.Models.ApplicationUser", b =>
@@ -757,7 +867,8 @@ namespace Vxp.Data.Migrations
 
                     b.HasOne("Vxp.Data.Models.Address", "ContactAddress")
                         .WithMany()
-                        .HasForeignKey("ContactAddressId");
+                        .HasForeignKey("ContactAddressId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Vxp.Data.Models.BankAccount", b =>

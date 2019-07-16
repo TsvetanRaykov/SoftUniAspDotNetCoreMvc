@@ -6,7 +6,7 @@ namespace Vxp.Data.Models
 
     using Vxp.Data.Common.Models;
 
-    public class Message : BaseModel<int>
+    public class Message : BaseDeletableModel<int>
     {
         public Message()
         {
@@ -17,7 +17,7 @@ namespace Vxp.Data.Models
 
         public virtual Message Topic { get; set; }
 
-        public ApplicationUser Author { get; set; }
+        public virtual ApplicationUser Author { get; set; }
 
         public virtual ICollection<MessageRecipient> Recipients { get; set; }
     }

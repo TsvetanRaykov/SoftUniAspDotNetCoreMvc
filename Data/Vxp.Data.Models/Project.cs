@@ -6,7 +6,7 @@ namespace Vxp.Data.Models
 
     using Vxp.Data.Common.Models;
 
-    public class Project : BaseModel<int>
+    public class Project : BaseDeletableModel<int>
     {
         public Project()
         {

@@ -3,7 +3,7 @@
     using Vxp.Data.Common.Enums;
     using Vxp.Data.Common.Models;
 
-    public class PriceModifier : BaseModel<int>
+    public class PriceModifier : BaseDeletableModel<int>
     {
         public ApplicationUser Seller { get; set; }
 

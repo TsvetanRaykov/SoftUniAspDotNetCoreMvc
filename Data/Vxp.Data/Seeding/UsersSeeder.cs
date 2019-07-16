@@ -2,11 +2,10 @@
 
 namespace Vxp.Data.Seeding
 {
-    using System;
-    using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
+    using System;
+    using System.Threading.Tasks;
     using Vxp.Common;
     using Vxp.Data.Models;
 
@@ -20,8 +19,18 @@ namespace Vxp.Data.Seeding
 
             var administrator = new ApplicationUser
             {
+                FirstName = "Tsvetan",
+                LastName = "Raykov",
                 Email = "tsvetan.raykov@gmail.com",
                 UserName = "tsvetan.raykov@gmail.com",
+                ContactAddress = new Address
+                {
+                    AddressLocation = "121 Fake Str.",
+                    Email = "tsvetan.raykov@gmail.com",
+                    City = "Lovech",
+                    Country = dbContext.Countries.Find(1),
+                    Phone = "0889999888"
+                }
             };
 
             var admins = await userManager.GetUsersInRoleAsync(GlobalConstants.Roles.AdministratorRoleName);

@@ -3,9 +3,9 @@
     using Vxp.Data.Common.Enums;
     using Vxp.Data.Common.Models;
 
-    public class OrderHistory : BaseModel<int>
+    public class OrderHistory : BaseDeletableModel<int>
     {
-        public Order Order { get; set; }
+        public virtual Order Order { get; set; }
 
         public OrderStatus OldStatus { get; set; }
 
