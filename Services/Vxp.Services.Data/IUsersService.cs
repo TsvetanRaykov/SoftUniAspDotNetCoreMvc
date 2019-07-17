@@ -7,8 +7,10 @@ namespace Vxp.Services.Data
     {
         Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>();
 
-        Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string role);
+        Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName);
 
         IEnumerable<KeyValuePair<string, string>> GetAllRoles();
+
+        Task<IEnumerable<string>> GetAllCountries();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 using System.Threading.Tasks;
 using Vxp.Common;
 
@@ -22,7 +23,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var roles = this._usersService.GetAllRoles().ToDictionary(x => x.Key, x => x.Value);
+            var roles = this._usersService.GetAllRoles().ToDictionary(x => x.Value, x => x.Key);
 
             var viewModel = new IndexViewModel
             {
@@ -40,14 +41,33 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> AddUser()
         {
-            var distributors = await this._usersService.GetAllInRoleAsync<AddUserDistributorViewModel>(GlobalConstants.Roles.PartnerRoleName);
+            var distributors = await this._usersService
+                .GetAllInRoleAsync<AddUserDistributorViewModel>(GlobalConstants.Roles.PartnerRoleName);
+
+            var vendors = await this._usersService
+                .GetAllInRoleAsync<AddUserDistributorViewModel>(GlobalConstants.Roles.VendorRoleName);
 
             var viewModel = new AddUserInputModel
             {
-                Roles = this._usersService.GetAllRoles().ToDictionary(x => x.Key, x => x.Value),
-                Distributors = distributors.ToDictionary(x => x.Id, x => x.DisplayName)
+                Roles = this._usersService.GetAllRoles()
+                    .Select(x => new SelectListItem(
+                        x.Key,
+                        x.Value,
+                        x.Key == GlobalConstants.Roles.AdministratorRoleName,
+                        false)).ToList(),
+
+                Distributors = distributors
+                    .Select(x => new SelectListItem(x.DisplayName, x.Id)).ToList(),
+
+                AvailableCountries = this._usersService.GetAllCountries().GetAwaiter().GetResult()
             };
 
+            if (vendors.Any())
+            {
+                viewModel.Roles.RemoveAll(r => r.Text == GlobalConstants.Roles.VendorRoleName);
+            }
+
+            viewModel.Distributors.Add(new SelectListItem("- Select Distributor -", string.Empty, true, true));
             return this.View(viewModel);
         }
 

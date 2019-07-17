@@ -1,4 +1,5 @@
-﻿@model Vxp.Web.Areas.Administration.ViewModels.Dashboard.IndexViewModel
+﻿@using Vxp.Web.Areas.Administration.ViewModels.Dashboard
+@model IndexViewModel
 @{
     this.ViewData["Title"] = "Admin dashboard";
     this.ViewData["sidebarMenu"] = "Users";
@@ -12,12 +13,11 @@
         <h2 class="mb-4 float-left">Users</h2>
         <a asp-area="Administration" asp-controller="Dashboard" asp-action="AddUser" class="btn btn-primary py-3 px-lg-5 text-nowrap float-right">Add New</a>
 
-        <table id="example" class="display hover cell-border" style="width: 100%">
+        <table id="example" class="table display hover cell-border" style="width: 100%">
             <thead>
                 <tr>
                     <th>Role</th>
                     <th>Name</th>
-                    <th>Company</th>
                     <th>Country</th>
                     <th>Address</th>
                     <th>Email</th>
@@ -32,7 +32,6 @@
                     <tr>
                         <td>@user.Role</td>
                         <td>@user.FirstName @user.LastName</td>
-                        <td>@user.CompanyName</td>
                         <td>@user.ContactAddressCountryName</td>
                         <td>@user.ContactAddressAddressLocation, @user.ContactAddressCity</td>
                         <td><a href="mailto:@user.Email" target="_top">@user.Email </a></td>
@@ -41,7 +40,7 @@
                         <td>
                             <form method="post">
                                 <input type="hidden" name="userId" value="@user.Id" />
-                                <button type="submit" class="btn btn-link">Details</button>
+                                <button type="submit" class="btn btn-primary">Details</button>
                             </form>
                         </td>
                     </tr>
@@ -51,7 +50,6 @@
                 <tr>
                     <th>Role</th>
                     <th>Name</th>
-                    <th>Company</th>
                     <th>Country</th>
                     <th>Address</th>
                     <th>Email</th>

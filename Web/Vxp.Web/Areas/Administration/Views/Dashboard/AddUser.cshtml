@@ -1,20 +1,9 @@
-﻿@using System.Collections.Specialized
-@using Vxp.Common
+﻿@using Vxp.Common
 @using Vxp.Web.Areas.Administration.ViewModels.Dashboard
 @model AddUserInputModel
 @{
     this.ViewData["Title"] = "Add User";
     this.ViewData["sidebarMenu"] = "Users";
-}
-
-@{
-    var roleItems = Model.Roles.Select(x => new SelectListItem
-    {
-        Text = x.Value,
-        Value = x.Key,
-        Selected = x.Value == GlobalConstants.Roles.AdministratorRoleName
-    }).ToList();
-
 }
 
 <div class="d-lg-flex">
@@ -26,10 +15,10 @@
         <hr class="h2" />
         <form method="post" asp-area="Administration" asp-controller="Dashboard" asp-action="AddUser" autocomplete="off">
             <div class="d-flex ">
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="w-50">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="w-33">
                     <div class="form-group">
-                        <select title="Role" class="form-control" asp-for="Role" asp-items="@roleItems" onchange="switchFormRoleMode(this)"></select>
+                        <select title="Role" class="form-control" asp-for="Role" asp-items="@Model.Roles" onchange="switchFormRoleMode(this)"></select>
                     </div>
                     <div class="form-group">
                         <input asp-for="@Model.FirstName" class="form-control" placeholder="First name" value="@Model.FirstName" />
@@ -47,25 +36,65 @@
                         <input asp-for="@Model.ConfirmPassword" class="form-control" placeholder="Confirm password" value="@Model.ConfirmPassword" />
                         <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
                     </div>
-                    <button type="submit" class="w-33 btn btn-primary py-3 text-nowrap">Register</button>
+                    <button type="submit" class="btn btn-primary py-3 px-5 text-nowrap">Register</button>
                 </div>
                 <div class="px-2"></div>
-                <div class="w-50">
+                <div class="w-33">
+                    @*<div class="form-group">
+                            <div class="form-control invisible"></div>
+                        </div>*@
                     <div class="form-group">
-                        <input asp-for="@Model.LastName" class="form-control" placeholder="Last name" value="@Model.LastName" />
-                        <span asp-validation-for="@Model.LastName" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input asp-for="@Model.ContactPhone" class="form-control" placeholder="Phone" />
+                        <input asp-for="@Model.ContactPhone" class="form-control" placeholder="Phone" value="@Model.ContactPhone" />
                         <span asp-validation-for="@Model.ContactPhone" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input asp-for="@Model.Country" class="form-control" placeholder="Country" />
+                        <input asp-for="@Model.LastName" class="form-control " placeholder="Last name" value="@Model.LastName" />
+                        <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="@Model.Country" class="form-control new-user-country" placeholder="Country" value="@Model.Country" />
                         <span asp-validation-for="@Model.Country" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input asp-for="@Model.City" class="form-control" placeholder="City" />
+                        <input asp-for="@Model.City" class="form-control" placeholder="City" value="@Model.City" />
                         <span asp-validation-for="@Model.City" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="@Model.Address" class="form-control" placeholder="Address" value="@Model.Address" />
+                        <span asp-validation-for="@Model.Address" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" id="panel-distributor" style="display: none;">
+                        <select title="Distributor" class="form-control" asp-for="Distributors" asp-items="@Model.Distributors"></select>
+                    </div>
+
+                </div>
+                <div class="px-2"></div>
+                <div class="w-33">
+                    <div id="panel-bank" style="display: none">
+                        <div class="form-group">
+                            <input asp-for="@Model.CompanyName" class="form-control" placeholder="Company Name" value="@Model.CompanyName" />
+                            <span asp-validation-for="@Model.CompanyName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="@Model.CompanyVatNumber" class="form-control" placeholder="Company Vat" value="@Model.CompanyVatNumber" />
+                            <span asp-validation-for="@Model.CompanyVatNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="@Model.AccountNumber" class="form-control" placeholder="Bank account" value="@Model.AccountNumber" />
+                            <span asp-validation-for="@Model.AccountNumber" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="@Model.BankName" class="form-control" placeholder="Bank name" value="@Model.BankName" />
+                            <span asp-validation-for="@Model.BankName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="@Model.BicCode" class="form-control" placeholder="BIC code" value="@Model.BicCode" />
+                            <span asp-validation-for="@Model.BicCode" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="@Model.SwiftCode" class="form-control" placeholder="SWIFT code" value="@Model.SwiftCode" />
+                            <span asp-validation-for="@Model.SwiftCode" class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,6 +104,7 @@
 
 @section Scripts
 {
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
 
         function switchFormRoleMode(e) {
@@ -82,19 +112,35 @@
             let selectedRole = e.options[e.selectedIndex].text;
 
             switch (selectedRole) {
+
             case '@GlobalConstants.Roles.AdministratorRoleName':
-                console.log("admin");
+                $("#panel-bank").hide();
+                $("#panel-distributor").hide();
                 break;
+
             case '@GlobalConstants.Roles.VendorRoleName':
-                console.log("vendor");
+                $("#panel-bank").show();
+                $("#panel-distributor").hide();
                 break;
+
             case '@GlobalConstants.Roles.PartnerRoleName':
-                console.log("distrib");
+                $("#panel-distributor").hide();
+                $("#panel-bank").show();
                 break;
+
             case '@GlobalConstants.Roles.CustomerRoleName':
-                console.log("customer");
+                $("#panel-bank").hide();
+                $("#panel-distributor").show();
                 break;
             }
         }
+
+    $(function () {
+        let availableCountries = @Html.Raw(Json.Serialize(Model.AvailableCountries));
+            $(".new-user-country").autocomplete({
+                source: availableCountries
+            });
+        });
+
     </script>
 }

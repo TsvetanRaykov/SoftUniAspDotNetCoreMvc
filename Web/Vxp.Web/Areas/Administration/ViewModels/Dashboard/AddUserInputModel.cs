@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Vxp.Web.Areas.Administration.ViewModels.Dashboard
 {
@@ -8,8 +9,9 @@ namespace Vxp.Web.Areas.Administration.ViewModels.Dashboard
     {
         public AddUserInputModel()
         {
-            this.Roles = new Dictionary<string, string>();
-            this.Distributors = new Dictionary<string, string>();
+            this.Roles = new List<SelectListItem>();
+            this.Distributors = new List<SelectListItem>();
+            this.AvailableCountries = new string[] { };
         }
 
         [Required]
@@ -67,10 +69,27 @@ namespace Vxp.Web.Areas.Administration.ViewModels.Dashboard
         public string Role { get; set; }
 
         [StringLength(100)]
-        public string DistributorId { get; set; }
+        public string CompanyName { get; set; }
 
-        public Dictionary<string, string> Roles { get; set; }
+        [StringLength(100)]
+        public string CompanyVatNumber { get; set; }
 
-        public Dictionary<string, string> Distributors { get; set; }
+        [StringLength(30)]
+        public string AccountNumber { get; set; }
+
+        [StringLength(30)]
+        public string BicCode { get; set; }
+
+        [StringLength(30)]
+        public string SwiftCode { get; set; }
+
+        [StringLength(100)]
+        public string BankName { get; set; }
+
+        public List<SelectListItem> Roles { get; set; }
+
+        public ICollection<SelectListItem> Distributors { get; set; }
+
+        public IEnumerable<string> AvailableCountries { get; set; }
     }
 }

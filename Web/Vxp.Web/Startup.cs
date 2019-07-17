@@ -43,7 +43,7 @@ namespace Vxp.Web
             // TODO: Add pooling when this bug is fixed: https://github.com/aspnet/EntityFrameworkCore/issues/9741
             services.AddDbContext<ApplicationDbContext>(
                 options => options.
-                   // UseLazyLoadingProxies().
+                    // UseLazyLoadingProxies().
                     UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services
@@ -130,7 +130,7 @@ namespace Vxp.Web
 
                 if (env.IsDevelopment())
                 {
-                   // dbContext.Database.EnsureDeleted();
+                    //dbContext.Database.EnsureDeleted();
                     dbContext.Database.Migrate();
                 }
 
