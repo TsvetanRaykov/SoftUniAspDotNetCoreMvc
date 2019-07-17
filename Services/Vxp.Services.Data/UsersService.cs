@@ -1,4 +1,6 @@
-﻿namespace Vxp.Services.Data
+﻿using System.Linq;
+
+namespace Vxp.Services.Data
 {
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -26,12 +28,16 @@
 
         public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
         {
-            return await this._usersRepository.AllAsNoTracking().To<TViewModel>().ToListAsync();
+            return await this._usersRepository.AllAsNoTracking()
+                .To<TViewModel>()
+                .ToListAsync();
         }
 
-        public Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string role)
+        public async Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string role)
         {
-            throw new System.NotImplementedException();
+            return await this._usersRepository.AllAsNoTracking().Where(u => u.Roles.Any(r => r.RoleId == role))
+                       .To<TViewModel>()
+                       .ToListAsync();
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetAllRoles()

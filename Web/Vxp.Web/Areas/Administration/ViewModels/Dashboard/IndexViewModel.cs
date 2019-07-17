@@ -6,6 +6,6 @@ namespace Vxp.Web.Areas.Administration.ViewModels.Dashboard
     {
         public int SettingsCount { get; set; }
 
-        public IEnumerable<UserViewModel> Users { get; set; }
+        public IEnumerable<ListUserViewModel> Users { get; set; }
     }
 }

@@ -1,0 +1,100 @@
+﻿@using System.Collections.Specialized
+@using Vxp.Common
+@using Vxp.Web.Areas.Administration.ViewModels.Dashboard
+@model AddUserInputModel
+@{
+    this.ViewData["Title"] = "Add User";
+    this.ViewData["sidebarMenu"] = "Users";
+}
+
+@{
+    var roleItems = Model.Roles.Select(x => new SelectListItem
+    {
+        Text = x.Value,
+        Value = x.Key,
+        Selected = x.Value == GlobalConstants.Roles.AdministratorRoleName
+    }).ToList();
+
+}
+
+<div class="d-lg-flex">
+    <div class="mr-md-4 mr-lg-5">
+        <span class="icon mb-3 d-block icon-user"></span>
+    </div>
+    <div class="d-flex flex-column w-100">
+        <h2>Add User</h2>
+        <hr class="h2" />
+        <form method="post" asp-area="Administration" asp-controller="Dashboard" asp-action="AddUser" autocomplete="off">
+            <div class="d-flex ">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="w-50">
+                    <div class="form-group">
+                        <select title="Role" class="form-control" asp-for="Role" asp-items="@roleItems" onchange="switchFormRoleMode(this)"></select>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="@Model.FirstName" class="form-control" placeholder="First name" value="@Model.FirstName" />
+                        <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="@Model.Email" class="form-control" placeholder="Email" value="@Model.Email" />
+                        <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="@Model.Password" class="form-control" placeholder="Password" value="@Model.Password" />
+                        <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="@Model.ConfirmPassword" class="form-control" placeholder="Confirm password" value="@Model.ConfirmPassword" />
+                        <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="w-33 btn btn-primary py-3 text-nowrap">Register</button>
+                </div>
+                <div class="px-2"></div>
+                <div class="w-50">
+                    <div class="form-group">
+                        <input asp-for="@Model.LastName" class="form-control" placeholder="Last name" value="@Model.LastName" />
+                        <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="@Model.ContactPhone" class="form-control" placeholder="Phone" />
+                        <span asp-validation-for="@Model.ContactPhone" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="@Model.Country" class="form-control" placeholder="Country" />
+                        <span asp-validation-for="@Model.Country" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input asp-for="@Model.City" class="form-control" placeholder="City" />
+                        <span asp-validation-for="@Model.City" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+
+        function switchFormRoleMode(e) {
+
+            let selectedRole = e.options[e.selectedIndex].text;
+
+            switch (selectedRole) {
+            case '@GlobalConstants.Roles.AdministratorRoleName':
+                console.log("admin");
+                break;
+            case '@GlobalConstants.Roles.VendorRoleName':
+                console.log("vendor");
+                break;
+            case '@GlobalConstants.Roles.PartnerRoleName':
+                console.log("distrib");
+                break;
+            case '@GlobalConstants.Roles.CustomerRoleName':
+                console.log("customer");
+                break;
+            }
+        }
+    </script>
+}

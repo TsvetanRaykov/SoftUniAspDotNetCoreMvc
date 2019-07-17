@@ -5,10 +5,6 @@
 @inject UserManager<ApplicationUser> UserManager
 
 
-@{
-    var user = await UserManager.FindByNameAsync(this.User.Identity.Name);
-}
-
 <ul class="navbar-nav nav flex-grow-1">
     <li class="nav-item">
         <a class="nav-link" href="#main"><span>Home</span></a>
@@ -33,6 +29,8 @@
 <ul class="navbar-nav">
     @if (this.SignInManager.IsSignedIn(this.User))
     {
+        var user = await UserManager.FindByNameAsync(this.User.Identity.Name);
+
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span>@($"{user.FirstName} {user.LastName}")</span></a>
         </li>

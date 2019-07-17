@@ -35,4 +35,8 @@
     <ProjectReference Include="..\Vxp.Web.Infrastructure\Vxp.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\Vxp.Web.ViewModels\Vxp.Web.ViewModels.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Administration\Views\Users\" />
+  </ItemGroup>
 </Project>

@@ -9,7 +9,7 @@ using Vxp.Services.Mapping;
 
 namespace Vxp.Web.Areas.Administration.ViewModels.Dashboard
 {
-    public class UserViewModel : IMapFrom<ApplicationUser>
+    public class ListUserViewModel : IMapFrom<ApplicationUser>
     {
         public string Id { get; set; }
         public bool IsDeleted { get; set; }
