@@ -5,9 +5,9 @@
 
     public class PriceModifier : BaseDeletableModel<int>
     {
-        public ApplicationUser Seller { get; set; }
+        public virtual ApplicationUser Seller { get; set; }
 
-        public ApplicationUser Buyer { get; set; }
+        public virtual ApplicationUser Buyer { get; set; }
 
         public PriceModifierRange PriceModifierRange { get; set; }
 

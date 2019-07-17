@@ -1,4 +1,7 @@
 ﻿// ReSharper disable VirtualMemberCallInConstructor
+
+using System.Collections.Generic;
+
 namespace Vxp.Data.Models
 {
     using System;

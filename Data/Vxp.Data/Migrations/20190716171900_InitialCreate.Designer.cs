@@ -10,7 +10,7 @@ using Vxp.Data;
 namespace Vxp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190716093715_InitialCreate")]
+    [Migration("20190716171900_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -185,12 +185,12 @@ namespace Vxp.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<int>("AddressId");
+
                     b.Property<int?>("CompanyId");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
-
-                    b.Property<int>("ContactAddressId");
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -235,9 +235,10 @@ namespace Vxp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("AddressId")
+                        .IsUnique();
 
-                    b.HasIndex("ContactAddressId");
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("IsDeleted");
 
@@ -860,14 +861,14 @@ namespace Vxp.Data.Migrations
 
             modelBuilder.Entity("Vxp.Data.Models.ApplicationUser", b =>
                 {
+                    b.HasOne("Vxp.Data.Models.Address", "ContactAddress")
+                        .WithOne("User")
+                        .HasForeignKey("Vxp.Data.Models.ApplicationUser", "AddressId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Vxp.Data.Models.Company", "Company")
                         .WithMany("Members")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Vxp.Data.Models.Address", "ContactAddress")
-                        .WithMany()
-                        .HasForeignKey("ContactAddressId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

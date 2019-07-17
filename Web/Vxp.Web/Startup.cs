@@ -1,4 +1,5 @@
 ﻿using Vxp.Common;
+using Vxp.Web.Areas.Administration.ViewModels.Dashboard;
 
 namespace Vxp.Web
 {
@@ -41,7 +42,9 @@ namespace Vxp.Web
             // Framework services
             // TODO: Add pooling when this bug is fixed: https://github.com/aspnet/EntityFrameworkCore/issues/9741
             services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+                options => options.
+                   // UseLazyLoadingProxies().
+                    UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
 
             services
                 .AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -100,7 +103,6 @@ namespace Vxp.Web
             // services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
-
             services.AddTransient<IEmailSender, SendGridEmailSender>(ctx =>
             {
                 var logger = ctx.GetService<ILoggerFactory>();
@@ -111,12 +113,15 @@ namespace Vxp.Web
                     GlobalConstants.Email.SystemEmailSendFromEmail,
                     GlobalConstants.Email.SystemEmailSendFromName);
             });
+
+            services.AddTransient<IUsersService, UsersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly,
+                typeof(IndexViewModel).GetTypeInfo().Assembly);
 
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
@@ -125,6 +130,7 @@ namespace Vxp.Web
 
                 if (env.IsDevelopment())
                 {
+                   // dbContext.Database.EnsureDeleted();
                     dbContext.Database.Migrate();
                 }
 

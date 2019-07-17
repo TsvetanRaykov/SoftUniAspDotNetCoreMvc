@@ -138,8 +138,9 @@
             ConfigureOrderProduct(builder);
 
             ConfigurePriceModifier(builder);
-        }
 
+        }
+        
         private static void ConfigureOrderProduct(ModelBuilder builder)
         {
             builder.Entity<OrderProduct>(entity =>
@@ -344,6 +345,8 @@
         {
             builder.Entity<ApplicationUser>(entity =>
             {
+                entity.HasOne(e => e.ContactAddress).WithOne(a => a.User);
+
                 entity.HasMany(e => e.Claims)
                     .WithOne()
                     .HasForeignKey(e => e.UserId)

@@ -28,15 +28,29 @@
 #cookieConsentWrapper {
     margin-top: 100pt;
 }
-#cookieConsentWrapper > div {
-    z-index: 1000;
-    width: 90%;
-    margin: 0 auto;
-    -ms-opacity:0.6;
-    opacity:0.6;
-}
+
+    #cookieConsentWrapper > div {
+        z-index: 1000;
+        width: 90%;
+        margin: 0 auto;
+        -ms-opacity: 0.6;
+        opacity: 0.6;
+    }
 
 .vxp-section {
     padding: 7rem 0;
     position: relative;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: inherit;
+    border: 1px solid #ddd;
+}
+
+.page-item.active .page-link {
+    background-color: #6E5773;
+    border-color: #6E5773;
+}
+
+.dataTables_wrapper .dataTables_length label {
 }
