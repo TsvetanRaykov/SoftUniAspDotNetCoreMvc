@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Vxp.Common.Attributes.Validation;
+using Vxp.Services.Mapping;
+using Vxp.Services.Models.Administration.Users;
 
-namespace Vxp.Web.Areas.Administration.ViewModels.Dashboard
+namespace Vxp.Web.ViewModels.Administration.Users
 {
-    public class AddUserInputModel
+    public class AddUserInputModel : IMapTo<CreateUserServiceModel>
     {
         public AddUserInputModel()
         {
-            this.Roles = new List<SelectListItem>();
-            this.Distributors = new List<SelectListItem>();
+            this.AvailableRoles = new List<SelectListItem>();
+            this.AvailableDistributors = new List<SelectListItem>();
             this.AvailableCountries = new string[] { };
         }
 
@@ -55,8 +58,8 @@ namespace Vxp.Web.Areas.Administration.ViewModels.Dashboard
         [StringLength(100)]
         public string Address { get; set; }
 
-        [Required]
         [DisplayName("Contact Email")]
+        [RequireVendorPartner(nameof(Role), ErrorMessage = "The Contact Email is required")]
         [EmailAddress]
         public string ContactEmail { get; set; }
 
@@ -64,32 +67,46 @@ namespace Vxp.Web.Areas.Administration.ViewModels.Dashboard
         [Phone]
         public string ContactPhone { get; set; }
 
-        [Required]
-        [StringLength(20, MinimumLength = 4)]
+        [Required(AllowEmptyStrings = false)]
+        [StringLength(36)]
         public string Role { get; set; }
 
+        [DisplayName("Company Name")]
+        [RequireVendorPartner(nameof(Role), ErrorMessage = "The Company Name is required")]
         [StringLength(100)]
         public string CompanyName { get; set; }
 
+        [DisplayName("VAT Number")]
+        [RequireVendorPartner(nameof(Role), ErrorMessage = "The VAT is required")]
         [StringLength(100)]
         public string CompanyVatNumber { get; set; }
 
+        [DisplayName("Bank Account Number")]
+        [RequireVendorPartner(nameof(Role), ErrorMessage = "The Bank Account is required")]
         [StringLength(30)]
         public string AccountNumber { get; set; }
 
+        [DisplayName("BIC Code")]
+        [RequireVendorPartner(nameof(Role), ErrorMessage = "The BIC code is required")]
         [StringLength(30)]
         public string BicCode { get; set; }
 
+        [DisplayName("SWIFT")]
         [StringLength(30)]
         public string SwiftCode { get; set; }
 
+        [DisplayName("Bank Name")]
+        [RequireVendorPartner(nameof(Role), ErrorMessage = "The Bank name is required")]
         [StringLength(100)]
         public string BankName { get; set; }
 
-        public List<SelectListItem> Roles { get; set; }
+        [StringLength(36)] // GUID
+        public string DistributorId { get; set; }
 
-        public ICollection<SelectListItem> Distributors { get; set; }
-
+        public List<SelectListItem> AvailableRoles { get; set; }
+        public ICollection<SelectListItem> AvailableDistributors { get; set; }
         public IEnumerable<string> AvailableCountries { get; set; }
+
+    
     }
 }

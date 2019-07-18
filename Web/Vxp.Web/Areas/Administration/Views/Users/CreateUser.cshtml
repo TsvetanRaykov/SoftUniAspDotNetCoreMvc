@@ -1,10 +1,14 @@
 ﻿@using Vxp.Common
-@using Vxp.Web.Areas.Administration.ViewModels.Dashboard
+@using Vxp.Web.ViewModels.Administration.Users
 @model AddUserInputModel
+
 @{
     this.ViewData["Title"] = "Add User";
     this.ViewData["sidebarMenu"] = "Users";
 }
+<style type="text/css">
+   
+</style>
 
 <div class="d-lg-flex">
     <div class="mr-md-4 mr-lg-5">
@@ -13,12 +17,13 @@
     <div class="d-flex flex-column w-100">
         <h2>Add User</h2>
         <hr class="h2" />
-        <form method="post" asp-area="Administration" asp-controller="Dashboard" asp-action="AddUser" autocomplete="off">
+        <form method="post" asp-area="Administration" asp-controller="Users" asp-action="Create">
             <div class="d-flex ">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="w-33">
                     <div class="form-group">
-                        <select title="Role" class="form-control" asp-for="Role" asp-items="@Model.Roles" onchange="switchFormRoleMode(this)"></select>
+                        <select title="Role" class="form-control" asp-for="Role" asp-items="@Model.AvailableRoles" onchange="switchFormRoleMode(this.options[this.selectedIndex].text)"></select>
+                        <span asp-validation-for="@Model.Role" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <input asp-for="@Model.FirstName" class="form-control" placeholder="First name" value="@Model.FirstName" />
@@ -63,14 +68,18 @@
                         <input asp-for="@Model.Address" class="form-control" placeholder="Address" value="@Model.Address" />
                         <span asp-validation-for="@Model.Address" class="text-danger"></span>
                     </div>
-                    <div class="form-group" id="panel-distributor" style="display: none;">
-                        <select title="Distributor" class="form-control" asp-for="Distributors" asp-items="@Model.Distributors"></select>
+                    <div class="form-group customer-specific" style="display: none;">
+                        <select title="Distributor" class="form-control" asp-for="DistributorId" asp-items="@Model.AvailableDistributors"></select>
+                        <span asp-validation-for="@Model.DistributorId" class="text-danger"></span>
                     </div>
-
+                    <div class="form-group distributor-specific" style="display: none;">
+                        <input asp-for="@Model.ContactEmail" class="form-control" placeholder="Contact Email" value="@Model.ContactEmail" />
+                        <span asp-validation-for="@Model.ContactEmail" class="text-danger"></span>
+                    </div>
                 </div>
                 <div class="px-2"></div>
                 <div class="w-33">
-                    <div id="panel-bank" style="display: none">
+                    <div class="distributor-specific" style="display: none">
                         <div class="form-group">
                             <input asp-for="@Model.CompanyName" class="form-control" placeholder="Company Name" value="@Model.CompanyName" />
                             <span asp-validation-for="@Model.CompanyName" class="text-danger"></span>
@@ -107,40 +116,41 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
 
-        function switchFormRoleMode(e) {
-
-            let selectedRole = e.options[e.selectedIndex].text;
+        function switchFormRoleMode(selectedRole) {
 
             switch (selectedRole) {
 
             case '@GlobalConstants.Roles.AdministratorRoleName':
-                $("#panel-bank").hide();
-                $("#panel-distributor").hide();
+                    $(".distributor-specific").hide();
+                    $(".customer-specific").hide();
                 break;
 
             case '@GlobalConstants.Roles.VendorRoleName':
-                $("#panel-bank").show();
-                $("#panel-distributor").hide();
+                    $(".distributor-specific").show();
+                    $(".customer-specific").hide();
                 break;
 
-            case '@GlobalConstants.Roles.PartnerRoleName':
-                $("#panel-distributor").hide();
-                $("#panel-bank").show();
+            case '@GlobalConstants.Roles.DistributorRoleName':
+                    $(".distributor-specific").show();
+                    $(".customer-specific").hide();
                 break;
 
             case '@GlobalConstants.Roles.CustomerRoleName':
-                $("#panel-bank").hide();
-                $("#panel-distributor").show();
+                    $(".distributor-specific").hide();
+                    $(".customer-specific").show();
                 break;
             }
         }
+
+        switchFormRoleMode("@Model.Role");
 
     $(function () {
         let availableCountries = @Html.Raw(Json.Serialize(Model.AvailableCountries));
             $(".new-user-country").autocomplete({
                 source: availableCountries
             });
-        });
+    });
+
 
     </script>
 }

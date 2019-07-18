@@ -10,7 +10,7 @@ using Vxp.Data;
 namespace Vxp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190716171900_InitialCreate")]
+    [Migration("20190718134224_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,5 +1,6 @@
 ﻿using Vxp.Common;
-using Vxp.Web.Areas.Administration.ViewModels.Dashboard;
+using Vxp.Services.Models.Administration.Users;
+using Vxp.Web.ViewModels.Administration.Dashboard;
 
 namespace Vxp.Web
 {
@@ -120,8 +121,10 @@ namespace Vxp.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly,
-                typeof(IndexViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(
+                typeof(ErrorViewModel).GetTypeInfo().Assembly,
+                typeof(IndexViewModel).GetTypeInfo().Assembly,
+                typeof(CreateUserServiceModel).GetTypeInfo().Assembly);
 
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
@@ -131,7 +134,7 @@ namespace Vxp.Web
                 if (env.IsDevelopment())
                 {
                     //dbContext.Database.EnsureDeleted();
-                    dbContext.Database.Migrate();
+                    //dbContext.Database.Migrate();
                 }
 
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();

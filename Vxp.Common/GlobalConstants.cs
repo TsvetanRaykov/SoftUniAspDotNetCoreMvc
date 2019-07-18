@@ -6,7 +6,7 @@
         {
             public const string AdministratorRoleName = "Administrator";
             public const string VendorRoleName = "Vendor";
-            public const string PartnerRoleName = "Partner";
+            public const string DistributorRoleName = "Distributor";
             public const string CustomerRoleName = "Customer";
         }
 

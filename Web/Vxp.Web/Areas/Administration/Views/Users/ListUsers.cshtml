@@ -1,0 +1,78 @@
+﻿@using Vxp.Web.ViewModels.Administration.Users
+@model IEnumerable<ListUserViewModel>
+
+@{
+    this.ViewData["Title"] = "List Users";
+    this.ViewData["sidebarMenu"] = "Users";
+}
+
+<div class="d-lg-flex">
+    <div class="mr-md-4 mr-lg-5">
+        <span class="icon mb-3 d-block icon-users"></span>
+    </div>
+    <div class="text">
+        <h2 class="mb-4 float-left">Users</h2>
+        <a asp-area="Administration" asp-controller="Users" asp-action="Create" class="btn btn-primary py-3 px-lg-5 text-nowrap float-right">Add New</a>
+
+        <table id="example" class="table display hover cell-border" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Deleted</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Role</td>
+                        <td>@user.FirstName @user.LastName</td>
+                        <td>@user.ContactAddressCountryName</td>
+                        <td>@user.ContactAddressAddressLocation, @user.ContactAddressCity</td>
+                        <td><a href="mailto:@user.Email" target="_top">@user.Email </a></td>
+                        <td>@user.ContactAddressPhone</td>
+                        <td>@(user.IsDeleted ? "yes" : "no")</td>
+                        <td>
+                            <form method="post">
+                                <input type="hidden" name="userId" value="@user.Id" />
+                                <button type="submit" class="btn btn-primary">Details</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Role</th>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Deleted</th>
+                    <th>Details</th>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/lib/DataTables/datatables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "lengthChange": false
+            });
+        });
+    </script>
+
+}

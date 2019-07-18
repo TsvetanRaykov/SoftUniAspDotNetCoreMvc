@@ -2,12 +2,16 @@
     width: 100%;
 }
 
+/* Used in javascript only */
 .js-full-height {
 }
 
-.ftco-navbar-light.scrolled img {
-    /*width: 150px;*/
+.distributor-specific {
 }
+
+.customer-specific {
+}
+/* * */
 
 .row-technology {
     margin-top: 30pt;
@@ -50,9 +54,6 @@
 .page-item.active .page-link {
     background-color: #6E5773;
     border-color: #6E5773;
-}
-
-.dataTables_wrapper .dataTables_length label {
 }
 
 .ftco-services .tab-content .tab-pane .icon {

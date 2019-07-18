@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 
-namespace Vxp.Web.Areas.Administration.ViewModels.Dashboard
+namespace Vxp.Web.ViewModels.Administration.Users
 {
     public class ListUserViewModel : IMapFrom<ApplicationUser>
     {

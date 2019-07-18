@@ -1,7 +1,7 @@
 ﻿using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 
-namespace Vxp.Web.Areas.Administration.ViewModels.Dashboard
+namespace Vxp.Web.ViewModels.Administration.Users
 {
     public class AddUserDistributorViewModel : IMapFrom<ApplicationUser>
     {

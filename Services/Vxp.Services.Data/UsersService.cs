@@ -1,5 +1,8 @@
-﻿namespace Vxp.Services.Data
+﻿using Vxp.Services.Models.Administration.Users;
+
+namespace Vxp.Services.Data
 {
+    using Microsoft.AspNetCore.Identity;
     using System.Linq;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -11,21 +14,20 @@
     public class UsersService : IUsersService
     {
         private readonly IDeletableEntityRepository<ApplicationUser> _usersRepository;
-        private readonly IDeletableEntityRepository<ApplicationRole> _rolesRepository;
         private readonly IDeletableEntityRepository<Country> _countriesRepository;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        private Dictionary<string, string> _roles;
-
-        private Dictionary<string, string> Roles =>
-            this._roles ?? (this._roles = this._rolesRepository.AllAsNoTrackingWithDeleted()
-                                                        .ToDictionaryAsync(key => key.Name, v => v.Id)
-                                                        .GetAwaiter().GetResult());
-
-        public UsersService(IDeletableEntityRepository<ApplicationUser> usersRepository, IDeletableEntityRepository<ApplicationRole> rolesRepository, IDeletableEntityRepository<Country> countriesRepository)
+        public UsersService(
+            IDeletableEntityRepository<ApplicationUser> usersRepository,
+            IDeletableEntityRepository<Country> countriesRepository,
+            RoleManager<ApplicationRole> roleManager,
+            UserManager<ApplicationUser> userManager)
         {
             this._usersRepository = usersRepository;
-            this._rolesRepository = rolesRepository;
             this._countriesRepository = countriesRepository;
+            this._roleManager = roleManager;
+            this._userManager = userManager;
         }
 
         public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
@@ -37,14 +39,11 @@
 
         public async Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName)
         {
-            return await this._usersRepository.AllAsNoTracking().Where(u => u.Roles.Any(r => r.RoleId == this.Roles[roleName]))
+            var role = await this._roleManager.FindByNameAsync(roleName);
+
+            return await this._usersRepository.AllAsNoTracking().Where(u => u.Roles.Any(r => r.RoleId == role.Id))
                 .To<TViewModel>()
                 .ToListAsync();
-        }
-
-        public IEnumerable<KeyValuePair<string, string>> GetAllRoles()
-        {
-            return this.Roles;
         }
 
         public async Task<IEnumerable<string>> GetAllCountries()
@@ -54,6 +53,55 @@
                 .Select(x => x.Name)
                 .OrderBy(x => x)
                 .ToListAsync();
+        }
+
+        public Task<string> CreateUser(CreateUserServiceModel userModel)
+        {
+
+            throw new System.NotImplementedException();
+        }
+
+        public async Task<string> CreateUser<TViewModel>(TViewModel userModel)
+        {
+
+            var inputUsers = new HashSet<TViewModel> { userModel };
+            var serviceUsers = inputUsers.AsQueryable().To<CreateUserServiceModel>();
+            var applicationUsers = serviceUsers.To<ApplicationUser>();
+
+            var serviceUser = serviceUsers.First();
+            var applicationUser = applicationUsers.First();
+
+            if (applicationUser.ContactAddress != null)
+            {
+                var countryCandidate = this._countriesRepository
+                    .AllAsNoTrackingWithDeleted()
+                    .FirstOrDefault(c => c.Name == serviceUser.Country);
+
+                if (countryCandidate == null) // seed
+                {
+                    countryCandidate = new Country
+                    {
+                        Name = serviceUser.Country,
+                        Language = serviceUser.Country
+                    };
+
+                    await this._countriesRepository.AddAsync(countryCandidate);
+                }
+
+                applicationUser.ContactAddress.CountryId = countryCandidate.Id;
+            }
+
+
+            var user = await this._userManager.CreateAsync(applicationUser, serviceUser.Password);
+
+            if (user.Succeeded)
+            {
+                await this._userManager.AddToRoleAsync(applicationUser, serviceUser.Role);
+
+                return applicationUser.Id;
+            }
+
+            return null;
         }
     }
 }
