@@ -1,34 +1,37 @@
-﻿using Vxp.Services.Models.Administration.Users;
-
-namespace Vxp.Services.Data
+﻿namespace Vxp.Services.Data.Users
 {
     using Microsoft.AspNetCore.Identity;
-    using System.Linq;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Vxp.Data.Common.Repositories;
     using Vxp.Data.Models;
     using Mapping;
+    using Vxp.Services.Models.Administration.Users;
 
     public class UsersService : IUsersService
     {
-        private readonly IDeletableEntityRepository<ApplicationUser> _usersRepository;
-        private readonly IDeletableEntityRepository<Country> _countriesRepository;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IDeletableEntityRepository<ApplicationUser> _usersRepository;
+        private readonly IDeletableEntityRepository<Country> _countriesRepository;
+        private readonly IDistributorsService _distributorsService;
 
         public UsersService(
+            RoleManager<ApplicationRole> roleManager,
+            UserManager<ApplicationUser> userManager,
             IDeletableEntityRepository<ApplicationUser> usersRepository,
             IDeletableEntityRepository<Country> countriesRepository,
-            RoleManager<ApplicationRole> roleManager,
-            UserManager<ApplicationUser> userManager)
+            IDistributorsService distributorsService)
         {
-            this._usersRepository = usersRepository;
-            this._countriesRepository = countriesRepository;
             this._roleManager = roleManager;
             this._userManager = userManager;
+            this._usersRepository = usersRepository;
+            this._countriesRepository = countriesRepository;
+            this._distributorsService = distributorsService;
         }
+
 
         public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
         {
@@ -55,12 +58,6 @@ namespace Vxp.Services.Data
                 .ToListAsync();
         }
 
-        public Task<string> CreateUser(CreateUserServiceModel userModel)
-        {
-
-            throw new System.NotImplementedException();
-        }
-
         public async Task<string> CreateUser<TViewModel>(TViewModel userModel)
         {
 
@@ -73,30 +70,51 @@ namespace Vxp.Services.Data
 
             if (applicationUser.ContactAddress != null)
             {
-                var countryCandidate = this._countriesRepository
+                var countryFromDb = this._countriesRepository
                     .AllAsNoTrackingWithDeleted()
                     .FirstOrDefault(c => c.Name == serviceUser.Country);
 
-                if (countryCandidate == null) // seed
+                if (countryFromDb == null) // seed
                 {
-                    countryCandidate = new Country
+                    countryFromDb = new Country
                     {
                         Name = serviceUser.Country,
                         Language = serviceUser.Country
                     };
 
-                    await this._countriesRepository.AddAsync(countryCandidate);
+                    await this._countriesRepository.AddAsync(countryFromDb);
                 }
 
-                applicationUser.ContactAddress.CountryId = countryCandidate.Id;
+                applicationUser.ContactAddress.CountryId = countryFromDb.Id;
             }
 
+            string newDistributorKey = null;
+
+            if (!string.IsNullOrWhiteSpace(serviceUser.DistributorId))
+            {
+                var distributor = await this._userManager.FindByIdAsync(serviceUser.DistributorId);
+                if (distributor == null)
+                {
+                    return null;
+                }
+
+                newDistributorKey = await this._distributorsService.GenerateNewDistributorKeyAsync(distributor.UserName);
+            }
 
             var user = await this._userManager.CreateAsync(applicationUser, serviceUser.Password);
 
             if (user.Succeeded)
             {
                 await this._userManager.AddToRoleAsync(applicationUser, serviceUser.Role);
+
+                if (!string.IsNullOrWhiteSpace(newDistributorKey))
+                {
+                    if (!await this._distributorsService.AddCustomerToDistributor(applicationUser.UserName, newDistributorKey))
+                    {
+                        await this._userManager.DeleteAsync(applicationUser);
+                        return null;
+                    }
+                }
 
                 return applicationUser.Id;
             }

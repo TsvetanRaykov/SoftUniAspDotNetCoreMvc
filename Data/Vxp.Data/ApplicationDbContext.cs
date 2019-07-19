@@ -140,7 +140,7 @@
             ConfigurePriceModifier(builder);
 
         }
-        
+
         private static void ConfigureOrderProduct(ModelBuilder builder)
         {
             builder.Entity<OrderProduct>(entity =>
@@ -367,6 +367,7 @@
 
                 entity.HasMany(e => e.BankAccounts)
                     .WithOne(a => a.Owner)
+                    .HasForeignKey(a => a.OwnerId)
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
 

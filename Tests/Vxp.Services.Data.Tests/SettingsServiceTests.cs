@@ -1,4 +1,6 @@
-﻿namespace Vxp.Services.Data.Tests
+﻿using Vxp.Services.Data.Settings;
+
+namespace Vxp.Services.Data.Tests
 {
     using System.Collections.Generic;
     using System.Linq;

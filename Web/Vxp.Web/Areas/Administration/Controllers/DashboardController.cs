@@ -1,4 +1,6 @@
-﻿namespace Vxp.Web.Areas.Administration.Controllers
+﻿using Vxp.Services.Data.Settings;
+
+namespace Vxp.Web.Areas.Administration.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Vxp.Services.Data;

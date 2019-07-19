@@ -1,4 +1,6 @@
-﻿namespace Sandbox
+﻿using Vxp.Services.Data.Settings;
+
+namespace Sandbox
 {
     using System;
     using System.Diagnostics;

@@ -1,10 +1,9 @@
-﻿namespace Vxp.Services.Data
+﻿using System.Linq;
+using Vxp.Data.Common.Repositories;
+using Vxp.Data.Models;
+
+namespace Vxp.Services.Data.Settings
 {
-    using System.Linq;
-
-    using Vxp.Data.Common.Repositories;
-    using Vxp.Data.Models;
-
     public class SettingsService : ISettingsService
     {
         private readonly IDeletableEntityRepository<Setting> settingsRepository;

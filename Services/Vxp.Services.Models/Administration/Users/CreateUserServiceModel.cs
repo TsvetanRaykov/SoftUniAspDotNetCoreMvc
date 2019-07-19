@@ -46,17 +46,13 @@ namespace Vxp.Services.Models.Administration.Users
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<CreateUserServiceModel, ApplicationUser>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(model => model.Email))
-
-                .ForMember(dest => dest.Company, opt => opt.Condition(src => src.CompanyName != null))
-                .ForMember(dest => dest.Company, opt => opt.MapFrom(src => new Company
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.CompanyName != null ? new Company
                 {
                     Name = src.CompanyName,
                     BusinessNumber = src.CompanyVatNumber
-                }))
-
-                .ForMember(dest => dest.BankAccounts, opt => opt.Condition(src => src.AccountNumber != null))
-                .ForMember(dest => dest.BankAccounts, opt => opt.MapFrom(src => new[]
+                } : null))
+                .ForMember(dest => dest.BankAccounts, opt => opt.MapFrom(src => src.AccountNumber != null ? new[]
                 {
                     new BankAccount {
                     AccountNumber = src.AccountNumber,
@@ -64,16 +60,14 @@ namespace Vxp.Services.Models.Administration.Users
                     BicCode = src.BicCode,
                     SwiftCode = src.SwiftCode,
                     }
-                }))
-
-                .ForMember(dest => dest.ContactAddress, opt => opt.Condition(src => src.Address != null))
-                .ForMember(dest => dest.ContactAddress, opt => opt.MapFrom(src => new Address
+                } : null))
+                .ForMember(dest => dest.ContactAddress, opt => opt.MapFrom(src => src.Address != null ? new Address
                 {
                     AddressLocation = src.Address,
                     City = src.City,
                     Phone = src.ContactPhone,
-                    Email = src.ContactEmail
-                }));
+                    Email = src.ContactEmail ?? src.Email
+                } : null));
 
         }
     }

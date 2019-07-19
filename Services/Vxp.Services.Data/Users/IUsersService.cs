@@ -1,8 +1,7 @@
-﻿namespace Vxp.Services.Data
+﻿namespace Vxp.Services.Data.Users
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Vxp.Services.Models.Administration.Users;
 
     public interface IUsersService
     {

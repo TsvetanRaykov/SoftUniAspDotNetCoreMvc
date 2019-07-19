@@ -27,6 +27,8 @@ namespace Vxp.Data.Models
         public virtual ICollection<DistributorKey> DistributorKeys { get; set; }
 
         [Required]
+        public string OwnerId { get; set; }
+
         public virtual ApplicationUser Owner { get; set; }
     }
 }

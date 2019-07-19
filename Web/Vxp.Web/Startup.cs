@@ -1,40 +1,39 @@
-﻿using Vxp.Common;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Vxp.Common;
+using Vxp.Data;
+using Vxp.Data.Common;
+using Vxp.Data.Common.Repositories;
+using Vxp.Data.Models;
+using Vxp.Data.Repositories;
+using Vxp.Data.Seeding;
+using Vxp.Services.Data.Settings;
+using Vxp.Services.Data.Users;
+using Vxp.Services.Mapping;
+using Vxp.Services.Messaging;
 using Vxp.Services.Models.Administration.Users;
+using Vxp.Web.ViewModels;
 using Vxp.Web.ViewModels.Administration.Dashboard;
 
 namespace Vxp.Web
 {
-    using System.Reflection;
-
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.UI;
-    using Microsoft.AspNetCore.Identity.UI.Services;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using Vxp.Data;
-    using Vxp.Data.Common;
-    using Vxp.Data.Common.Repositories;
-    using Vxp.Data.Models;
-    using Vxp.Data.Repositories;
-    using Vxp.Data.Seeding;
-    using Vxp.Services.Data;
-    using Vxp.Services.Mapping;
-    using Vxp.Services.Messaging;
-    using Vxp.Web.ViewModels;
-
     public class Startup
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            this._configuration = configuration;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -45,7 +44,7 @@ namespace Vxp.Web
             services.AddDbContext<ApplicationDbContext>(
                 options => options.
                     // UseLazyLoadingProxies().
-                    UseSqlServer(this.configuration.GetConnectionString("DefaultConnection")));
+                    UseSqlServer(this._configuration.GetConnectionString("DefaultConnection")));
 
             services
                 .AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -89,7 +88,7 @@ namespace Vxp.Web
                     options.ConsentCookie.Name = ".AspNetCore.ConsentCookie";
                 });
 
-            services.AddSingleton(this.configuration);
+            services.AddSingleton(this._configuration);
 
             // Identity stores
             services.AddTransient<IUserStore<ApplicationUser>, ApplicationUserStore>();
@@ -104,13 +103,14 @@ namespace Vxp.Web
             // services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IDistributorsService, DistributorsService>();
             services.AddTransient<IEmailSender, SendGridEmailSender>(ctx =>
             {
                 var logger = ctx.GetService<ILoggerFactory>();
 
                 return new SendGridEmailSender(
                     logger,
-                    this.configuration["Authentication:SendGridApiKey"],
+                    this._configuration["Authentication:SendGridApiKey"],
                     GlobalConstants.Email.SystemEmailSendFromEmail,
                     GlobalConstants.Email.SystemEmailSendFromName);
             });

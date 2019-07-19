@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Vxp.Common;
 using Vxp.Data.Models;
-using Vxp.Services.Data;
+using Vxp.Services.Data.Users;
 using Vxp.Web.ViewModels.Administration.Users;
 
 

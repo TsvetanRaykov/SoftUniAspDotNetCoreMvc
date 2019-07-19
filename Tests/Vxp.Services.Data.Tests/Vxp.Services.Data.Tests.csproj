@@ -8,6 +8,10 @@
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="UserControllerTests.cs" />
+  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
@@ -26,6 +30,16 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Vxp.Data\Vxp.Data.csproj" />
     <ProjectReference Include="..\..\Services\Vxp.Services.Data\Vxp.Services.Data.csproj" />
+    <ProjectReference Include="..\..\Web\Vxp.Web\Vxp.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Hosting">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.hosting\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.TestHost">
+      <HintPath>C:\Users\tsvet\.nuget\packages\microsoft.aspnetcore.testhost\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.TestHost.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
