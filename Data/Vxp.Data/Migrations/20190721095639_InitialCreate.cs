@@ -184,22 +184,22 @@ namespace Vxp.Data.Migrations
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: true),
-                    AddressId = table.Column<int>(nullable: false),
+                    ContactAddressId = table.Column<int>(nullable: true),
                     CompanyId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_AspNetUsers_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Addresses_ContactAddressId",
+                        column: x => x.ContactAddressId,
+                        principalTable: "Addresses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -725,15 +725,14 @@ namespace Vxp.Data.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_AddressId",
-                table: "AspNetUsers",
-                column: "AddressId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_CompanyId",
                 table: "AspNetUsers",
                 column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ContactAddressId",
+                table: "AspNetUsers",
+                column: "ContactAddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_IsDeleted",

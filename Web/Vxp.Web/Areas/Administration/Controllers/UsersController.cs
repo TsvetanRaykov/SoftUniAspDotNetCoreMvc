@@ -7,6 +7,7 @@ using Vxp.Common;
 using Vxp.Data.Models;
 using Vxp.Services.Data.Users;
 using Vxp.Web.ViewModels.Administration.Users;
+using Vxp.Web.ViewModels.Components;
 
 
 namespace Vxp.Web.Areas.Administration.Controllers
@@ -41,7 +42,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
             var viewModel = new AddUserInputModel
             {
-                Role = GlobalConstants.Roles.VendorRoleName // Role dropdown selected item
+                Role = GlobalConstants.Roles.VendorRoleName // RoleId dropdown selected item
             };
 
             await this.ApplyRolesAndDistributorsToAddUserInputModel(viewModel);
@@ -50,6 +51,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AddUserInputModel inputModel)
         {
             if (!this.ModelState.IsValid)
@@ -64,6 +66,23 @@ namespace Vxp.Web.Areas.Administration.Controllers
             return this.RedirectToAction(nameof(this.List));
         }
 
+        [HttpPost]
+        public IActionResult Edit(UserIdInputModel inputModel)
+        {
+            return this.View("EditUser", inputModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(EditUserProfileViewComponentModel profileViewComponentModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("EditUser");
+            }
+
+            return this.View("EditUser");
+        }
 
         private async Task ApplyRolesAndDistributorsToAddUserInputModel(AddUserInputModel addUserInputModel)
         {
@@ -82,7 +101,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
             addUserInputModel.AvailableDistributors = distributors.Select(x => new SelectListItem(x.DisplayName, x.Id, x.Id == addUserInputModel.DistributorId)).ToList();
             addUserInputModel.AvailableDistributors.Add(new SelectListItem("- Select Distributor -", string.Empty, addUserInputModel.DistributorId == null, true));
-            addUserInputModel.AvailableCountries = this._usersService.GetAllCountries().GetAwaiter().GetResult();
+            addUserInputModel.AvailableCountries = this._usersService.GetAllCountriesAsync().GetAwaiter().GetResult();
 
             if (vendors.Any())
             {

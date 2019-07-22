@@ -2,15 +2,12 @@
 // ReSharper disable ClassWithVirtualMembersNeverInherited.Global
 
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Vxp.Data.Models
 {
+    using Microsoft.AspNetCore.Identity;
     using System;
     using System.Collections.Generic;
-
-    using Microsoft.AspNetCore.Identity;
     using Vxp.Data.Common.Models;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
@@ -45,10 +42,6 @@ namespace Vxp.Data.Models
 
         public string LastName { get; set; }
 
-        [Required]
-        public int AddressId { get; set; }
-
-        [ForeignKey(nameof(AddressId))]
         public virtual Address ContactAddress { get; set; }
 
         public int? CompanyId { get; set; }

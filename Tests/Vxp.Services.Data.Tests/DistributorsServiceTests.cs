@@ -17,6 +17,7 @@ namespace Vxp.Services.Data.Tests
         [Fact]
         public async Task GenerateNewDistributorKeyShouldReturnGuidString()
         {
+            //Arrange
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: "DbDistServiceTest")
                 .Options;
@@ -49,8 +50,10 @@ namespace Vxp.Services.Data.Tests
 
             var distributorService = new DistributorsService(distUsersRepository, fakeUserManager.Object, distKeysRepository);
 
+            //Act
             var newDistributorKey = await distributorService.GenerateNewDistributorKeyAsync(aUser.Email);
 
+            //Assert
             var expectedDistributorKey = distKeysRepository.AllAsNoTracking()
                  .Include(key => key.BankAccount)
                  .FirstOrDefault(k => k.KeyCode.ToString() == newDistributorKey);

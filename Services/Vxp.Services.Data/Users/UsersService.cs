@@ -1,5 +1,9 @@
-﻿namespace Vxp.Services.Data.Users
+﻿using System;
+using System.Linq.Expressions;
+
+namespace Vxp.Services.Data.Users
 {
+    using Mapping;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -7,7 +11,6 @@
     using System.Threading.Tasks;
     using Vxp.Data.Common.Repositories;
     using Vxp.Data.Models;
-    using Mapping;
     using Vxp.Services.Models.Administration.Users;
 
     public class UsersService : IUsersService
@@ -32,12 +35,15 @@
             this._distributorsService = distributorsService;
         }
 
-
-        public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
+        public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
         {
-            return await this._usersRepository.AllAsNoTracking()
-                .To<TViewModel>()
-                .ToListAsync();
+            var query = exp == null ?
+                this._usersRepository.AllAsNoTracking() :
+                this._usersRepository.AllAsNoTracking().Where(exp);
+
+            return await query
+                 .To<TViewModel>()
+                 .ToListAsync();
         }
 
         public async Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName)
@@ -49,7 +55,7 @@
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetAllCountries()
+        public async Task<IEnumerable<string>> GetAllCountriesAsync()
         {
             return await this._countriesRepository
                 .AllAsNoTrackingWithDeleted()

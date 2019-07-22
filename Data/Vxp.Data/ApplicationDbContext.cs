@@ -345,7 +345,8 @@
         {
             builder.Entity<ApplicationUser>(entity =>
             {
-                entity.HasOne(e => e.ContactAddress).WithOne(a => a.User);
+                entity.HasOne(e => e.ContactAddress);
+                   
 
                 entity.HasMany(e => e.Claims)
                     .WithOne()

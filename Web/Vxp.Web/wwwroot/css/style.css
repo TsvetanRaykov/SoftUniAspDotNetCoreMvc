@@ -2164,7 +2164,7 @@ pre {
         border: 0;
     }
 
-.form-control {
+/*.form-control {
     display: block;
     width: 100%;
     height: calc(2.25rem + 2px);
@@ -2182,7 +2182,7 @@ pre {
     -o-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-}
+}*/
 
 @media screen and (prefers-reduced-motion: reduce) {
     .form-control {
@@ -2206,7 +2206,7 @@ pre {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-.form-control::-webkit-input-placeholder {
+/*.form-control::-webkit-input-placeholder {
     color: #6c757d;
     opacity: 1;
 }
@@ -2224,7 +2224,7 @@ pre {
 .form-control::placeholder {
     color: #6c757d;
     opacity: 1;
-}
+}*/
 
 .form-control:disabled, .form-control[readonly] {
     background-color: #e9ecef;
@@ -12059,7 +12059,7 @@ h1, h2, h3, h4, h5,
         }
 }
 
-.form-control {
+/*.form-control {
     height: 60px !important;
     background: #fff !important;
     color: #000000 !important;
@@ -12067,7 +12067,7 @@ h1, h2, h3, h4, h5,
     border-radius: 5px;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
-}
+}*/
 
     .form-control:focus, .form-control:active {
         border-color: #000000;
@@ -12777,25 +12777,21 @@ textarea.form-control {
     color: rgba(255, 255, 255, 0.7) !important;
 }
 
-    .block-9 .form-control::-webkit-input-placeholder {
-        /* Chrome/Opera/Safari */
+    /*.block-9 .form-control::-webkit-input-placeholder {
         color: rgba(255, 255, 255, 0.7) !important;
     }
 
     .block-9 .form-control::-moz-placeholder {
-        /* Firefox 19+ */
         color: rgba(255, 255, 255, 0.7) !important;
     }
 
     .block-9 .form-control:-ms-input-placeholder {
-        /* IE 10+ */
         color: rgba(255, 255, 255, 0.7) !important;
     }
 
     .block-9 .form-control:-moz-placeholder {
-        /* Firefox 18- */
         color: rgba(255, 255, 255, 0.7) !important;
-    }
+    }*/
 
 .block-21 .blog-img {
     display: block;

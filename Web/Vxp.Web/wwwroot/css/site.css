@@ -109,3 +109,8 @@
     -moz-border-radius: 0px;
     background-image: none;
 }
+
+::placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+    font-weight: normal;
+}

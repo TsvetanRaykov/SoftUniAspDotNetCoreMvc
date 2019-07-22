@@ -29,7 +29,7 @@ namespace Vxp.Web
 {
     public class Startup
     {
-        private readonly IConfiguration _configuration;
+        private IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
@@ -87,6 +87,8 @@ namespace Vxp.Web
                     options.MinimumSameSitePolicy = SameSiteMode.Lax;
                     options.ConsentCookie.Name = ".AspNetCore.ConsentCookie";
                 });
+
+            services.AddResponseCompression(opt => opt.EnableForHttps = true);
 
             services.AddSingleton(this._configuration);
 
@@ -155,6 +157,8 @@ namespace Vxp.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+
+            app.UseResponseCompression();
 
             app.UseMvc(routes =>
             {

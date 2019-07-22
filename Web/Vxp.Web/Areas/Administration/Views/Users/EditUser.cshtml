@@ -1,0 +1,16 @@
+﻿@model Vxp.Web.ViewModels.Administration.Users.UserIdInputModel
+
+@{
+    this.ViewData["Title"] = "Edit User";
+    this.ViewData["sidebarMenu"] = "Users";
+}
+
+<div class="d-lg-flex">
+    <div class="mr-md-4 mr-lg-5">
+        <span class="icon mb-3 d-block icon-user"></span>
+    </div>
+
+    @await Component.InvokeAsync("EditUserProfile", @Model)
+
+</div>
+

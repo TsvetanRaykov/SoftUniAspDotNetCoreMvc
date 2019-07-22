@@ -17,13 +17,13 @@
         <table id="example" class="table display hover cell-border" style="width: 100%">
             <thead>
                 <tr>
-                    <th>Role</th>
+                    <th>RoleId</th>
                     <th>Name</th>
                     <th>Country</th>
                     <th>Address</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Deleted</th>
+                    @*<th>Deleted</th>*@
                     <th>Details</th>
                 </tr>
             </thead>
@@ -37,9 +37,9 @@
                         <td>@user.ContactAddressAddressLocation, @user.ContactAddressCity</td>
                         <td><a href="mailto:@user.Email" target="_top">@user.Email </a></td>
                         <td>@user.ContactAddressPhone</td>
-                        <td>@(user.IsDeleted ? "yes" : "no")</td>
+                        @*<td>@(user.IsDeleted ? "yes" : "no")</td>*@
                         <td>
-                            <form method="post">
+                            <form method="post" asp-action="Edit">
                                 <input type="hidden" name="userId" value="@user.Id" />
                                 <button type="submit" class="btn btn-primary">Details</button>
                             </form>
@@ -49,13 +49,13 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th>Role</th>
+                    <th>RoleId</th>
                     <th>Name</th>
                     <th>Country</th>
                     <th>Address</th>
                     <th>Email</th>
                     <th>Phone</th>
-                    <th>Deleted</th>
+                    @*<th>Deleted</th>*@
                     <th>Details</th>
                 </tr>
             </tfoot>

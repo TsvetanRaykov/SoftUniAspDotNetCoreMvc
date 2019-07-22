@@ -1,0 +1,104 @@
+﻿@model Vxp.Web.ViewModels.Components.EditUserProfileViewComponentModel
+
+<form class="w-100" method="post" asp-area="Administration" asp-controller="Users" asp-action="Update">
+    <div class="d-flex mb-1">
+        <div class="w-33 bg-light d-flex flex-column p-1">
+            <h6>Personal data</h6>
+            <div class="w-100">
+                <select title="Role" class="form-control text-dark font-weight-bold" asp-for="RoleId" asp-items="Model.AvailableRoles"></select>
+                <span asp-validation-for="RoleId" class="text-danger"></span>
+            </div>
+
+
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.UserName" class="form-control text-black-50 font-weight-bold" placeholder="Email" value="@Model.UserName" />
+                <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.Password" class="form-control text-dark font-weight-bold" placeholder="Password" value="@Model.Password" />
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.ConfirmPassword" class="form-control text-dark font-weight-bold" placeholder="Confirm password" value="@Model.ConfirmPassword" />
+                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="px-1"></div>
+        <div class="w-33 bg-light d-flex flex-column p-1">
+            <h6>Personal data</h6>
+            <div class="w-100">
+                <input asp-for="@Model.FirstName" class="form-control text-dark font-weight-bold" placeholder="First name" value="@Model.FirstName" />
+                <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.LastName" class="form-control text-dark font-weight-bold" placeholder="Last name" value="@Model.LastName" />
+                <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.ContactAddress.CountryName" class="form-control text-dark font-weight-bold" placeholder="Country" value="@Model.ContactAddress.CountryName" />
+                <span asp-validation-for="@Model.ContactAddress.CountryName" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.ContactAddress.City" class="form-control text-dark font-weight-bold" placeholder="City" value="@Model.ContactAddress.City" />
+                <span asp-validation-for="@Model.ContactAddress.City" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.ContactAddress.AddressLocation" class="form-control text-dark font-weight-bold" placeholder="Address" value="@Model.ContactAddress.AddressLocation" />
+                <span asp-validation-for="@Model.ContactAddress.AddressLocation" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.ContactAddress.Phone" class="form-control text-dark font-weight-bold" placeholder="Phone" value="@Model.ContactAddress.Phone" />
+                <span asp-validation-for="@Model.ContactAddress.Phone" class="text-danger"></span>
+            </div>
+            <div class="w-100">
+                <input asp-for="@Model.ContactAddress.Email" class="form-control text-dark font-weight-bold" placeholder="Contact Email" value="@Model.ContactAddress.Email" />
+                <span asp-validation-for="@Model.ContactAddress.Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="px-1"></div>
+        <div class="w-33 bg-light d-flex flex-column p-1">
+            <h6>Company data</h6>
+            <div class="w-100">
+                <input asp-for="@Model.Company.Name" class="form-control text-dark font-weight-bold" placeholder="Company name" value="@Model.Company.Name" />
+                <span asp-validation-for="@Model.Company.Name" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.Company.BusinessNumber" class="form-control text-dark font-weight-bold" placeholder="Company BIN" value="@Model.Company.BusinessNumber" />
+                <span asp-validation-for="@Model.Company.BusinessNumber" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.Company.ContactAddress.CountryName" class="form-control text-dark font-weight-bold" placeholder="Country" value="@Model.Company.ContactAddress.CountryName" />
+                <span asp-validation-for="@Model.Company.ContactAddress.CountryName" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.Company.ContactAddress.City" class="form-control text-dark font-weight-bold" placeholder="City" value="@Model.Company.ContactAddress.City" />
+                <span asp-validation-for="@Model.Company.ContactAddress.City" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.Company.ContactAddress.AddressLocation" class="form-control text-dark font-weight-bold" placeholder="Address" value="@Model.Company.ContactAddress.AddressLocation" />
+                <span asp-validation-for="@Model.Company.ContactAddress.AddressLocation" class="text-danger"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <input asp-for="@Model.Company.ContactAddress.Phone" class="form-control text-dark font-weight-bold" placeholder="Phone" value="@Model.Company.ContactAddress.Phone" />
+                <span asp-validation-for="@Model.Company.ContactAddress.Phone" class="text-danger"></span>
+            </div>
+            <div class="w-100">
+                <input asp-for="@Model.Company.ContactAddress.Email" class="form-control text-dark font-weight-bold" placeholder="Contact Email" value="@Model.Company.ContactAddress.Email" />
+                <span asp-validation-for="@Model.Company.ContactAddress.Email" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</form>

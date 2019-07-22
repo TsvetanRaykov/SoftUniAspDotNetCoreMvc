@@ -5,71 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - VERTEX</title>
 
-    <environment names="Development">
+    <environment names="Development,Development2">
 
         <link rel="icon" href="@Url.Content("~/images/favicon.png")" />
 
-        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 
-        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" asp-append-version="true" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" rel="stylesheet">
 
-        <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/animate.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css">
+        <link rel="stylesheet" href="~/css/animate.css">
 
-        <link rel="stylesheet" href="~/css/owl.carousel.min.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/owl.theme.default.min.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/magnific-popup.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+        <link rel="stylesheet" href="~/css/magnific-popup.css">
 
-        <link rel="stylesheet" href="~/css/aos.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/aos.css">
 
-        <link rel="stylesheet" href="~/css/ionicons.min.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/ionicons.min.css">
 
-        <link rel="stylesheet" href="~/css/bootstrap-datepicker.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/jquery.timepicker.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/bootstrap-datepicker.css">
+        <link rel="stylesheet" href="~/css/jquery.timepicker.css">
 
-        <link rel="stylesheet" href="~/css/flaticon.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/icomoon.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/flaticon.css">
+        <link rel="stylesheet" href="~/css/icomoon.css">
 
         @*<link href="~/lib/DataTables/datatables.css" rel="stylesheet" />*@
         <link href="~/lib/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-        <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
-
+        <link href="~/css/style.css" rel="stylesheet" asp-append-version="true">
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
-        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 
 
-        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" asp-append-version="true" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" rel="stylesheet">
 
-        <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/animate.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css">
+        <link rel="stylesheet" href="~/css/animate.css">
 
-        <link rel="stylesheet" href="~/css/owl.carousel.min.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/owl.theme.default.min.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/magnific-popup.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+        <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+        <link rel="stylesheet" href="~/css/magnific-popup.css">
 
-        <link rel="stylesheet" href="~/css/aos.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/aos.css">
 
-        <link rel="stylesheet" href="~/css/ionicons.min.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/ionicons.min.css">
 
-        <link rel="stylesheet" href="~/css/bootstrap-datepicker.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/jquery.timepicker.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/bootstrap-datepicker.css">
+        <link rel="stylesheet" href="~/css/jquery.timepicker.css">
 
-        <link rel="stylesheet" href="~/css/flaticon.css" asp-append-version="true">
-        <link rel="stylesheet" href="~/css/icomoon.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/flaticon.css">
+        <link rel="stylesheet" href="~/css/icomoon.css">
 
         <link href="~/lib/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-        <link rel="stylesheet" href="~/css/style.css" asp-append-version="true">
+        <link rel="stylesheet" href="~/css/style.css">
 
-
-        <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.min.css" rel="stylesheet" />
     </environment>
 </head>
 <body>
     <partial name="_CookieConsentPartial" />
+
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target"
              id="ftco-navbar">
@@ -84,6 +83,7 @@
 
                 <div class="collapse navbar-collapse" id="ftco-nav">
                     <partial name="_LoginPartial" />
+
                 </div>
             </div>
         </nav>
@@ -94,55 +94,56 @@
     <partial name="_CookieConsentPartial" />
     <partial name="_FooterPartial" />
 
-    
     <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
 
-        <script src="~/js/jquery-migrate-3.0.1.min.js" asp-append-version="true"></script>
-        <script src="~/js/popper.min.js" asp-append-version="true"></script>
+        <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="~/js/popper.min.js"></script>
 
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 
-        <script src="~/js/jquery.easing.1.3.js" asp-append-version="true"></script>
-        <script src="~/js/jquery.waypoints.min.js" asp-append-version="true"></script>
-        <script src="~/js/jquery.stellar.min.js" asp-append-version="true"></script>
-        <script src="~/js/owl.carousel.min.js" asp-append-version="true"></script>
-        <script src="~/js/jquery.magnific-popup.min.js" asp-append-version="true"></script>
-        <script src="~/js/aos.js" asp-append-version="true"></script>
-        <script src="~/js/jquery.animateNumber.min.js" asp-append-version="true"></script>
-        <script src="~/js/bootstrap-datepicker.js" asp-append-version="true"></script>
-        <script src="~/js/jquery.timepicker.min.js" asp-append-version="true"></script>
-        <script src="~/js/scrollax.min.js" asp-append-version="true"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false" asp-append-version="true"></script>
-        <script src="~/js/google-map.js" asp-append-version="true"></script>
-        <script src="~/js/main.js" asp-append-version="true"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/jquery.easing.1.3.js"></script>
+        <script src="~/js/jquery.waypoints.min.js"></script>
+        <script src="~/js/jquery.stellar.min.js"></script>
+        <script src="~/js/owl.carousel.min.js"></script>
+        <script src="~/js/jquery.magnific-popup.min.js"></script>
+        <script src="~/js/aos.js"></script>
+        <script src="~/js/jquery.animateNumber.min.js"></script>
+        <script src="~/js/bootstrap-datepicker.js"></script>
+        <script src="~/js/jquery.timepicker.min.js"></script>
+        <script src="~/js/scrollax.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+        <script src="~/js/google-map.js"></script>
+        <script src="~/js/main.js"></script>
+        <script src="~/js/site.js"></script>
 
     </environment>
     <environment names="Staging,Production">
-        <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
 
-        <script src="~/js/jquery-migrate-3.0.1.min.js" asp-append-version="true"></script>
-        <script src="~/js/popper.min.js" asp-append-version="true"></script>
+        <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="~/js/popper.min.js"></script>
 
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js" asp-append-version="true"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 
-        <script src="~/js/jquery.easing.1.3.js" asp-append-version="true"></script>
-        <script src="~/js/jquery.waypoints.min.js" asp-append-version="true"></script>
-        <script src="~/js/jquery.stellar.min.js" asp-append-version="true"></script>
-        <script src="~/js/owl.carousel.min.js" asp-append-version="true"></script>
-        <script src="~/js/jquery.magnific-popup.min.js" asp-append-version="true"></script>
-        <script src="~/js/aos.js" asp-append-version="true"></script>
-        <script src="~/js/jquery.animateNumber.min.js" asp-append-version="true"></script>
-        <script src="~/js/bootstrap-datepicker.js" asp-append-version="true"></script>
-        <script src="~/js/jquery.timepicker.min.js" asp-append-version="true"></script>
-        <script src="~/js/scrollax.min.js" asp-append-version="true"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false" asp-append-version="true"></script>
-        <script src="~/js/google-map.js" asp-append-version="true"></script>
+        <script src="~/js/jquery.easing.1.3.js"></script>
+        <script src="~/js/jquery.waypoints.min.js"></script>
+        <script src="~/js/jquery.stellar.min.js"></script>
+        <script src="~/js/owl.carousel.min.js"></script>
+        <script src="~/js/jquery.magnific-popup.min.js"></script>
+        <script src="~/js/aos.js"></script>
+        <script src="~/js/jquery.animateNumber.min.js"></script>
+        <script src="~/js/bootstrap-datepicker.js"></script>
+        <script src="~/js/jquery.timepicker.min.js"></script>
+        <script src="~/js/scrollax.min.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+        <script src="~/js/google-map.js"></script>
 
         <script src="~/js/main.js" asp-append-version="true"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>

@@ -34,6 +34,7 @@
 
             if (string.IsNullOrWhiteSpace(apiKey))
             {
+                // Check user-secrets
                 throw new ArgumentOutOfRangeException(nameof(apiKey));
             }
 
