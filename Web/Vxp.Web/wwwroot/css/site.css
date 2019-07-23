@@ -114,3 +114,9 @@
     color: rgba(0, 0, 0, 0.5) !important;
     font-weight: normal;
 }
+
+.vxp-form-control-label {
+    font-size: small;
+    margin-bottom: 0;
+    color: #6E5773;
+}

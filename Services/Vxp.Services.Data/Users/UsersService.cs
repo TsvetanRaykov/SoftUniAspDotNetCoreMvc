@@ -35,15 +35,18 @@ namespace Vxp.Services.Data.Users
             this._distributorsService = distributorsService;
         }
 
-        public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
+        public IQueryable<TViewModel> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
         {
             var query = exp == null ?
                 this._usersRepository.AllAsNoTracking() :
                 this._usersRepository.AllAsNoTracking().Where(exp);
 
-            return await query
-                 .To<TViewModel>()
-                 .ToListAsync();
+            return query.To<TViewModel>();
+        }
+
+        public IQueryable<TViewModel> GetAllAsync<TViewModel>()
+        {
+            return this._usersRepository.AllAsNoTracking().To<TViewModel>();
         }
 
         public async Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName)

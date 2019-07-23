@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Vxp.Data.Models;
 
@@ -9,7 +10,7 @@ namespace Vxp.Services.Data.Users
 
     public interface IUsersService
     {
-        Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null);
+        IQueryable<TViewModel> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null);
 
         Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName);
 

@@ -1,12 +1,9 @@
 ﻿// ReSharper disable VirtualMemberCallInConstructor
 
-using System.Collections.Generic;
-
 namespace Vxp.Data.Models
 {
-    using System;
-
     using Microsoft.AspNetCore.Identity;
+    using System;
     using Vxp.Data.Common.Models;
 
     public class ApplicationRole : IdentityRole, IAuditInfo, IDeletableEntity

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Vxp.Common;
 using Vxp.Data.Models;
 using Vxp.Services.Data.Users;
@@ -27,7 +28,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
         {
             var roles = this._roleManager.Roles.ToDictionary(x => x.Id, x => x.Name);
 
-            var viewModel = await this._usersService.GetAllAsync<ListUserViewModel>();
+            var viewModel = await this._usersService.GetAll<ListUserViewModel>().ToListAsync();
 
             foreach (var viewModelUser in viewModel)
             {
@@ -108,6 +109,5 @@ namespace Vxp.Web.Areas.Administration.Controllers
                 addUserInputModel.AvailableRoles.RemoveAll(r => r.Text == GlobalConstants.Roles.VendorRoleName);
             }
         }
-
     }
 }

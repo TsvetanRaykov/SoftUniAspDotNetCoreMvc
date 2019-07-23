@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -118,6 +119,7 @@ namespace Vxp.Web
             });
 
             services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IRolesService, RolesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -128,6 +130,7 @@ namespace Vxp.Web
                 typeof(IndexViewModel).GetTypeInfo().Assembly,
                 typeof(CreateUserServiceModel).GetTypeInfo().Assembly);
 
+            
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {

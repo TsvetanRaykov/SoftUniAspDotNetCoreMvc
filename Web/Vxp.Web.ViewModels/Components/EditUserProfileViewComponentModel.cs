@@ -53,13 +53,22 @@ namespace Vxp.Web.ViewModels.Components
 
         public IEnumerable<EditUserProfileViewComponentBankAccountModel> BankAccounts { get; set; }
 
-
         //Other
+        [Required(AllowEmptyStrings = false)]
+        [Display(Name = "Role")]
+        [StringLength(32)]
         public string RoleId { get; set; }
+
+        [Display(Name = "Distributor")]
+        [StringLength(32)]
         public string DistributorId { get; set; }
+
         public List<SelectListItem> AvailableRoles { get; set; }
+
         public ICollection<SelectListItem> AvailableDistributors { get; set; }
+
         public IEnumerable<string> AvailableCountries { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<ApplicationUser, EditUserProfileViewComponentModel>()
