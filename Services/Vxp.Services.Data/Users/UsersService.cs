@@ -37,16 +37,21 @@ namespace Vxp.Services.Data.Users
 
         public IQueryable<TViewModel> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
         {
-            var query = exp == null ?
-                this._usersRepository.AllAsNoTracking() :
-                this._usersRepository.AllAsNoTracking().Where(exp);
+            var query = this._usersRepository.AllAsNoTracking()
+                .Include(user => user.Roles)
+                .Include(user => user.BankAccounts)
+                .Include(user => user.Distributors)
+                .ThenInclude(distributorUser => distributorUser.DistributorKey)
+                .ThenInclude(distributorKey => distributorKey.BankAccount)
+                .ThenInclude(bankAccount => bankAccount.Owner)
+                .ThenInclude(applicationUser => applicationUser.Company).AsQueryable();
+
+            if (exp != null)
+            {
+                query = query.Where(exp);
+            }
 
             return query.To<TViewModel>();
-        }
-
-        public IQueryable<TViewModel> GetAllAsync<TViewModel>()
-        {
-            return this._usersRepository.AllAsNoTracking().To<TViewModel>();
         }
 
         public async Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName)

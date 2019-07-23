@@ -1,32 +1,70 @@
-﻿@model Vxp.Web.ViewModels.Components.EditUserProfileViewComponentModel
+﻿@using Vxp.Common
+@model Vxp.Web.ViewModels.Components.EditUserProfileViewComponentModel
+<style type="text/css">
+    .vxp-section-edit-user-shipping-address {
+    }
 
-<form class="w-100" method="post" asp-area="Administration" asp-controller="Users" asp-action="Update">
+    .vxp-section-edit-user-company-info {
+    }
+
+    .vxp-section-edit-user-bank-accounts {
+    }
+
+    .vxp-section-edit-user-distributors {
+    }
+
+    .country-selector {
+    }
+</style>
+
+<form class="w-100" method="post" asp-area="" asp-controller="Users" asp-action="Update">
     <div class="d-flex mb-1">
         <div class="w-25 bg-light d-flex flex-column p-1 border rounded">
-            <h6 class="bg-primary text-white p-1 rounded">Personal data</h6>
+            <h6 class="bg-primary text-white p-1 rounded">Account data</h6>
             <div class="w-100">
                 <label asp-for="@Model.RoleId" class="vxp-form-control-label"></label>
-                <select title="Role" class="form-control text-dark font-weight-bold" asp-for="RoleId" asp-items="Model.AvailableRoles"></select>
+                <select title="Role" class="form-control text-dark font-weight-bold" asp-for="RoleId" asp-items="Model.AvailableRoles" id="edit-user-form-role-selector"></select>
                 <span asp-validation-for="@Model.RoleId" class="text-danger"></span>
             </div>
-            <div class="py-1"></div>
-            <h6 class="bg-primary text-white p-1 rounded">Distributors</h6>
-            <div class="w-100">
-                <table class="table-bordered w-100">
-                    <tr>
-                        <th>Distributor</th>
-                        <th>Action</th>
-                    </tr>
-                    @foreach (var distributor in Model.AvailableDistributors)
-                    {
-                        <tr>
-                            <td>@distributor.Text</td>
-                            <td><a class="btn btn-primary" asp-action="">Edit</a></td>
-                        </tr>
-                    }
-                </table>
+            <div class="vxp-section-edit-user-distributors animated" style="display: none;">
+                <div class="py-1"></div>
+                <h6 class="bg-primary text-white p-1 rounded">Distributors</h6>
+                <div class="w-100">
+                    <div class="vxp-edit-user-form-container container-fluid border rounded">
+                        @foreach (var distributor in Model.AvailableDistributors)
+                        {
+                            <div class="row px-1">
+                                <div class="col-sm-10 text-dark font-weight-bold">@distributor.Text</div>
+                                <div class="col-sm-2 text-right"><a class="btn btn-light rounded py-0 w-100 border" href="#@distributor.Value">Edit</a></div>
+                            </div>
+                        }
+                        <div class="row px-1">
+                            <div class="col-sm-10">...</div>
+                            <div class="col-sm-2 text-right"><a class="btn btn-light rounded py-0 w-100 border" asp-action="">Add</a></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="py-1"></div>
+            <div class="vxp-section-edit-user-bank-accounts animated">
+                <div class="py-1"></div>
+                <h6 class="bg-primary text-white p-1 rounded">Bank accounts</h6>
+                <div class="w-100">
+                    <div class="vxp-edit-user-form-container container-fluid border rounded">
+                        @foreach (var bankAccount in Model.BankAccounts)
+                        {
+                            <div class="row px-1">
+                                <div class="col-sm-10 text-dark font-weight-bold">@bankAccount.Text</div>
+                                <div class="col-sm-2 text-right"><a class="btn btn-light rounded py-0 w-100 border" href="#@bankAccount.Value">Edit</a></div>
+                            </div>
+                        }
+                        <div class="row px-1">
+                            <div class="col-sm-10">...</div>
+                            <div class="col-sm-2 text-right"><a class="btn btn-light rounded py-0 w-100 border" asp-action="">Add</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="h-100"></div>
             <div class="w-100">
                 <label asp-for="@Model.UserName" class="vxp-form-control-label"></label>
                 <input asp-for="@Model.UserName" class="form-control text-black-50 font-weight-bold" placeholder="Email" value="@Model.UserName" />
@@ -39,7 +77,7 @@
                 <span asp-validation-for="@Model.Password" class="text-danger"></span>
             </div>
             <div class="py-1"></div>
-            <div class="w-100">
+            <div class="w-100 align-self-end">
                 <label asp-for="@Model.ConfirmPassword" class="vxp-form-control-label"></label>
                 <input asp-for="@Model.ConfirmPassword" class="form-control text-dark font-weight-bold" placeholder="Confirm password" value="@Model.ConfirmPassword" />
                 <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
@@ -47,7 +85,7 @@
         </div>
         <div class="px-1"></div>
         <div class="w-25 bg-light d-flex flex-column p-1 border rounded">
-            <h6 class="bg-primary text-white p-1 rounded">Personal data</h6>
+            <h6 class="bg-primary text-white p-1 rounded">Personal information</h6>
             <div class="w-100">
                 <label asp-for="@Model.FirstName" class="vxp-form-control-label"></label>
                 <input asp-for="@Model.FirstName" class="form-control text-dark font-weight-bold" placeholder="First name" value="@Model.FirstName" />
@@ -62,7 +100,7 @@
             <div class="py-1"></div>
             <div class="w-100">
                 <label asp-for="@Model.ContactAddress.CountryName" class="vxp-form-control-label"></label>
-                <input asp-for="@Model.ContactAddress.CountryName" class="form-control text-dark font-weight-bold" placeholder="Country" value="@Model.ContactAddress.CountryName" />
+                <input asp-for="@Model.ContactAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.ContactAddress.CountryName" />
                 <span asp-validation-for="@Model.ContactAddress.CountryName" class="text-danger"></span>
             </div>
             <div class="py-1"></div>
@@ -90,9 +128,9 @@
                 <span asp-validation-for="@Model.ContactAddress.Email" class="text-danger"></span>
             </div>
         </div>
-        <div class="px-1"></div>
-        <div class="w-25 bg-light d-flex flex-column p-1 border rounded">
-            <h6 class="bg-primary text-white p-1 rounded">Company data</h6>
+        <div class="vxp-section-edit-user-company-info px-1 "></div>
+        <div class="vxp-section-edit-user-company-info w-25 bg-light d-flex flex-column p-1 border rounded">
+            <h6 class="bg-primary text-white p-1 rounded">Company information</h6>
             <div class="w-100">
                 <label asp-for="@Model.Company.Name" class="vxp-form-control-label"></label>
                 <input asp-for="@Model.Company.Name" class="form-control text-dark font-weight-bold" placeholder="Company name" value="@Model.Company.Name" />
@@ -107,7 +145,7 @@
             <div class="py-1"></div>
             <div class="w-100">
                 <label asp-for="@Model.Company.ContactAddress.CountryName" class="vxp-form-control-label"></label>
-                <input asp-for="@Model.Company.ContactAddress.CountryName" class="form-control text-dark font-weight-bold" placeholder="Country" value="@Model.Company.ContactAddress.CountryName" />
+                <input asp-for="@Model.Company.ContactAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.Company.ContactAddress.CountryName" />
                 <span asp-validation-for="@Model.Company.ContactAddress.CountryName" class="text-danger"></span>
             </div>
             <div class="py-1"></div>
@@ -135,12 +173,12 @@
                 <span asp-validation-for="@Model.Company.ContactAddress.Email" class="text-danger"></span>
             </div>
         </div>
-        <div class="px-1"></div>
-        <div class="w-25 bg-light d-flex flex-column p-1 border rounded">
+        <div class="vxp-section-edit-user-shipping-address px-1"></div>
+        <div class="vxp-section-edit-user-shipping-address w-25 bg-light d-flex flex-column p-1 border rounded">
             <h6 class="bg-primary text-white p-1 rounded">Shipping address</h6>
             <div class="w-100">
                 <label asp-for="@Model.Company.ShippingAddress.CountryName" class="vxp-form-control-label"></label>
-                <input asp-for="@Model.Company.ShippingAddress.CountryName" class="form-control text-dark font-weight-bold" placeholder="Country" value="@Model.Company.ShippingAddress.CountryName" />
+                <input asp-for="@Model.Company.ShippingAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.Company.ShippingAddress.CountryName" />
                 <span asp-validation-for="@Model.Company.ShippingAddress.CountryName" class="text-danger"></span>
             </div>
             <div class="py-1"></div>
@@ -169,42 +207,61 @@
             </div>
         </div>
     </div>
-    @*<div class="d-flex mb-1">
-            <div class="w-25 bg-light d-flex flex-column p-1"></div>
-            <div class="px-1"></div>
-            <div class="w-25 bg-light d-flex flex-column p-1">
-                <h6 class="bg-primary text-white p-1">Shipping address</h6>
-                <div class="w-100">
-                    <label asp-for="@Model.Company.ShippingAddress.CountryName" class="vxp-form-control-label"></label>
-                    <input asp-for="@Model.Company.ShippingAddress.CountryName" class="form-control text-dark font-weight-bold" placeholder="Country" value="@Model.Company.ShippingAddress.CountryName" />
-                    <span asp-validation-for="@Model.Company.ShippingAddress.CountryName" class="text-danger"></span>
-                </div>
-                <div class="py-1"></div>
-                <div class="w-100">
-                    <label asp-for="@Model.Company.ShippingAddress.City" class="vxp-form-control-label"></label>
-                    <input asp-for="@Model.Company.ShippingAddress.City" class="form-control text-dark font-weight-bold" placeholder="City" value="@Model.Company.ShippingAddress.City" />
-                    <span asp-validation-for="@Model.Company.ShippingAddress.City" class="text-danger"></span>
-                </div>
-                <div class="py-1"></div>
-                <div class="w-100">
-                    <label asp-for="@Model.Company.ShippingAddress.City" class="vxp-form-control-label"></label>
-                    <input asp-for="@Model.Company.ShippingAddress.AddressLocation" class="form-control text-dark font-weight-bold" placeholder="Address" value="@Model.Company.ShippingAddress.AddressLocation" />
-                    <span asp-validation-for="@Model.Company.ShippingAddress.AddressLocation" class="text-danger"></span>
-                </div>
-                <div class="py-1"></div>
-                <div class="w-100">
-                    <label asp-for="@Model.Company.ShippingAddress.Phone" class="vxp-form-control-label"></label>
-                    <input asp-for="@Model.Company.ShippingAddress.Phone" class="form-control text-dark font-weight-bold" placeholder="Phone" value="@Model.Company.ShippingAddress.Phone" />
-                    <span asp-validation-for="@Model.Company.ShippingAddress.Phone" class="text-danger"></span>
-                </div>
-                <div class="py-1"></div>
-                <div class="w-100">
-                    <label asp-for="@Model.Company.ShippingAddress.Email" class="vxp-form-control-label"></label>
-                    <input asp-for="@Model.Company.ShippingAddress.Email" class="form-control text-dark font-weight-bold" placeholder="Contact Email" value="@Model.Company.ShippingAddress.Email" />
-                    <span asp-validation-for="@Model.Company.ShippingAddress.Email" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="px-1"></div>
-            <div class="w-25 bg-light d-flex flex-column p-1"></div>
-        </div>*@
+    <div class="d-flex mr-1 my-3 align-content-start">
+        <div class="w-25">
+            <button class="w-50 btn btn-primary rounded" type="submit">Submit</button>
+        </div>
+    </div>
 </form>
+
+<script on-content-loaded>
+    window.onload = () => {
+
+        $('#edit-user-form-role-selector').on('change', function () {
+            switchFormRoleMode(this.options[this.selectedIndex].text);
+        });
+
+        let initialFormMode = $('#edit-user-form-role-selector option:selected').text();
+
+        let distributorsSection = $('.vxp-section-edit-user-distributors');
+
+        function switchFormRoleMode(selectedRole) {
+
+            distributorsSection.hide();
+
+            switch (selectedRole) {
+
+                case '@GlobalConstants.Roles.AdministratorRoleName':
+                    console.log('Administrator');
+                    break;
+
+                case '@GlobalConstants.Roles.VendorRoleName':
+                    console.log('Vendor');
+                    break;
+
+                case '@GlobalConstants.Roles.DistributorRoleName':
+                    console.log('Distributor');
+                    break;
+
+                case '@GlobalConstants.Roles.CustomerRoleName':
+                    distributorsSection.show();
+                    console.log('Customer');
+                    break;
+
+                default:
+                    console.log('Default');
+                    break;
+            }
+        }
+
+        switchFormRoleMode(initialFormMode);
+
+        $(function () {
+            let availableCountries = @Html.Raw(Json.Serialize(Model.AvailableCountries));
+            $(".country-selector").autocomplete({
+                source: availableCountries
+            });
+        });
+
+    };
+</script>

@@ -2,17 +2,6 @@
     width: 100%;
 }
 
-/* Used in javascript only */
-.js-full-height {
-}
-
-.distributor-specific {
-}
-
-.customer-specific {
-}
-/* * */
-
 .row-technology {
     margin-top: 30pt;
 }
@@ -120,3 +109,19 @@
     margin-bottom: 0;
     color: #6E5773;
 }
+
+.vxp-edit-user-form-container {
+    width: 100%;
+}
+
+    .vxp-edit-user-form-container [class^="col"] {
+        padding: 0;
+    }
+
+    .vxp-edit-user-form-container .btn {
+        font-size: small;
+    }
+
+    .vxp-edit-user-form-container .text-dark {
+        color: black !important;
+    }

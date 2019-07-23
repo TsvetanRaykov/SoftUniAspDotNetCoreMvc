@@ -15,13 +15,11 @@ namespace Vxp.Web.ViewComponents
     {
         private readonly IUsersService _usersService;
         private readonly IRolesService _rolesService;
-        //private readonly RoleManager<ApplicationRole> _roleManager;
 
         public EditUserProfileViewComponent(IUsersService usersService, IRolesService rolesService)
         {
             this._usersService = usersService;
             this._rolesService = rolesService;
-            //       this._roleManager = roleManager;
         }
         public async Task<IViewComponentResult> InvokeAsync(UserIdInputModel inputModel)
         {
@@ -46,7 +44,6 @@ namespace Vxp.Web.ViewComponents
             userModel.AvailableCountries = this._usersService.GetAllCountriesAsync().GetAwaiter().GetResult();
 
             var roles = this._rolesService.GetAll<SelectListItem>();
-
             var userRole = roles.FirstOrDefault(r => r.Value == userModel.RoleId);
             if (userRole != null)
             {

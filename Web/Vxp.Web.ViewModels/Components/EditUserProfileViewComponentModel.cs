@@ -12,7 +12,7 @@ namespace Vxp.Web.ViewModels.Components
     {
         public EditUserProfileViewComponentModel()
         {
-            this.BankAccounts = new HashSet<EditUserProfileViewComponentBankAccountModel>();
+            this.BankAccounts = new HashSet<SelectListItem>();
             this.AvailableCountries = new HashSet<string>();
             this.AvailableDistributors = new HashSet<SelectListItem>();
             this.AvailableRoles = new List<SelectListItem>();
@@ -51,12 +51,12 @@ namespace Vxp.Web.ViewModels.Components
         //Address
         public EditUserProfileViewComponentAddressModel ContactAddress { get; set; }
 
-        public IEnumerable<EditUserProfileViewComponentBankAccountModel> BankAccounts { get; set; }
+        public IEnumerable<SelectListItem> BankAccounts { get; set; }
 
         //Other
-        [Required(AllowEmptyStrings = false)]
-        [Display(Name = "Role")]
-        [StringLength(32)]
+        //[Required(AllowEmptyStrings = false)]
+        //[Display(Name = "Role")]
+        //[StringLength(32)]
         public string RoleId { get; set; }
 
         [Display(Name = "Distributor")]
@@ -73,7 +73,13 @@ namespace Vxp.Web.ViewModels.Components
         {
             configuration.CreateMap<ApplicationUser, EditUserProfileViewComponentModel>()
                 .ForMember(dest => dest.RoleId, opt =>
-                      opt.MapFrom(src => src.Roles.First().RoleId));
+                      opt.MapFrom(src => src.Roles.First().RoleId))
+                .ForMember(dest => dest.AvailableDistributors,
+                    opt => opt.MapFrom(src => src.Distributors.Select(d => new SelectListItem
+                    {
+                        Value = d.DistributorKey.BankAccount.Owner.Id,
+                        Text = $"{d.DistributorKey.BankAccount.Owner.Company.Name}"
+                    })));
         }
     }
 }
