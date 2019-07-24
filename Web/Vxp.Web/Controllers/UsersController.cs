@@ -11,9 +11,14 @@ namespace Vxp.Web.Controllers
     [Authorize]
     public class UsersController : BaseController
     {
-
-        public IActionResult Index(VxpUserInputModel inputModel)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(VxpUserInputModel inputModel)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("EditUser");
+            }
             return this.LocalRedirect(inputModel.ReturnUrl);
         }
     }

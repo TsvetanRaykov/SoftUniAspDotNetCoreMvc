@@ -73,17 +73,17 @@ namespace Vxp.Web.Areas.Administration.Controllers
             return this.View("EditUser", inputModel);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Update(EditUserProfileViewComponentModel profileViewComponentModel)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                return this.View("EditUser");
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Update(EditUserProfileViewComponentModel profileViewComponentModel)
+        //{
+        //    if (!this.ModelState.IsValid)
+        //    {
+        //        return this.View("EditUser");
+        //    }
 
-            return this.View("EditUser");
-        }
+        //    return this.View("EditUser");
+        //}
 
         private async Task ApplyRolesAndDistributorsToAddUserInputModel(AddUserInputModel addUserInputModel)
         {
