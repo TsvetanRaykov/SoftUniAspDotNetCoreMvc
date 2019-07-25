@@ -1,8 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Vxp.Common;
 
-namespace Vxp.Common.Attributes.Validation
+namespace Vxp.Web.Infrastructure.Attributes.Validation
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class RequireVendorPartnerAttribute : ValidationAttribute

@@ -1,4 +1,4 @@
-﻿@model Vxp.Web.ViewModels.Administration.Users.UserIdInputModel
+﻿@model Vxp.Web.ViewModels.Components.EditUserProfileViewComponentModel
 
 @{
     this.ViewData["Title"] = "Edit User";
@@ -13,7 +13,7 @@
     </div>
 
     @await Component.InvokeAsync("EditUserProfile", @Model)
-    
+
 
 </div>
 

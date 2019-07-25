@@ -14,7 +14,7 @@
         <h2 class="mb-4 float-left">Users</h2>
         <a asp-area="Administration" asp-controller="Users" asp-action="Create" class="btn btn-primary py-3 px-lg-5 text-nowrap float-right">Add New</a>
 
-        <table id="example" class="table display hover cell-border" style="width: 100%">
+        <table class="vxp-table table rounded display hover cell-border" style="width: 100%">
             <thead>
                 <tr>
                     <th>RoleId</th>
@@ -24,7 +24,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     @*<th>Deleted</th>*@
-                    <th>Details</th>
+                    <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
                 </tr>
             </thead>
             <tbody>
@@ -38,11 +38,8 @@
                         <td><a href="mailto:@user.Email" target="_top">@user.Email </a></td>
                         <td>@user.ContactAddressPhone</td>
                         @*<td>@(user.IsDeleted ? "yes" : "no")</td>*@
-                        <td>
-                            <form method="post" asp-action="Edit">
-                                <input type="hidden" name="userId" value="@user.Id" />
-                                <button type="submit" class="btn btn-primary">Details</button>
-                            </form>
+                        <td class="text-right">
+                            <a class="btn btn-link btn-light" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
                         </td>
                     </tr>
                 }
@@ -56,7 +53,7 @@
                     <th>Email</th>
                     <th>Phone</th>
                     @*<th>Deleted</th>*@
-                    <th>Details</th>
+                    <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
                 </tr>
             </tfoot>
         </table>
@@ -69,7 +66,7 @@
     <script src="~/lib/DataTables/datatables.js"></script>
     <script>
         $(document).ready(function () {
-            $('#example').DataTable({
+            $('.vxp-table').DataTable({
                 "lengthChange": false
             });
         });

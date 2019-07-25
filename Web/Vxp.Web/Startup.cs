@@ -18,11 +18,13 @@ using Vxp.Data.Common.Repositories;
 using Vxp.Data.Models;
 using Vxp.Data.Repositories;
 using Vxp.Data.Seeding;
+using Vxp.Services.Data.BankAccounts;
 using Vxp.Services.Data.Settings;
 using Vxp.Services.Data.Users;
 using Vxp.Services.Mapping;
 using Vxp.Services.Messaging;
 using Vxp.Services.Models.Administration.Users;
+using Vxp.Web.Infrastructure.ModelBinders;
 using Vxp.Web.ViewModels;
 using Vxp.Web.ViewModels.Administration.Dashboard;
 
@@ -63,7 +65,10 @@ namespace Vxp.Web
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
             services
-                .AddMvc()
+                .AddMvc(options =>
+                {
+                   // options.ModelBinderProviders.Insert(0, new BankAccountToSelectListItemModelBinderProvider());
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddRazorPagesOptions(options =>
                 {
@@ -120,6 +125,7 @@ namespace Vxp.Web
 
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IRolesService, RolesService>();
+            services.AddTransient<IBankAccountsService, BankAccountsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -130,7 +136,7 @@ namespace Vxp.Web
                 typeof(IndexViewModel).GetTypeInfo().Assembly,
                 typeof(CreateUserServiceModel).GetTypeInfo().Assembly);
 
-            
+
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {

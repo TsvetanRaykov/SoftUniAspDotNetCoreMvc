@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
+using Vxp.Web.Infrastructure.ModelBinders;
 
 namespace Vxp.Web.ViewModels.Components
 {
+    
     public class EditUserProfileViewComponentModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
     {
         public EditUserProfileViewComponentModel()
@@ -21,6 +25,9 @@ namespace Vxp.Web.ViewModels.Components
         }
 
         //AspNetUser
+        [Required(AllowEmptyStrings = false)]
+        public string UserId { get; set; }
+
         [Required]
         [Display(Name = "Email")]
         [EmailAddress]
@@ -43,6 +50,7 @@ namespace Vxp.Web.ViewModels.Components
 
         [Display(Name = "Confirm password")]
         [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         //Company
@@ -51,6 +59,7 @@ namespace Vxp.Web.ViewModels.Components
         //Address
         public EditUserProfileViewComponentAddressModel ContactAddress { get; set; }
 
+        [ModelBinder(typeof(KvpStringListToSelectListModelBinder))]
         public IEnumerable<SelectListItem> BankAccounts { get; set; }
 
         //Other
@@ -65,6 +74,7 @@ namespace Vxp.Web.ViewModels.Components
 
         public List<SelectListItem> AvailableRoles { get; set; }
 
+        [ModelBinder(typeof(KvpStringListToSelectListModelBinder))]
         public ICollection<SelectListItem> AvailableDistributors { get; set; }
 
         public IEnumerable<string> AvailableCountries { get; set; }
@@ -73,7 +83,7 @@ namespace Vxp.Web.ViewModels.Components
         {
             configuration.CreateMap<ApplicationUser, EditUserProfileViewComponentModel>()
                 .ForMember(dest => dest.RoleId, opt =>
-                      opt.MapFrom(src => src.Roles.First().RoleId))
+                    opt.MapFrom(src => src.Roles.First().RoleId))
                 .ForMember(dest => dest.AvailableDistributors,
                     opt => opt.MapFrom(src => src.Distributors.Select(d => new SelectListItem
                     {

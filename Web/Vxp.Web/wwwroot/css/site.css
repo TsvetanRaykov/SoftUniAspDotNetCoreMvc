@@ -99,7 +99,19 @@
     background-image: none;
 }
 
-::placeholder {
+.btn, 
+.page-link {
+    -ms-border-radius: 0.25rem !important;
+    border-radius: 0.25rem !important;
+}
+
+.btn-link,
+.btn-link:hover {
+    color: #6E5773;
+    text-decoration: none;
+}
+
+input::placeholder {
     color: rgba(0, 0, 0, 0.5) !important;
     font-weight: normal;
 }
@@ -125,3 +137,19 @@
     .vxp-edit-user-form-container .text-dark {
         color: black !important;
     }
+
+
+.vxp-table .btn {
+    padding: 0 10px;
+    font-size: small;
+}
+
+.vxp-table .icon {
+    margin: 0.2rem 0.8rem 0.2rem 0;
+    font-size: 1.2rem !important;
+}
+
+.vxp-table.table.dataTable.vxp-table th,
+.vxp-table.table.dataTable tbody td {
+    padding: 5px;
+}

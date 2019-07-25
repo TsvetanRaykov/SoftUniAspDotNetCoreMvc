@@ -14,6 +14,13 @@
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Shared\Components\EditUserProfile\**" />
+    <Content Remove="Views\Shared\Components\EditUserProfile\**" />
+    <EmbeddedResource Remove="Views\Shared\Components\EditUserProfile\**" />
+    <None Remove="Views\Shared\Components\EditUserProfile\**" />
+  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
@@ -35,5 +42,9 @@
     <ProjectReference Include="..\..\Services\Vxp.Services\Vxp.Services.csproj" />
     <ProjectReference Include="..\Vxp.Web.Infrastructure\Vxp.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\Vxp.Web.ViewModels\Vxp.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\Components\EditUserProfile\Default.cshtml" />
   </ItemGroup>
 </Project>

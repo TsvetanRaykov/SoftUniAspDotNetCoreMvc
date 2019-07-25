@@ -17,7 +17,7 @@
     }
 </style>
 
-<form class="w-100" method="post" asp-controller="Users" asp-action="Update">
+<form class="w-100" method="post">
     <div class="d-flex mb-1">
         <div class="w-25 bg-light d-flex flex-column p-1 border rounded">
             <h6 class="bg-primary text-white p-1 rounded">Account data</h6>
@@ -37,6 +37,9 @@
                                 <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@distributor.Text</div>
                                 <div class="col-xl-2 col-sm-4 text-right"><a class="btn btn-light rounded p-0 w-100 border" asp-action="Edit" asp-route-id="@distributor.Value">Edit</a></div>
                             </div>
+
+                            var distibutorKey = $"{distributor.Value}:{distributor.Text}";
+                            <input type="hidden" name="AvailableDistributors" value="@distibutorKey" />
                         }
                         <div class="row px-1">
                             <div class="col-xl-10 col-sm-8">...</div>
@@ -56,7 +59,10 @@
                                 <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@bankAccount.Text</div>
                                 <div class="col-xl-2 col-sm-4 text-right"><a class="btn btn-light rounded p-0 w-100 border" asp-action="Edit" asp-route-id="@bankAccount.Value">Edit</a></div>
                             </div>
+                            var accountKey = $"{bankAccount.Value}:{bankAccount.Text}";
+                            <input type="hidden" name="BankAccounts" value="@accountKey" />
                         }
+
                         <div class="row px-1">
                             <div class="col-xl-10 col-sm-8">...</div>
                             <div class="col-xl-2 col-sm-4 text-right"><a class="btn btn-light rounded p-0 w-100 border" asp-action="">Add</a></div>

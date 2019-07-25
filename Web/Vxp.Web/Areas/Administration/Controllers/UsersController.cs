@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Vxp.Common;
 using Vxp.Data.Models;
 using Vxp.Services.Data.Users;
+using Vxp.Services.Mapping;
 using Vxp.Web.ViewModels.Administration.Users;
 using Vxp.Web.ViewModels.Components;
 
@@ -62,15 +63,42 @@ namespace Vxp.Web.Areas.Administration.Controllers
                 return this.View("CreateUser", inputModel);
             }
 
-            string newUserId = await this._usersService.CreateUser(inputModel);
+            var newUserId = await this._usersService.CreateUser(inputModel);
 
             return this.RedirectToAction(nameof(this.List));
         }
 
-        [HttpPost]
-        public IActionResult Edit(UserIdInputModel inputModel)
+        // [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(UserIdInputModel inputModel)
         {
-            return this.View("EditUser", inputModel);
+
+            var userModels = await this._usersService
+                .GetAll<EditUserProfileViewComponentModel>(u => u.Id == inputModel.Id)
+                .ToListAsync();
+
+            var userModel = userModels.FirstOrDefault();
+
+            userModel = userModel ?? new EditUserProfileViewComponentModel();
+
+            await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(userModel);
+            
+            return this.View("EditUser", userModel);
+        }
+
+       
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditUserProfileViewComponentModel inputModel)
+        {
+
+            if (!this.ModelState.IsValid)
+            {
+                await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(inputModel);
+                return this.View("EditUser", inputModel);
+            }
+
+            return this.Ok();
         }
 
         //[HttpPost]
@@ -108,6 +136,17 @@ namespace Vxp.Web.Areas.Administration.Controllers
             {
                 addUserInputModel.AvailableRoles.RemoveAll(r => r.Text == GlobalConstants.Roles.VendorRoleName);
             }
+        }
+
+        private async Task ApplyMissingPropertiesToEditUserProfileViewComponentModel(EditUserProfileViewComponentModel userModel)
+        {
+            userModel.AvailableCountries = await this._usersService.GetAllCountriesAsync();
+            userModel.AvailableRoles = await this._roleManager.Roles.To<SelectListItem>().ToListAsync();
+            userModel.AvailableRoles.ForEach(r => { r.Selected = r.Value == userModel.RoleId; });
+            userModel.Company = userModel.Company ?? new EditUserProfileViewComponentCompanyModel();
+            userModel.Company.ContactAddress = userModel.Company.ContactAddress ?? new EditUserProfileViewComponentAddressModel();
+            userModel.Company.ShippingAddress = userModel.Company.ShippingAddress ?? new EditUserProfileViewComponentAddressModel();
+            userModel.ContactAddress = userModel.ContactAddress ?? new EditUserProfileViewComponentAddressModel();
         }
     }
 }

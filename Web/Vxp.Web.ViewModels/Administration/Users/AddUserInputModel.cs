@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Vxp.Common.Attributes.Validation;
 using Vxp.Services.Mapping;
 using Vxp.Services.Models.Administration.Users;
+using Vxp.Web.Infrastructure.Attributes.Validation;
 
 namespace Vxp.Web.ViewModels.Administration.Users
 {
