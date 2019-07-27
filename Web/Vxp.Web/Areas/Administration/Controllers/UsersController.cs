@@ -104,6 +104,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
             return this.View("EditUser", inputModel);
         }
 
+        //public IActionResult UpdateAccount()
         
         private async Task ApplyRolesAndDistributorsToAddUserInputModel(AddUserInputModel addUserInputModel)
         {

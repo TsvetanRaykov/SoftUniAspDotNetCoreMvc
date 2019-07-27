@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Vxp.Data.Common.Repositories;
 using Vxp.Data.Models;
@@ -17,9 +16,15 @@ namespace Vxp.Services.Data.BankAccounts
             this._bankAccountsRepository = bankAccountsRepository;
         }
 
-        public TViewModel CreateBankAccount<TViewModel>()
+        public async Task<TViewModel> CreateBankAccount<TViewModel>(TViewModel bankAccount)
         {
-            throw new NotImplementedException();
+            var appBankAccount = AutoMapper.Mapper.Map<BankAccount>(bankAccount);
+
+            await this._bankAccountsRepository.AddAsync(appBankAccount);
+            await this._bankAccountsRepository.SaveChangesAsync();
+
+            bankAccount = AutoMapper.Mapper.Map<TViewModel>(appBankAccount);
+            return bankAccount;
         }
 
         public IQueryable<TViewModel> GetAllBankAccounts<TViewModel>()
@@ -27,9 +32,40 @@ namespace Vxp.Services.Data.BankAccounts
             return this._bankAccountsRepository.AllAsNoTracking().To<TViewModel>();
         }
 
-        public Task<bool> RemoveBankAccountAsync(int bankAccountId)
+        public async Task<bool> RemoveBankAccountAsync(int bankAccountId)
         {
-            throw new NotImplementedException();
+            var bankAccount = await this._bankAccountsRepository.GetByIdWithDeletedAsync(bankAccountId);
+            if (bankAccount == null)
+            {
+                return false;
+            }
+
+            this._bankAccountsRepository.Delete(bankAccount);
+            await this._bankAccountsRepository.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UpdateBankAccount<TViewModel>(TViewModel bankAccount)
+        {
+            var appBankAccount = AutoMapper.Mapper.Map<BankAccount>(bankAccount);
+
+            //var dbBankAccount = await this._bankAccountsRepository.GetByIdWithDeletedAsync(appBankAccount.Id);
+
+            //if (dbBankAccount == null)
+            //{
+            //    return false;
+            //}
+
+            //dbBankAccount.AccountNumber = appBankAccount.AccountNumber;
+            //dbBankAccount.BankName = appBankAccount.BankName;
+            //dbBankAccount.BicCode = appBankAccount.BicCode;
+            //dbBankAccount.SwiftCode = appBankAccount.SwiftCode;
+
+            this._bankAccountsRepository.Update(appBankAccount);
+            await this._bankAccountsRepository.SaveChangesAsync();
+
+            return true;
         }
     }
 }

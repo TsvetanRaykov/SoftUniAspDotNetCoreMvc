@@ -159,9 +159,49 @@ input::placeholder {
     margin-left: 0.25rem;
 }
 
-/*.modal {
-    background: rgba(255, 255, 255, 0.5); 
+.vxp-loader {
+    border: 14px solid #ffffff;
+    border-radius: 50%;
+    border-top: 14px solid #6F5873;
+    border-bottom: 14px solid #6F5873;
+    width: 80px;
+    height: 80px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    margin: 50pt auto;
+    opacity: 0.8;
 }
-.modal-backdrop {
-    display: none;
-}*/
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0); }
+    100% { transform: rotate(360deg); }
+}
+
+.vxp-modal-loader .modal-dialog{
+    display: table;
+    position: relative;
+    margin: 0 auto;
+    top: calc(30%);
+}
+
+.vxp-delete-confirmation-dialog .modal-body {
+    background: #C82333;
+    color: #ffffff;
+}
+
+.vxp-input-error {
+    border: 2px solid red;
+}
+
+#modalBankAccount form .btn {
+    padding: 0 0.5rem;
+    height: 3rem;
+}
+.vxp-validation-errors-placeholder {
+    font-size: small;
+}
