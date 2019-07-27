@@ -68,7 +68,6 @@ namespace Vxp.Web.Areas.Administration.Controllers
             return this.RedirectToAction(nameof(this.List));
         }
 
-        // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(UserIdInputModel inputModel)
         {
 
@@ -85,34 +84,27 @@ namespace Vxp.Web.Areas.Administration.Controllers
             return this.View("EditUser", userModel);
         }
 
-       
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditUserProfileViewComponentModel inputModel)
         {
+            await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(inputModel);
 
             if (!this.ModelState.IsValid)
             {
-                await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(inputModel);
+                //TODO: Implement the server validation logic
+
                 return this.View("EditUser", inputModel);
             }
 
-            return this.Ok();
+            var test = this._usersService.UpdateUser(inputModel);
+
+            inputModel.SuccessMessage = $"{inputModel.UserName} data has been updated.";
+
+            return this.View("EditUser", inputModel);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Update(EditUserProfileViewComponentModel profileViewComponentModel)
-        //{
-        //    if (!this.ModelState.IsValid)
-        //    {
-        //        return this.View("EditUser");
-        //    }
-
-        //    return this.View("EditUser");
-        //}
-
+        
         private async Task ApplyRolesAndDistributorsToAddUserInputModel(AddUserInputModel addUserInputModel)
         {
             var distributors = await this._usersService

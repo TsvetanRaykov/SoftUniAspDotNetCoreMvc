@@ -14,8 +14,11 @@ namespace Vxp.Services.Data.Users
 
         Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName);
 
+        //TODO: Move to AddressesService or so
         Task<IEnumerable<string>> GetAllCountriesAsync();
 
         Task<string> CreateUser<TViewModel>(TViewModel userModel);
+
+        bool UpdateUser<TViewModel>(TViewModel userModel);
     }
 }

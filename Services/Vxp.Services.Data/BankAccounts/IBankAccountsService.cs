@@ -9,7 +9,7 @@ namespace Vxp.Services.Data.BankAccounts
     public interface IBankAccountsService
     {
         TViewModel CreateBankAccount<TViewModel>();
-        IQueryable<TViewModel> GetAllBankAccounts<TViewModel>(Expression<Func<BankAccount, bool>> exp = null);
+        IQueryable<TViewModel> GetAllBankAccounts<TViewModel>();
         Task<bool> RemoveBankAccountAsync(int bankAccountId);
     }
 }

@@ -21,6 +21,10 @@
     <EmbeddedResource Remove="Views\Shared\Components\EditUserProfile\**" />
     <None Remove="Views\Shared\Components\EditUserProfile\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\UsersController.cs" />
+  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>

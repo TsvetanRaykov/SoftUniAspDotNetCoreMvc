@@ -135,5 +135,25 @@ namespace Vxp.Services.Data.Users
 
             return null;
         }
+
+        public bool UpdateUser<TViewModel>(TViewModel userModel)
+        {
+            var applicationUser = AutoMapper.Mapper.Map<ApplicationUser>(userModel);
+
+            var userFromDb = this._usersRepository.AllWithDeleted().FirstOrDefault(u => u.Id == applicationUser.Id);
+
+            if (userFromDb == null)
+            {
+                return false;
+            }
+
+            userFromDb.FirstName = applicationUser.FirstName;
+            userFromDb.LastName = applicationUser.LastName;
+
+            this._usersRepository.Update(userFromDb);
+            this._usersRepository.SaveChangesAsync().GetAwaiter().GetResult();
+
+            return true;
+        }
     }
 }

@@ -4,7 +4,7 @@ using Vxp.Services.Mapping;
 
 namespace Vxp.Web.ViewModels.Components
 {
-    public class EditUserProfileViewComponentAddressModel : IMapFrom<Address>
+    public class EditUserProfileViewComponentAddressModel : IMapFrom<Address>, IMapTo<Address>
     {
         [Display(Name = "City")]
         [StringLength(50)]

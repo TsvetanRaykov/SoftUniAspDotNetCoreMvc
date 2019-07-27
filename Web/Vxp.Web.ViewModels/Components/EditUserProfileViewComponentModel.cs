@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 using Vxp.Web.Infrastructure.ModelBinders;
 
 namespace Vxp.Web.ViewModels.Components
 {
-    
-    public class EditUserProfileViewComponentModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
+
+    public class EditUserProfileViewComponentModel : IMapFrom<ApplicationUser>, IMapTo<ApplicationUser>, IHaveCustomMappings
     {
         public EditUserProfileViewComponentModel()
         {
@@ -26,7 +25,13 @@ namespace Vxp.Web.ViewModels.Components
 
         //AspNetUser
         [Required(AllowEmptyStrings = false)]
+        [StringLength(36)]
         public string UserId { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [Display(Name = "Role")]
+        [StringLength(36)]
+        public string RoleId { get; set; }
 
         [Required]
         [Display(Name = "Email")]
@@ -63,13 +68,8 @@ namespace Vxp.Web.ViewModels.Components
         public IEnumerable<SelectListItem> BankAccounts { get; set; }
 
         //Other
-        //[Required(AllowEmptyStrings = false)]
-        //[Display(Name = "Role")]
-        //[StringLength(32)]
-        public string RoleId { get; set; }
-
         [Display(Name = "Distributor")]
-        [StringLength(32)]
+        [StringLength(36)]
         public string DistributorId { get; set; }
 
         public List<SelectListItem> AvailableRoles { get; set; }
@@ -79,17 +79,33 @@ namespace Vxp.Web.ViewModels.Components
 
         public IEnumerable<string> AvailableCountries { get; set; }
 
+        public string SuccessMessage { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
+            configuration.CreateMap<ApplicationRole, SelectListItem>()
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Name));
+
+            configuration.CreateMap<BankAccount, SelectListItem>()
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.AccountNumber));
+
             configuration.CreateMap<ApplicationUser, EditUserProfileViewComponentModel>()
-                .ForMember(dest => dest.RoleId, opt =>
-                    opt.MapFrom(src => src.Roles.First().RoleId))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.Roles.First().RoleId))
                 .ForMember(dest => dest.AvailableDistributors,
                     opt => opt.MapFrom(src => src.Distributors.Select(d => new SelectListItem
                     {
                         Value = d.DistributorKey.BankAccount.Owner.Id,
                         Text = $"{d.DistributorKey.BankAccount.Owner.Company.Name}"
                     })));
+
+            configuration.CreateMap<EditUserProfileViewComponentModel, ApplicationUser>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.BankAccounts, opt => opt.Ignore())
+                .ForMember(dest => dest.Distributors, opt => opt.Ignore());
+
         }
     }
 }

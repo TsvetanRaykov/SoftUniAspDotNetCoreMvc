@@ -22,16 +22,9 @@ namespace Vxp.Services.Data.BankAccounts
             throw new NotImplementedException();
         }
 
-        public IQueryable<TViewModel> GetAllBankAccounts<TViewModel>(Expression<Func<BankAccount, bool>> exp)
+        public IQueryable<TViewModel> GetAllBankAccounts<TViewModel>()
         {
-            var query = this._bankAccountsRepository.AllAsNoTracking();
-
-            if (exp != null)
-            {
-                query = query.Where(exp);
-            }
-
-            return query.To<TViewModel>();
+            return this._bankAccountsRepository.AllAsNoTracking().To<TViewModel>();
         }
 
         public Task<bool> RemoveBankAccountAsync(int bankAccountId)

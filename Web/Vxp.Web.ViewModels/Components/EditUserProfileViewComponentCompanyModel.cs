@@ -4,7 +4,7 @@ using Vxp.Services.Mapping;
 
 namespace Vxp.Web.ViewModels.Components
 {
-    public class EditUserProfileViewComponentCompanyModel : IMapFrom<Company>
+    public class EditUserProfileViewComponentCompanyModel : IMapFrom<Company>, IMapTo<Company>
     {
         public EditUserProfileViewComponentCompanyModel()
         {

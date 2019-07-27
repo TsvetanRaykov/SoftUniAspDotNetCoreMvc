@@ -18,6 +18,7 @@
 </style>
 
 <form class="w-100" method="post">
+    <input type="hidden" asp-for="@Model.UserId" value="@Model.UserId" />
     <div class="d-flex mb-1">
         <div class="w-25 bg-light d-flex flex-column p-1 border rounded">
             <h6 class="bg-primary text-white p-1 rounded">Account data</h6>
@@ -38,8 +39,8 @@
                                 <div class="col-xl-2 col-sm-4 text-right"><a class="btn btn-light rounded p-0 w-100 border" asp-action="Edit" asp-route-id="@distributor.Value">Edit</a></div>
                             </div>
 
-                            var distibutorKey = $"{distributor.Value}:{distributor.Text}";
-                            <input type="hidden" name="AvailableDistributors" value="@distibutorKey" />
+                            var distributorKey = $"{distributor.Value}:{distributor.Text}";
+                            <input type="hidden" name="AvailableDistributors" value="@distributorKey" />
                         }
                         <div class="row px-1">
                             <div class="col-xl-10 col-sm-8">...</div>
@@ -57,7 +58,7 @@
                         {
                             <div class="row px-1">
                                 <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@bankAccount.Text</div>
-                                <div class="col-xl-2 col-sm-4 text-right"><a class="btn btn-light rounded p-0 w-100 border" asp-action="Edit" asp-route-id="@bankAccount.Value">Edit</a></div>
+                                <div class="col-xl-2 col-sm-4 text-right"><a class="btn btn-light rounded p-0 w-100 border" href="#" data-toggle="modal" data-target="#modalBankAccount" data-id="@bankAccount.Value">Edit</a></div>
                             </div>
                             var accountKey = $"{bankAccount.Value}:{bankAccount.Text}";
                             <input type="hidden" name="BankAccounts" value="@accountKey" />
@@ -213,12 +214,67 @@
             </div>
         </div>
     </div>
-    <div class="d-flex mr-1 my-3 align-content-start">
-        <div class="w-25">
-            <button class="w-50 btn btn-primary rounded" type="submit">Submit</button>
+    <div class="d-flex my-3 align-content-start">
+        <div class="w-25 d-flex pr-1" id="component-notifier">
+            <button class="w-50 btn btn-primary rounded" type="submit">Update</button>
+            <div class="px-1"></div>
+            <button class="w-50 btn btn-primary rounded" type="button">Delete</button>
         </div>
     </div>
 </form>
+
+<!-- Modal -->
+<div class="modal fade" id="modalBankAccount" tabindex="-1" role="dialog" aria-labelledby="modalBankAccountLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalBankAccountLabel">Appointment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#">
+                    <div class="form-group">
+                        <label for="appointment_name" class="text-black">Full Name</label>
+                        <input type="text" class="form-control" name="account-number">
+                    </div>
+                    <div class="form-group">
+                        <label for="appointment_email" class="text-black">Email</label>
+                        <input type="text" class="form-control" id="appointment_email">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="appointment_date" class="text-black">Date</label>
+                                <input type="text" class="form-control" id="appointment_date">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="appointment_time" class="text-black">Time</label>
+                                <input type="text" class="form-control" id="appointment_time">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="appointment_message" class="text-black">Message</label>
+                        <textarea name="" id="appointment_message" class="form-control" cols="30" rows="10"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Send Message" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
 
 <script on-content-loaded>
     window.onload = () => {
@@ -262,12 +318,47 @@
 
         switchFormRoleMode(initialFormMode);
 
-        $(function () {
+        if ("@Model.SuccessMessage") {
+
+            $("#component-notifier").notify("@Model.SuccessMessage",
+                {
+                    "position": "right",
+                    "className": "success"
+                });
+        }
+
+        $(function() {
             let availableCountries = @Html.Raw(Json.Serialize(Model.AvailableCountries));
             $(".country-selector").autocomplete({
                 source: availableCountries
             });
         });
 
+        $('#modalBankAccount').modal({
+            "backdrop": "static",
+            "keyboard": false,
+            "show": false
+        });
+
+        $('#modalBankAccount').appendTo("body");
+
+        $('#modalBankAccount').on('show.bs.modal', function(e) {
+
+            var accountId = $(e.relatedTarget).data('id');
+
+            $.ajax({
+                url: "/api/BankAccounts/" + accountId,
+                type: "GET",
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (data) {
+                    console.error(data);
+                }
+            });
+
+            ////populate the textbox
+            //$(e.currentTarget).find('input[name="account-number"]').val(accountId);
+        });
     };
 </script>
