@@ -12,7 +12,7 @@
         ApplicationDbContext,
         string,
         IdentityUserClaim<string>,
-        IdentityUserRole<string>,
+        ApplicationUserRole<string>,
         IdentityUserLogin<string>,
         IdentityUserToken<string>,
         IdentityRoleClaim<string>>
@@ -22,9 +22,9 @@
         {
         }
 
-        protected override IdentityUserRole<string> CreateUserRole(ApplicationUser user, ApplicationRole role)
+        protected override ApplicationUserRole<string> CreateUserRole(ApplicationUser user, ApplicationRole role)
         {
-            return new IdentityUserRole<string> { RoleId = role.Id, UserId = user.Id };
+            return new ApplicationUserRole<string> { RoleId = role.Id, UserId = user.Id };
         }
 
         protected override IdentityUserClaim<string> CreateUserClaim(ApplicationUser user, Claim claim)

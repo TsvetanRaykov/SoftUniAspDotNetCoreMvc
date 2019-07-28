@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 using Vxp.Web.Infrastructure.ModelBinders;

@@ -1,7 +1,8 @@
-﻿// ReSharper disable VirtualMemberCallInConstructor
+﻿// ReSharper disable ClassWithVirtualMembersNeverInherited.Global
 
 namespace Vxp.Data.Models
 {
+    using System.Collections.Generic;
     using Microsoft.AspNetCore.Identity;
     using System;
     using Vxp.Data.Common.Models;
@@ -18,6 +19,8 @@ namespace Vxp.Data.Models
         {
             this.Id = Guid.NewGuid().ToString();
         }
+
+        public virtual ICollection<ApplicationUserRole<string>> Users { get; set; } = new List<ApplicationUserRole<string>>();
 
         public DateTime CreatedOn { get; set; }
 

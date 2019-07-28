@@ -1,14 +1,15 @@
-﻿class BankAccountForm {
+﻿class DistributorEditForm {
 
-    constructor(accountId) {
+    constructor(distributorId) {
 
-        this.accountId = accountId;
+        this.apiBaseUrl = "/api/Distributors/";
+        this.accountId = distributorId;
         this.loader = $("#modal-loader");
-        this.form = $("#modalBankAccount");
+        this.form = $("#modalDistributor");
 
-        this.submitButton = $("#btnBankAccountSubmit");
-        this.deleteButton = $("#btnBankAccountDelete");
-        this.errorPaceholder = $("#modalBankAccount .vxp-validation-errors-placeholder");
+        this.submitButton = $("#btnDistributorFormSubmit");
+        this.deleteButton = $("#btnDistributorFormDelete");
+        this.errorPaceholder = $("#modalDistributor .vxp-validation-errors-placeholder");
 
         this.ownerId = this.form.find('input[name="owner-id"]').val();
 
@@ -18,18 +19,20 @@
             bicCode: this.form.find('input[name="bic-code"]'),
             swiftCode: this.form.find('input[name="swift-code"]')
         }
-        this.deleteButton.off('click').on("click", () => this.confirmDelete());
+        this.deleteButton.off("click").on("click", () => this.confirmDelete());
 
-        this.setMode(accountId ? "update" : "create");
-        let that = this;
-        this.form.submit(function (e) {
+        this.setMode(distributorId ? "update" : "create");
+
+        const that = this;
+        this.form.off("submit").on("submit", function (e) {
             e.preventDefault();
             that.submit();
+            return false;
         });
 
         for (let key in that.inputFields) {
             if (that.inputFields.hasOwnProperty(key)) {
-                that.inputFields[key].on('change keydown paste input',
+                that.inputFields[key].on("change keydown paste input",
                     function () {
                         that.clearErrors();
                     });
@@ -40,6 +43,7 @@
     }
 
     setMode(mode) {
+
         this.reset();
 
         switch (mode) {
@@ -47,18 +51,21 @@
                 this.submitButton.val("Create");
                 this.method = "POST";
                 this.Run = () => this.form.modal('show');
+                this.deleteButton.hide();
                 break;
             default: // update
                 this.submitButton.val("Update");
                 this.method = "PUT";
+                this.deleteButton.show();
                 this.Run = () => this.load();
+                break;
         }
     }
 
     load() {
 
         $.ajax({
-            url: "/api/BankAccounts/" + this.accountId,
+            url: this.apiBaseUrl + this.accountId,
             type: "GET",
             beforeSend: () => this.loader.modal('show'),
             success: (data) => {
@@ -105,7 +112,7 @@
         let that = this;
 
         $.ajax({
-            url: "/api/BankAccounts/",
+            url: this.apiBaseUrl,
             type: this.method,
             contentType: 'application/json',
             data: JSON.stringify({
@@ -147,8 +154,8 @@
         const that = this;
         window.bootbox.confirm({
 
-            title: "Bank account delete confirmation!",
-            message: "Are you sure to delete this bank account?",
+            title: "Remove distributor from the list!",
+            message: "Are you sure to drop the connection to this distributor?",
             className: "vxp-delete-confirmation-dialog",
             buttons: {
                 confirm: {
@@ -170,7 +177,7 @@
 
     delete() {
         $.ajax({
-            url: "/api/BankAccounts/" + this.accountId,
+            url: this.apiBaseUrl + this.accountId,
             type: "DELETE",
             success: () => {
                 window.location.reload();

@@ -56,6 +56,8 @@
         public DbSet<OrderHistory> OrderHistories { get; set; }
 
         public DbSet<OrderProduct> OrderProducts { get; set; }
+        public DbSet<ApplicationUserRole<string>> ApplicationUserRoles { get; set; }
+
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -109,6 +111,8 @@
         {
             ConfigureUser(builder);
 
+            ConfigureUserRoles(builder);
+
             ConfigureAddress(builder);
 
             ConfigureBankAccount(builder);
@@ -139,6 +143,25 @@
 
             ConfigurePriceModifier(builder);
 
+        }
+
+        private static void ConfigureUserRoles(ModelBuilder builder)
+        {
+            builder.Entity<ApplicationUserRole<string>>(entity =>
+            {
+
+                entity.HasOne(e => e.Role)
+                    .WithMany(r => r.Users)
+                    .HasForeignKey(u => u.RoleId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.User)
+                    .WithMany(u => u.Roles)
+                    .HasForeignKey(r => r.UserId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
         }
 
         private static void ConfigureOrderProduct(ModelBuilder builder)
@@ -346,7 +369,7 @@
             builder.Entity<ApplicationUser>(entity =>
             {
                 entity.HasOne(e => e.ContactAddress);
-                   
+
 
                 entity.HasMany(e => e.Claims)
                     .WithOne()
@@ -355,12 +378,6 @@
                     .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasMany(e => e.Logins)
-                    .WithOne()
-                    .HasForeignKey(e => e.UserId)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasMany(e => e.Roles)
                     .WithOne()
                     .HasForeignKey(e => e.UserId)
                     .IsRequired()

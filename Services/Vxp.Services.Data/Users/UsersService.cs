@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-
-namespace Vxp.Services.Data.Users
+﻿namespace Vxp.Services.Data.Users
 {
     using Mapping;
     using Microsoft.AspNetCore.Identity;
@@ -12,6 +9,8 @@ namespace Vxp.Services.Data.Users
     using Vxp.Data.Common.Repositories;
     using Vxp.Data.Models;
     using Vxp.Services.Models.Administration.Users;
+    using System;
+    using System.Linq.Expressions;
 
     public class UsersService : IUsersService
     {
@@ -35,10 +34,11 @@ namespace Vxp.Services.Data.Users
             this._distributorsService = distributorsService;
         }
 
-        public IQueryable<TViewModel> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
+        public Task<IQueryable<TViewModel>> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
         {
             var query = this._usersRepository.AllAsNoTracking()
                 .Include(user => user.Roles)
+                .ThenInclude(role => role.Role)
                 .Include(user => user.BankAccounts)
                 .Include(user => user.Distributors)
                 .ThenInclude(distributorUser => distributorUser.DistributorKey)
@@ -51,16 +51,16 @@ namespace Vxp.Services.Data.Users
                 query = query.Where(exp);
             }
 
-            return query.To<TViewModel>();
+            return Task.Run(() => query.To<TViewModel>());
         }
 
-        public async Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName)
+        public Task<IQueryable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName)
         {
-            var role = await this._roleManager.FindByNameAsync(roleName);
+            var applicationUsersInRole = this._usersRepository.AllAsNoTracking()
+                .Where(u => u.Roles.Any(r => r.Role.Name == roleName))
+                .Include(u => u.Company);
 
-            return await this._usersRepository.AllAsNoTracking().Where(u => u.Roles.Any(r => r.RoleId == role.Id))
-                .To<TViewModel>()
-                .ToListAsync();
+            return Task.Run(() => applicationUsersInRole.To<TViewModel>());
         }
 
         public async Task<IEnumerable<string>> GetAllCountriesAsync()

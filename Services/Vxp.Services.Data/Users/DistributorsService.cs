@@ -25,11 +25,6 @@ namespace Vxp.Services.Data.Users
             this._distributorKeysRepository = distributorKeysRepository;
         }
 
-        public int GetDistributorsCount()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public async Task<string> GenerateNewDistributorKeyAsync(string distributorName)
         {
             var distributor = this._userManager.Users

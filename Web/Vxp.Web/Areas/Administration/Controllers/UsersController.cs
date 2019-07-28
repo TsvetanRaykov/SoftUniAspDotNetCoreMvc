@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Vxp.Common;
 using Vxp.Data.Models;
 using Vxp.Services.Data.Users;
@@ -16,6 +16,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 {
     public class UsersController : AdministrationController
     {
+
         private readonly IUsersService _usersService;
         private readonly RoleManager<ApplicationRole> _roleManager;
 
@@ -27,15 +28,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> List()
         {
-            var roles = this._roleManager.Roles.ToDictionary(x => x.Id, x => x.Name);
-
-            var viewModel = await this._usersService.GetAll<ListUserViewModel>().ToListAsync();
-
-            foreach (var viewModelUser in viewModel)
-            {
-                viewModelUser.Role = roles[viewModelUser.Roles.First().RoleId];
-            }
-
+            var viewModel = await this._usersService.GetAll<ListUserViewModel>().GetAwaiter().GetResult().ToListAsync();
             return this.View("ListUsers", viewModel);
         }
 
@@ -44,7 +37,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
             var viewModel = new AddUserInputModel
             {
-                Role = GlobalConstants.Roles.VendorRoleName // RoleId dropdown selected item
+                Role = GlobalConstants.Roles.DistributorRoleName // RoleId dropdown selected item
             };
 
             await this.ApplyRolesAndDistributorsToAddUserInputModel(viewModel);
@@ -72,15 +65,14 @@ namespace Vxp.Web.Areas.Administration.Controllers
         {
 
             var userModels = await this._usersService
-                .GetAll<EditUserProfileViewComponentModel>(u => u.Id == inputModel.Id)
-                .ToListAsync();
+                .GetAll<EditUserProfileViewComponentModel>(u => u.Id == inputModel.Id);
 
             var userModel = userModels.FirstOrDefault();
 
             userModel = userModel ?? new EditUserProfileViewComponentModel();
 
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(userModel);
-            
+
             return this.View("EditUser", userModel);
         }
 
@@ -105,7 +97,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
         }
 
         //public IActionResult UpdateAccount()
-        
+
         private async Task ApplyRolesAndDistributorsToAddUserInputModel(AddUserInputModel addUserInputModel)
         {
             var distributors = await this._usersService
@@ -113,6 +105,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
             var vendors = await this._usersService
                 .GetAllInRoleAsync<AddUserDistributorViewModel>(GlobalConstants.Roles.VendorRoleName);
+                
 
             addUserInputModel.AvailableRoles = this._roleManager.Roles
                 .Select(role => new SelectListItem(

@@ -36,7 +36,7 @@
                         {
                             <div class="row px-1">
                                 <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@distributor.Text</div>
-                                <div class="col-xl-2 col-sm-4 text-right"><a class="btn btn-light rounded p-0 w-100 border" asp-action="Edit" asp-route-id="@distributor.Value">Edit</a></div>
+                                <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="new DistributorEditForm('@distributor.Value')">Edit</button></div>
                             </div>
 
                             var distributorKey = $"{distributor.Value}:{distributor.Text}";
@@ -44,7 +44,7 @@
                         }
                         <div class="row px-1">
                             <div class="col-xl-10 col-sm-8">...</div>
-                            <div class="col-xl-2 col-sm-4 text-right"><a class="btn btn-light rounded p-0  w-100 border" asp-action="">Add</a></div>
+                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0  w-100 border" onclick="new DistributorEditForm()">Add</button></div>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         {
                             <div class="row px-1">
                                 <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@bankAccount.Text</div>
-                                <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="new BankAccountForm(@bankAccount.Value)">Edit</button></div>
+                                <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="new BankAccountEditForm(@bankAccount.Value)">Edit</button></div>
                             </div>
                             var accountKey = $"{bankAccount.Value}:{bankAccount.Text}";
                             <input type="hidden" name="BankAccounts" value="@accountKey" />
@@ -66,7 +66,7 @@
 
                         <div class="row px-1">
                             <div class="col-xl-10 col-sm-8">...</div>
-                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="new BankAccountForm()">Add</button></div>
+                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="new BankAccountEditForm()">Add</button></div>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
         </div>
         <div class="px-1"></div>
         <div class="w-25 bg-light d-flex flex-column p-1 border rounded">
-            <h6 class="bg-primary text-white p-1 rounded">Personal information</h6>
+            <h6 class="bg-primary text-white p-1 rounded">Contact information</h6>
             <div class="w-100">
                 <label asp-for="@Model.FirstName" class="vxp-form-control-label"></label>
                 <input asp-for="@Model.FirstName" class="form-control text-dark font-weight-bold" placeholder="First name" value="@Model.FirstName" />
@@ -223,7 +223,7 @@
     </div>
 </form>
 
-<!-- Modal -->
+<!-- Modal Bank Account -->
 <div class="modal fade" id="modalBankAccount" tabindex="-1" role="dialog" aria-labelledby="modalBankAccountLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -270,15 +270,144 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Distributor -->
+<div class="modal fade" id="modalDistributor" tabindex="-1" role="dialog" aria-labelledby="modalDistributorLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDistributorLabel">Distributor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" name="owner-id" value="@Model.UserId" />
+                    <input type="hidden" name="distributor-id" />
+                    <div id="distributor-description-list" class="d-flex flex-column text-dark">
+
+                        <table class="w-100 vxp-table-distributor">
+                            <tr>
+                                <th>Bastun Bastunov</th>
+                                <th>bastun@mail.com</th>
+                            </tr>
+                        </table>
+
+                        @*<div class="row pb-1">
+                                <div class="col-1"></div>
+                                <div class="col pl-2">Bastun Bastunov</div>
+                                <div class="col-1"><span class="icon icon-envelope-o"></span></div>
+                                <div class="col pl-2">bastun@mail.com</div>
+                            </div>*@
+
+                        <h6 class="bg-primary text-white p-1 rounded">Contact</h6>
+                        <table class="w-100 vxp-table-distributor">
+                            <tr>
+                                <th><span class="icon icon-map-marker"></span></th>
+                                <td>eba li go, Yahoo, Malta</td>
+                            </tr>
+                            <tr>
+                                <th><span class="icon icon-envelope"></span></th>
+                                <td>bastun.office@mail.com</td>
+                            </tr>
+                            <tr>
+                                <th><span class="icon icon-phone"></span></th>
+                                <td>+3000909</td>
+                            </tr>
+                        </table>
+
+                        <div class="d-flex">
+                            <div class="w-50">
+                                <h6 class="bg-primary text-white p-1 rounded">Company</h6>
+                                <table class="w-100 vxp-table-distributor">
+                                    <tr>
+                                        <td colspan="2">Company na Bastuna</td>
+                                    </tr>
+                                    <tr>
+                                        <th>BIN</th>
+                                        <td>34713984756234562734</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="mx-1"></div>
+                            <div class="w-50">
+                                <h6 class="bg-primary text-white p-1 rounded">Bank account</h6>
+                                <table class="w-100 vxp-table-distributor">
+                                    <tr>
+                                        <th>Bank</th>
+                                        <td>Fibanka</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Account</th>
+                                        <td>31231231</td>
+                                    </tr>
+                                    <tr>
+                                        <th>BIC</th>
+                                        <td>qweqw9383</td>
+                                    </tr>
+                                    <tr>
+                                        <th>SWIFT</th>
+                                        <td>swqq092384</td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+
+
+
+                        @*<h6 class="bg-primary text-white p-1 rounded">Bank account</h6>
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-2 vxp-form-control-label">Bank</div>
+                                <div class="col pl-2">Fibank</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-2 vxp-form-control-label">Account</div>
+                                <div class="col pl-2">31231231</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-2 vxp-form-control-label">BIC</div>
+                                <div class="col pl-2">qweqw9383</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-1"></div>
+                                <div class="col-2 vxp-form-control-label">SWIFT</div>
+                                <div class="col pl-2">swqq092384</div>
+                            </div>*@
+
+                    </div>
+                    <div class="pt-3 d-flex">
+                        <div class="w-50 d-flex flex-nowrap align-content-end">
+                            @*<input id="btnDistributorFormSubmit" type="submit" value="Update" class="btn btn-success" />*@
+                            <input id="btnDistributorFormDelete" type="button" value="Delete" class="btn btn-danger ml-1" />
+                            <input type="button" value="Cancel" class="btn btn-secondary ml-1" data-dismiss="modal" aria-label="Close" />
+                        </div>
+                        <div class="w-50">
+                            <div class="text-danger vxp-validation-errors-placeholder"></div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 <div id="modal-loader" class="modal vxp-modal-loader" data-backdrop="static" data-keyboard="false" tabindex="-1">
     <div class="modal-dialog modal-sm">
         <div class="vxp-loader"></div>
     </div>
 </div>
 
-<script src="~/js/BankAccountForm.js" on-content-loaded></script>
+<script src="~/js/BankAccountEditForm.js" on-content-loaded></script>
+<script src="~/js/DistributorEditForm.js" on-content-loaded></script>
+
 <script on-content-loaded>
-    
+
     window.onload = () => {
 
         $('#edit-user-form-role-selector').on('change', function () {
@@ -336,14 +465,13 @@
             });
         });
 
-        $('#modalBankAccount').modal({
+        $('#modalBankAccount, #modalDistributor').modal({
             "backdrop": "static",
             "keyboard": false,
             "show": false
         });
 
-        $('#modal-loader').appendTo("body");
-        $('#modalBankAccount').appendTo("body");
+        $('#modalBankAccount, #modalDistributor, #modal-loader').appendTo("body");
 
     };
 </script>

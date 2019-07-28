@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 
 namespace Vxp.Web.ViewModels.Administration.Users
 {
-    public class ListUserViewModel : IMapFrom<ApplicationUser>
+    public class ListUserViewModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
     {
         public string Id { get; set; }
         public bool IsDeleted { get; set; }
@@ -21,8 +23,14 @@ namespace Vxp.Web.ViewModels.Administration.Users
         public string ContactAddressPhone { get; set; }
         public string ContactAddressCountryName { get; set; }
 
-        public string Role { get; set; }
+        public ApplicationRole Role { get; set; }
 
-        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
+        public virtual ICollection<ApplicationUserRole<string>> Roles { get; set; }
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<ApplicationUser, ListUserViewModel>()
+                .ForMember(dest => dest.Role, opt => opt
+                    .MapFrom(src => src.Roles.FirstOrDefault().Role));
+        }
     }
 }

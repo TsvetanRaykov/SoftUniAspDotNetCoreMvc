@@ -124,6 +124,7 @@ input::placeholder {
 
 .vxp-edit-user-form-container {
     width: 100%;
+    font-size: small;
 }
 
     .vxp-edit-user-form-container [class^="col"] {
@@ -136,6 +137,10 @@ input::placeholder {
 
     .vxp-edit-user-form-container .text-dark {
         color: black !important;
+    }
+
+    .vxp-edit-user-form-container [class^="col"]:nth-child(1):hover {
+        background: #E2E6EA;
     }
 
 
@@ -173,16 +178,26 @@ input::placeholder {
 }
 
 @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0); }
-    100% { -webkit-transform: rotate(360deg); }
+    0% {
+        -webkit-transform: rotate(0);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @keyframes spin {
-    0% { transform: rotate(0); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
-.vxp-modal-loader .modal-dialog{
+.vxp-modal-loader .modal-dialog {
     display: table;
     position: relative;
     margin: 0 auto;
@@ -202,6 +217,11 @@ input::placeholder {
     padding: 0 0.5rem;
     height: 3rem;
 }
+
 .vxp-validation-errors-placeholder {
+    font-size: small;
+}
+
+.vxp-table-distributor {
     font-size: small;
 }

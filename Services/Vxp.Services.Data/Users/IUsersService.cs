@@ -10,9 +10,9 @@ namespace Vxp.Services.Data.Users
 
     public interface IUsersService
     {
-        IQueryable<TViewModel> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null);
+        Task<IQueryable<TViewModel>> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null);
 
-        Task<IEnumerable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName);
+        Task<IQueryable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName);
 
         //TODO: Move to AddressesService or so
         Task<IEnumerable<string>> GetAllCountriesAsync();

@@ -11,7 +11,7 @@
         ApplicationRole,
         ApplicationDbContext,
         string,
-        IdentityUserRole<string>,
+        ApplicationUserRole<string>,
         IdentityRoleClaim<string>>
     {
         public ApplicationRoleStore(ApplicationDbContext context, IdentityErrorDescriber describer = null)
