@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 namespace Vxp.Services.Data.Users
@@ -9,7 +9,11 @@ namespace Vxp.Services.Data.Users
 
         Task<bool> AddCustomerToDistributor(string customerName, string distributorKey);
 
-        Task<IEnumerable<TViewModel>> GetCustomers<TViewModel>(string distributorName);
+        Task<IQueryable<TViewModel>> GetCustomers<TViewModel>(string distributorName);
+
+        Task<IQueryable<TViewModel>> GetDistributors<TViewModel>(string customerName);
+
+        Task<IQueryable<TViewModel>> GetAllDistributors<TViewModel>();
 
     }
 }

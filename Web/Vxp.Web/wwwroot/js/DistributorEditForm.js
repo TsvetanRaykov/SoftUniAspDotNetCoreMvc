@@ -3,7 +3,7 @@
     constructor(distributorId) {
 
         this.apiBaseUrl = "/api/Distributors/";
-        this.accountId = distributorId;
+        this.distributorId = distributorId;
         this.loader = $("#modal-loader");
         this.form = $("#modalDistributor");
 
@@ -11,14 +11,24 @@
         this.deleteButton = $("#btnDistributorFormDelete");
         this.errorPaceholder = $("#modalDistributor .vxp-validation-errors-placeholder");
 
-        this.ownerId = this.form.find('input[name="owner-id"]').val();
+        this.customerId = this.form.find('input[name="customer-id"]').val();
 
         this.inputFields = {
-            bankName: this.form.find('input[name="bank-name"]'),
-            accountNumber: this.form.find('input[name="account-number"]'),
-            bicCode: this.form.find('input[name="bic-code"]'),
-            swiftCode: this.form.find('input[name="swift-code"]')
+
+            distName: $("#dist-name"),
+            distEmail: $("#dist-email"),
+            distContactAddress: $("#dist-contact-address"),
+            distContactEmail: $("#dist-contact-email"),
+            distContactPhone: $("#dist-contact-phone"),
+            distCompanyName: $("#dist-company-name"),
+            distCompanyBin: $("#dist-company-bin"),
+            distBankName: $("#dist-bank-name"),
+            distBankIban: $("#dist-bank-iban"),
+            distBankBic: $("#dist-bank-bic"),
+            distBankSwift: $("#dist-bank-swift")
+
         }
+
         this.deleteButton.off("click").on("click", () => this.confirmDelete());
 
         this.setMode(distributorId ? "update" : "create");
@@ -50,29 +60,44 @@
             case "create":
                 this.submitButton.val("Create");
                 this.method = "POST";
-                this.Run = () => this.form.modal('show');
                 this.deleteButton.hide();
+                this.submitButton.show();
+                this.Run = () => this.load(`${this.apiBaseUrl}GetAvailable/${this.customerId}`);
                 break;
             default: // update
                 this.submitButton.val("Update");
                 this.method = "PUT";
+                this.submitButton.hide();
                 this.deleteButton.show();
-                this.Run = () => this.load();
+                this.Run = () => this.load(this.apiBaseUrl + this.distributorId);
                 break;
         }
+        this.mode = mode;
     }
 
-    load() {
+    load(url) {
 
         $.ajax({
-            url: this.apiBaseUrl + this.accountId,
+            url: url,
             type: "GET",
             beforeSend: () => this.loader.modal('show'),
-            success: (data) => {
-                this.inputFields.bankName.val(data.bankName);
-                this.inputFields.accountNumber.val(data.accountNumber);
-                this.inputFields.bicCode.val(data.bicCode);
-                this.inputFields.swiftCode.val(data.swiftCode);
+            success: (dataArray) => {
+                if (this.mode !== "create") {
+                    let data = dataArray[0];
+                    this.inputFields.distName.text(`${data.firstName} ${data.lastName}`);
+                    this.inputFields.distEmail.text(data.email);
+                    this.inputFields.distContactAddress.text(
+                        `${data.contactAddress.addressLocation}, ${data.contactAddress.city}, ${data.contactAddress
+                            .countryName}`);
+                    this.inputFields.distContactEmail.text(data.contactAddress.email);
+                    this.inputFields.distContactPhone.text(data.contactAddress.phone);
+                    this.inputFields.distCompanyName.text(data.company.name);
+                    this.inputFields.distCompanyBin.text(data.company.businessNumber);
+                    this.inputFields.distBankName.text(data.bankAccount.bankName);
+                    this.inputFields.distBankIban.text(data.bankAccount.accountNumber);
+                    this.inputFields.distBankBic.text(data.bankAccount.bicCode);
+                    this.inputFields.distBankSwift.text(data.bankAccount.swiftCode);
+                }
                 this.form.modal('show');
             },
             error: (data) => {
@@ -100,8 +125,7 @@
         const inputFields = this.inputFields;
         for (let key in inputFields) {
             if (inputFields.hasOwnProperty(key)) {
-                inputFields[key].val("");
-
+                inputFields[key].text("");
             }
         }
     }
@@ -116,12 +140,12 @@
             type: this.method,
             contentType: 'application/json',
             data: JSON.stringify({
-                id: this.accountId,
-                ownerId: this.ownerId,
-                bankName: this.inputFields.bankName.val(),
-                accountNumber: this.inputFields.accountNumber.val(),
-                bicCode: this.inputFields.bicCode.val(),
-                swiftCode: this.inputFields.swiftCode.val()
+                //id: this.distributorId,
+                //ownerId: this.ownerId,
+                //bankName: this.inputFields.bankName.val(),
+                //accountNumber: this.inputFields.accountNumber.val(),
+                //bicCode: this.inputFields.bicCode.val(),
+                //swiftCode: this.inputFields.swiftCode.val()
             }),
             success: function () {
                 window.location.reload();
@@ -177,7 +201,7 @@
 
     delete() {
         $.ajax({
-            url: this.apiBaseUrl + this.accountId,
+            url: this.apiBaseUrl + this.distributorId,
             type: "DELETE",
             success: () => {
                 window.location.reload();

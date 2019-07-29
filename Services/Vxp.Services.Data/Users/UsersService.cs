@@ -37,6 +37,7 @@
         public Task<IQueryable<TViewModel>> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
         {
             var query = this._usersRepository.AllAsNoTracking()
+                .Include(user => user.Company)
                 .Include(user => user.Roles)
                 .ThenInclude(role => role.Role)
                 .Include(user => user.BankAccounts)
@@ -44,7 +45,7 @@
                 .ThenInclude(distributorUser => distributorUser.DistributorKey)
                 .ThenInclude(distributorKey => distributorKey.BankAccount)
                 .ThenInclude(bankAccount => bankAccount.Owner)
-                .ThenInclude(applicationUser => applicationUser.Company).AsQueryable();
+                .ThenInclude(bankAccountOwner => bankAccountOwner.Company).AsQueryable();
 
             if (exp != null)
             {
@@ -57,8 +58,7 @@
         public Task<IQueryable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName)
         {
             var applicationUsersInRole = this._usersRepository.AllAsNoTracking()
-                .Where(u => u.Roles.Any(r => r.Role.Name == roleName))
-                .Include(u => u.Company);
+                .Where(u => u.Roles.Any(r => r.Role.Name == roleName));
 
             return Task.Run(() => applicationUsersInRole.To<TViewModel>());
         }

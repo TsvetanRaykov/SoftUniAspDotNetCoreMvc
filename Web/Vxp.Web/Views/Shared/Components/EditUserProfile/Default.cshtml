@@ -273,7 +273,7 @@
 
 <!-- Modal Distributor -->
 <div class="modal fade" id="modalDistributor" tabindex="-1" role="dialog" aria-labelledby="modalDistributorLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalDistributorLabel">Distributor</h5>
@@ -283,50 +283,56 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <input type="hidden" name="owner-id" value="@Model.UserId" />
+                    <input type="hidden" name="customer-id" value="@Model.UserName" />
                     <input type="hidden" name="distributor-id" />
                     <div id="distributor-description-list" class="d-flex flex-column text-dark">
-
-                        <table class="w-100 vxp-table-distributor">
-                            <tr>
-                                <th>Bastun Bastunov</th>
-                                <th>bastun@mail.com</th>
-                            </tr>
-                        </table>
-
-                        @*<div class="row pb-1">
-                                <div class="col-1"></div>
-                                <div class="col pl-2">Bastun Bastunov</div>
-                                <div class="col-1"><span class="icon icon-envelope-o"></span></div>
-                                <div class="col pl-2">bastun@mail.com</div>
-                            </div>*@
-
-                        <h6 class="bg-primary text-white p-1 rounded">Contact</h6>
-                        <table class="w-100 vxp-table-distributor">
-                            <tr>
-                                <th><span class="icon icon-map-marker"></span></th>
-                                <td>eba li go, Yahoo, Malta</td>
-                            </tr>
-                            <tr>
-                                <th><span class="icon icon-envelope"></span></th>
-                                <td>bastun.office@mail.com</td>
-                            </tr>
-                            <tr>
-                                <th><span class="icon icon-phone"></span></th>
-                                <td>+3000909</td>
-                            </tr>
-                        </table>
-
-                        <div class="d-flex">
+                        
+                        <div class="d-flex pt-3">
                             <div class="w-50">
-                                <h6 class="bg-primary text-white p-1 rounded">Company</h6>
+                                <h6 class="bg-primary text-white p-1 rounded">Person</h6>
                                 <table class="w-100 vxp-table-distributor">
                                     <tr>
-                                        <td colspan="2">Company na Bastuna</td>
+                                        <th><span class="icon icon-user-circle"></span></th>
+                                        <td><span  id="dist-name"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th><span class="icon icon-envelope-open-o"></span></th>
+                                        <td><span id="dist-email"></span></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="mx-1"></div>
+                            <div class="w-50">
+                                <h6 class="bg-primary text-white p-1 rounded">Contact</h6>
+                                <table class="w-100 vxp-table-distributor">
+                                    <tr>
+                                        <th><span class="icon icon-map-marker"></span></th>
+                                        <td><span id="dist-contact-address"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th><span class="icon icon-envelope"></span></th>
+                                        <td><span id="dist-contact-email"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th><span class="icon icon-phone"></span></th>
+                                        <td><span id="dist-contact-phone"></span></td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+
+                        <div class="d-flex pt-3">
+                            <div class="w-50">
+                                <h6 class="bg-primary text-white p-1 rounded">Business</h6>
+                                <table class="w-100 vxp-table-distributor">
+                                    <tr>
+                                        <th>Company</th>
+                                        <td><span id="dist-company-name"></span></td>
                                     </tr>
                                     <tr>
                                         <th>BIN</th>
-                                        <td>34713984756234562734</td>
+                                        <td><span id="dist-company-bin"></span></td>
                                     </tr>
                                 </table>
                             </div>
@@ -336,54 +342,30 @@
                                 <table class="w-100 vxp-table-distributor">
                                     <tr>
                                         <th>Bank</th>
-                                        <td>Fibanka</td>
+                                        <td><span id="dist-bank-name"></span></td>
                                     </tr>
                                     <tr>
-                                        <th>Account</th>
-                                        <td>31231231</td>
+                                        <th>IBAN</th>
+                                        <td><span id="dist-bank-iban"></span></td>
                                     </tr>
                                     <tr>
                                         <th>BIC</th>
-                                        <td>qweqw9383</td>
+                                        <td><span id="dist-bank-bic"></span></td>
                                     </tr>
                                     <tr>
                                         <th>SWIFT</th>
-                                        <td>swqq092384</td>
+                                        <td><span id="dist-bank-swift"></span></td>
                                     </tr>
                                 </table>
 
                             </div>
                         </div>
 
-
-
-                        @*<h6 class="bg-primary text-white p-1 rounded">Bank account</h6>
-                            <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-2 vxp-form-control-label">Bank</div>
-                                <div class="col pl-2">Fibank</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-2 vxp-form-control-label">Account</div>
-                                <div class="col pl-2">31231231</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-2 vxp-form-control-label">BIC</div>
-                                <div class="col pl-2">qweqw9383</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-2 vxp-form-control-label">SWIFT</div>
-                                <div class="col pl-2">swqq092384</div>
-                            </div>*@
-
                     </div>
                     <div class="pt-3 d-flex">
                         <div class="w-50 d-flex flex-nowrap align-content-end">
-                            @*<input id="btnDistributorFormSubmit" type="submit" value="Update" class="btn btn-success" />*@
-                            <input id="btnDistributorFormDelete" type="button" value="Delete" class="btn btn-danger ml-1" />
+                            <input id="btnDistributorFormSubmit" type="submit" value="Connect" class="btn btn-success" />
+                            <input id="btnDistributorFormDelete" type="button" value="Disconnect" class="btn btn-danger ml-1" />
                             <input type="button" value="Cancel" class="btn btn-secondary ml-1" data-dismiss="modal" aria-label="Close" />
                         </div>
                         <div class="w-50">

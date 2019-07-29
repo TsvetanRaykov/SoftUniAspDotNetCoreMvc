@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using AutoMapper;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 using Vxp.Common;
 using Vxp.Data;
 using Vxp.Data.Common;
@@ -24,7 +23,6 @@ using Vxp.Services.Data.Users;
 using Vxp.Services.Mapping;
 using Vxp.Services.Messaging;
 using Vxp.Services.Models.Administration.Users;
-using Vxp.Web.Infrastructure.ModelBinders;
 using Vxp.Web.ViewModels;
 using Vxp.Web.ViewModels.Administration.Dashboard;
 
@@ -67,7 +65,7 @@ namespace Vxp.Web
             services
                 .AddMvc(options =>
                 {
-                   // options.ModelBinderProviders.Insert(0, new BankAccountToSelectListItemModelBinderProvider());
+                    // options.ModelBinderProviders.Insert(0, new BankAccountToSelectListItemModelBinderProvider());
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddRazorPagesOptions(options =>
@@ -140,16 +138,17 @@ namespace Vxp.Web
             // Seed data on application startup
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
 
                 if (env.IsDevelopment())
                 {
+                    //var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     //dbContext.Database.EnsureDeleted();
                     //dbContext.Database.Migrate();
                     //new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
                 }
 
-                
+
             }
 
             if (env.IsDevelopment())

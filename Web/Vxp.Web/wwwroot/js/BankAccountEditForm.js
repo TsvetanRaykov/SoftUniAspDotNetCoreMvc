@@ -1,67 +1,38 @@
-﻿class BankAccountEditForm {
+﻿function BankAccountEditForm(accountId) {
 
-    constructor(accountId) {
 
-        this.accountId = accountId;
-        this.loader = $("#modal-loader");
-        this.form = $("#modalBankAccount");
+    this.accountId = accountId;
+    this.loader = $("#modal-loader");
+    this.form = $("#modalBankAccount");
 
-        this.submitButton = $("#btnBankAccountSubmit");
-        this.deleteButton = $("#btnBankAccountDelete");
-        this.errorPaceholder = $("#modalBankAccount .vxp-validation-errors-placeholder");
+    this.submitButton = $("#btnBankAccountSubmit");
+    this.deleteButton = $("#btnBankAccountDelete");
+    this.errorPaceholder = $("#modalBankAccount .vxp-validation-errors-placeholder");
 
-        this.ownerId = this.form.find('input[name="owner-id"]').val();
+    this.ownerId = this.form.find('input[name="owner-id"]').val();
 
-        this.inputFields = {
-            bankName: this.form.find('input[name="bank-name"]'),
-            accountNumber: this.form.find('input[name="account-number"]'),
-            bicCode: this.form.find('input[name="bic-code"]'),
-            swiftCode: this.form.find('input[name="swift-code"]')
-        }
-        this.deleteButton.off("click").on("click", () => this.confirmDelete());
+    this.inputFields = {
+        bankName: this.form.find('input[name="bank-name"]'),
+        accountNumber: this.form.find('input[name="account-number"]'),
+        bicCode: this.form.find('input[name="bic-code"]'),
+        swiftCode: this.form.find('input[name="swift-code"]')
+    }
 
-        this.setMode(accountId ? "update" : "create");
+    this.deleteButton.off("click").on("click", () => this.confirmDelete());
 
-        const that = this;
-        this.form.off("submit").on("submit", function (e) {
-            e.preventDefault();
-            that.submit();
-            return false;
-        });
 
-        for (let key in that.inputFields) {
-            if (that.inputFields.hasOwnProperty(key)) {
-                that.inputFields[key].on("change keydown paste input",
-                    function () {
-                        that.clearErrors();
-                    });
+    this.clearErrors = () => {
+        const inputFields = this.inputFields;
+        for (let key in inputFields) {
+            if (inputFields.hasOwnProperty(key)) {
+                inputFields[key].removeClass("vxp-input-error");
             }
         }
 
-        this.Run();
+        this.errorPaceholder.text("");
     }
 
-    setMode(mode) {
-
-        this.reset();
-
-        switch (mode) {
-            case "create":
-                this.submitButton.val("Create");
-                this.method = "POST";
-                this.Run = () => this.form.modal('show');
-                this.deleteButton.hide();
-                break;
-            default: // update
-                this.submitButton.val("Update");
-                this.method = "PUT";
-                this.deleteButton.show();
-                this.Run = () => this.load();
-                break;
-        }
-    }
-
-    load() {
+    this.load = () => {
 
         $.ajax({
             url: "/api/BankAccounts/" + this.accountId,
@@ -83,18 +54,7 @@
         });
     }
 
-    clearErrors() {
-        const inputFields = this.inputFields;
-        for (let key in inputFields) {
-            if (inputFields.hasOwnProperty(key)) {
-                inputFields[key].removeClass("vxp-input-error");
-            }
-        }
-
-        this.errorPaceholder.text("");
-    }
-
-    reset() {
+    this.reset = () => {
         this.clearErrors();
         const inputFields = this.inputFields;
         for (let key in inputFields) {
@@ -105,9 +65,52 @@
         }
     }
 
-    submit() {
+    this.setMode = (mode) => {
+
+        this.reset();
+
+        switch (mode) {
+            case "create":
+                this.submitButton.val("Create");
+                this.method = "POST";
+                this.Run = () => this.form.modal('show');
+                this.deleteButton.hide();
+                break;
+            default: // update
+                this.submitButton.val("Update");
+                this.method = "PUT";
+                this.deleteButton.show();
+                this.Run = () => this.load();
+                break;
+        }
+    }
+
+    this.setMode(accountId ? "update" : "create");
+
+    const that = this;
+    this.form.off("submit").on("submit", function (e) {
+        e.preventDefault();
+        that.submit();
+        return false;
+    });
+
+    for (let key in that.inputFields) {
+        if (that.inputFields.hasOwnProperty(key)) {
+            that.inputFields[key].on("change keydown paste input",
+                function () {
+                    that.clearErrors();
+                });
+        }
+    }
+
+    this.Run();
+
+   
+
+    this.submit = () => {
 
         this.form.validate(); // method from jquery.validate
+
         let that = this;
 
         $.ajax({
@@ -149,7 +152,7 @@
         });
     }
 
-    confirmDelete() {
+    this.confirmDelete = () => {
         const that = this;
         window.bootbox.confirm({
 
@@ -169,12 +172,12 @@
             swapButtonOrder: true,
             centerVertical: false,
             callback: function (result) {
-                if (result) { that.delete(); }
+                if (result) { that.deleteAccount(); }
             }
         });
     }
 
-    delete() {
+    this.deleteAccount = () => {
         $.ajax({
             url: "/api/BankAccounts/" + this.accountId,
             type: "DELETE",
