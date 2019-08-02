@@ -59,11 +59,12 @@ namespace Vxp.Web.ViewModels.Administration.Users
         public string Address { get; set; }
 
         [DisplayName("Contact Email")]
-        [RequireVendorPartner(nameof(Role), ErrorMessage = "The Contact Email is required")]
+        [RequireVendorPartner(nameof(Role))]
         [EmailAddress]
         public string ContactEmail { get; set; }
 
-        [DisplayName("Phone")]
+        [DisplayName("Contact Phone")]
+        [Required(AllowEmptyStrings = false)]
         [Phone]
         public string ContactPhone { get; set; }
 
@@ -72,22 +73,22 @@ namespace Vxp.Web.ViewModels.Administration.Users
         public string Role { get; set; }
 
         [DisplayName("Company Name")]
-        [RequireVendorPartner(nameof(Role), ErrorMessage = "The Company Name is required")]
+        [RequireVendorPartner(nameof(Role))]
         [StringLength(100)]
         public string CompanyName { get; set; }
 
         [DisplayName("VAT Number")]
-        [RequireVendorPartner(nameof(Role), ErrorMessage = "The VAT is required")]
+        [RequireVendorPartner(nameof(Role))]
         [StringLength(100)]
         public string CompanyVatNumber { get; set; }
 
         [DisplayName("Bank Account Number")]
-        [RequireVendorPartner(nameof(Role), ErrorMessage = "The Bank Account is required")]
+        [RequireVendorPartner(nameof(Role))]
         [StringLength(30)]
         public string AccountNumber { get; set; }
 
         [DisplayName("BIC Code")]
-        [RequireVendorPartner(nameof(Role), ErrorMessage = "The BIC code is required")]
+        [RequireVendorPartner(nameof(Role))]
         [StringLength(30)]
         public string BicCode { get; set; }
 
@@ -96,7 +97,7 @@ namespace Vxp.Web.ViewModels.Administration.Users
         public string SwiftCode { get; set; }
 
         [DisplayName("Bank Name")]
-        [RequireVendorPartner(nameof(Role), ErrorMessage = "The Bank name is required")]
+        [RequireVendorPartner(nameof(Role))]
         [StringLength(100)]
         public string BankName { get; set; }
 
@@ -107,6 +108,6 @@ namespace Vxp.Web.ViewModels.Administration.Users
         public ICollection<SelectListItem> AvailableDistributors { get; set; }
         public IEnumerable<string> AvailableCountries { get; set; }
 
-    
+
     }
 }

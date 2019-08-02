@@ -144,7 +144,7 @@
                     }
                 }
 
-                that.errorPaceholder.text(errors.join("<br/>"));
+                that.errorPaceholder.html(errors.join("<br/>"));
             },
             complete: function () {
                 // ignore

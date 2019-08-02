@@ -7,13 +7,12 @@ namespace Vxp.Services.Data.Users
     {
         Task<string> GenerateNewDistributorKeyAsync(string distributorName);
 
-        Task<bool> AddCustomerToDistributor(string customerName, string distributorKey);
+        Task<bool> AddCustomerToDistributorAsync(string customerName, string distributorKey);
+
+        Task<bool> RemoveCustomerFromDistributorAsync(string customerName, string distributorName);
 
         Task<IQueryable<TViewModel>> GetCustomers<TViewModel>(string distributorName);
 
-        Task<IQueryable<TViewModel>> GetDistributors<TViewModel>(string customerName);
-
-        Task<IQueryable<TViewModel>> GetAllDistributors<TViewModel>();
-
+        Task<IQueryable<TViewModel>> GetDistributorsForUser<TViewModel>(string customerName);
     }
 }

@@ -13,6 +13,14 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190719130959_FixBankAccountOwner.cs" />
     <Compile Remove="Migrations\20190719130959_FixBankAccountOwner.Designer.cs" />
+    <Compile Remove="Migrations\20190802104031_DistributorUserDistributorKeyDeleteCascade.cs" />
+    <Compile Remove="Migrations\20190802104031_DistributorUserDistributorKeyDeleteCascade.Designer.cs" />
+    <Compile Remove="Migrations\20190802104600_DistributorUserDistributorKeyDeleteCascade.cs" />
+    <Compile Remove="Migrations\20190802104600_DistributorUserDistributorKeyDeleteCascade.Designer.cs" />
+    <Compile Remove="Migrations\20190802104646_DistributorUserDistributorKeyDeleteCascade.cs" />
+    <Compile Remove="Migrations\20190802104646_DistributorUserDistributorKeyDeleteCascade.Designer.cs" />
+    <Compile Remove="Migrations\20190802122636_ChangeDistributorUserBankAccountFK.cs" />
+    <Compile Remove="Migrations\20190802122636_ChangeDistributorUserBankAccountFK.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

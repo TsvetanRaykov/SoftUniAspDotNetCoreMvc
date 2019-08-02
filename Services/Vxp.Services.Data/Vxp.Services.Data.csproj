@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Vxp.Data.Common\Vxp.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\Vxp.Data.Models\Vxp.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Vxp.Common\Vxp.Common.csproj" />
     <ProjectReference Include="..\Vxp.Services.Mapping\Vxp.Services.Mapping.csproj" />
     <ProjectReference Include="..\Vxp.Services.Models\Vxp.Services.Models.csproj" />
   </ItemGroup>

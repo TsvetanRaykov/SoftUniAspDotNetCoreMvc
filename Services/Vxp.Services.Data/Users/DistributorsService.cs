@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Vxp.Data.Common.Repositories;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
@@ -12,30 +10,23 @@ namespace Vxp.Services.Data.Users
 {
     public class DistributorsService : IDistributorsService
     {
-        //private readonly IRepository<DistributorUser> _distributorUsersRepository;
-        //private readonly IDeletableEntityRepository<DistributorKey> _distributorKeysRepository;
-        //private readonly UserManager<ApplicationUser> _userManager;
         private readonly IDeletableEntityRepository<ApplicationUser> _usersRepository;
+        private readonly IRepository<DistributorUser> _distributorUsersRepository;
+        private readonly IRepository<DistributorKey> _distributorKeysRepository;
 
-        public DistributorsService(IDeletableEntityRepository<ApplicationUser> usersRepository
-            //IRepository<DistributorUser> distributorUsersRepository,
-            //UserManager<ApplicationUser> userManager,
-            //IDeletableEntityRepository<DistributorKey> distributorKeysRepository,
+        public DistributorsService(
+            IDeletableEntityRepository<ApplicationUser> usersRepository,
+            IRepository<DistributorUser> distributorUsersRepository,
+            IRepository<DistributorKey> distributorKeysRepository
             )
         {
             this._usersRepository = usersRepository;
-            //this._distributorUsersRepository = distributorUsersRepository;
-            //this._userManager = userManager;
-            //this._distributorKeysRepository = distributorKeysRepository;
-            //this._applicationUsersRepository = applicationUsersRepository;
+            this._distributorUsersRepository = distributorUsersRepository;
+            this._distributorKeysRepository = distributorKeysRepository;
         }
 
         public async Task<string> GenerateNewDistributorKeyAsync(string distributorName)
         {
-            //var distributor = this._userManager.Users
-            //    .Include(u => u.BankAccounts)
-            //    .FirstOrDefault(u => u.UserName == distributorName);
-
             var distributor = this._usersRepository.All()
                 .Include(u => u.BankAccounts)
                 .ThenInclude(ba => ba.DistributorKeys)
@@ -49,13 +40,11 @@ namespace Vxp.Services.Data.Users
 
             distributor?.BankAccounts.FirstOrDefault()?.DistributorKeys.Add(newDistributorKey);
             await this._usersRepository.SaveChangesAsync();
-            //await this._distributorKeysRepository.AddAsync(newDistributorKey);
-            //await this._distributorKeysRepository.SaveChangesAsync();
 
             return newDistributorKey.KeyCode.ToString();
         }
 
-        public async Task<bool> AddCustomerToDistributor(string customerName, string distributorKey)
+        public async Task<bool> AddCustomerToDistributorAsync(string customerName, string distributorKey)
         {
             var customerFromDb = await this._usersRepository.AllAsNoTracking().FirstOrDefaultAsync(u => u.UserName == customerName);
 
@@ -64,10 +53,6 @@ namespace Vxp.Services.Data.Users
                     .SelectMany(ba => ba.DistributorKeys
                        .Where(dk => dk.KeyCode.ToString() == distributorKey)))
                 .SingleOrDefaultAsync();
-
-
-            //var distributorKeyFromDb = this._distributorKeysRepository.AllAsNoTracking()
-            //    .FirstOrDefault(k => k.KeyCode.ToString() == distributorKey);
 
             if (customerFromDb == null || distributorKeyFromDb == null)
             {
@@ -81,11 +66,9 @@ namespace Vxp.Services.Data.Users
             };
 
             customerFromDb.Distributors.Add(newRelation);
+            distributorKeyFromDb.Customers.Add(newRelation);
 
             await this._usersRepository.SaveChangesAsync();
-
-            //await this._distributorUsersRepository.AddAsync(newRelation);
-            //await this._distributorUsersRepository.SaveChangesAsync();
 
             return true;
         }
@@ -95,8 +78,9 @@ namespace Vxp.Services.Data.Users
             throw new System.NotImplementedException();
         }
 
-        public Task<IQueryable<TViewModel>> GetDistributors<TViewModel>(string customerName)
+        public Task<IQueryable<TViewModel>> GetDistributorsForUser<TViewModel>(string customerName)
         {
+
             var distributors = this._usersRepository.AllAsNoTracking()
                 .Include(u => u.BankAccounts)
                 .Include(u => u.Company)
@@ -109,9 +93,25 @@ namespace Vxp.Services.Data.Users
             return Task.Run(() => distributors.To<TViewModel>());
         }
 
-        public Task<IQueryable<TViewModel>> GetAllDistributors<TViewModel>()
+        public async Task<bool> RemoveCustomerFromDistributorAsync(string customerName, string distributorName)
         {
-            throw new NotImplementedException();
+            var distributorKey = this._distributorKeysRepository.All()
+                .Include(dk => dk.Customers)
+                .FirstOrDefault(dk => dk.Customers.Any(c => c.ApplicationUser.UserName == customerName) && dk.BankAccount.Owner.UserName == distributorName);
+
+            var relations = distributorKey?.Customers.ToList();
+
+            for (var i = 0; i < relations?.Count; i++)
+            {
+                this._distributorUsersRepository.Delete(relations[i]);
+            }
+
+            // TODO: Reconsider for multiple customers to single distributor key approach
+            this._distributorKeysRepository.Delete(distributorKey);
+
+            await this._distributorKeysRepository.SaveChangesAsync();
+
+            return true;
         }
     }
 }

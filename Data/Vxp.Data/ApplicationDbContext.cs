@@ -23,6 +23,12 @@
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+            base.OnConfiguring(optionsBuilder);
+        }
+
         public DbSet<Setting> Settings { get; set; }
 
         public DbSet<Address> Addresses { get; set; }
@@ -299,13 +305,13 @@
                     .WithMany(k => k.Customers)
                     .HasForeignKey(e => e.DistributorKeyId)
                     .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(e => e.ApplicationUser)
                     .WithMany(k => k.Distributors)
                     .HasForeignKey(e => e.ApplicationUserId)
                     .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
 
@@ -316,7 +322,13 @@
                 e.HasOne(d => d.BankAccount)
                     .WithMany(b => b.DistributorKeys)
                     .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasMany(d => d.Customers)
+                .WithOne(c => c.DistributorKey)
+                .HasForeignKey(c => c.DistributorKeyId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
             });
         }
 
@@ -346,10 +358,6 @@
         {
             builder.Entity<BankAccount>(entity =>
             {
-                entity.HasMany(b => b.DistributorKeys)
-                    .WithOne()
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
                 entity.Property(b => b.AccountNumber).IsRequired();
                 entity.Property(b => b.BicCode).IsRequired();
                 entity.Property(b => b.BankName).IsRequired();

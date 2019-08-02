@@ -286,7 +286,11 @@
                     <input type="hidden" name="customer-id" value="@Model.UserName" />
                     <input type="hidden" name="distributor-id" />
                     <div id="distributor-description-list" class="d-flex flex-column text-dark">
-                        
+                        <div class="pb-1">
+                            <select title="Distributor" class="form-control text-dark font-weight-bold" id="dist-form-selector" name="DistributorId">
+                                <option disabled="disabled" selected="selected" value="">- Select Distributor -</option>
+                            </select>
+                        </div>
                         <div class="d-flex pt-3">
                             <div class="w-50">
                                 <h6 class="bg-primary text-white p-1 rounded">Person</h6>

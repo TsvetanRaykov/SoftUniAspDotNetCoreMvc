@@ -97,6 +97,7 @@
                     };
 
                     await this._countriesRepository.AddAsync(countryFromDb);
+                    await this._countriesRepository.SaveChangesAsync();
                 }
 
                 applicationUser.ContactAddress.CountryId = countryFromDb.Id;
@@ -123,7 +124,7 @@
 
                 if (!string.IsNullOrWhiteSpace(newDistributorKey))
                 {
-                    if (!await this._distributorsService.AddCustomerToDistributor(applicationUser.UserName, newDistributorKey))
+                    if (!await this._distributorsService.AddCustomerToDistributorAsync(applicationUser.UserName, newDistributorKey))
                     {
                         await this._userManager.DeleteAsync(applicationUser);
                         return null;

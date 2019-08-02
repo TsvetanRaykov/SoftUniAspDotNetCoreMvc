@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Moq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Vxp.Data;
@@ -12,52 +10,40 @@ using Xunit;
 
 namespace Vxp.Services.Data.Tests
 {
+    [Collection("Database collection")]
     public class DistributorsServiceTests
     {
+        private readonly DatabaseFixture _fixture;
+
+        public DistributorsServiceTests(DatabaseFixture fixture)
+        {
+            this._fixture = fixture;
+        }
+
         [Fact]
         public async Task GenerateNewDistributorKeyShouldReturnGuidString()
         {
             //Arrange
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: "DbDistServiceTest")
-                .Options;
+           
+            //var fakeUserManager = new Mock<FakeUserManager>();
+            //var userStore = new List<ApplicationUser> { aUser };
+            //fakeUserManager.Setup(x => x.Users).Returns(userStore.AsQueryable);
 
-            var dbContext = new ApplicationDbContext(options);
+            var distUserDistributor = new EfRepository<DistributorUser>(_fixture.DbContext);
+            var distKeysRepository = new EfDeletableEntityRepository<DistributorKey>(_fixture.DbContext);
+            var appUserRepository = new EfDeletableEntityRepository<ApplicationUser>(_fixture.DbContext);
 
-            var aUser = new ApplicationUser
-            {
-                Email = "test@email.com",
-                UserName = "test@email.com",
-                BankAccounts = new[]
-                {
-                    new BankAccount {
-                        AccountNumber = "1234",
-                        BankName = "Fibank",
-                        BicCode = "222333df54",
-                        SwiftCode = "qweqweqwe",
-                    }
-                }
-            };
-
-            var distUsersRepository = new EfRepository<DistributorUser>(dbContext);
-            var distKeysRepository = new EfDeletableEntityRepository<DistributorKey>(dbContext);
-
-            var fakeUserManager = new Mock<FakeUserManager>();
-
-            var userStore = new List<ApplicationUser> { aUser };
-
-            fakeUserManager.Setup(x => x.Users).Returns(userStore.AsQueryable);
-
-            var distributorService = new DistributorsService(distUsersRepository, fakeUserManager.Object, distKeysRepository);
+            var distributorService = new DistributorsService(appUserRepository, distUserDistributor, distKeysRepository);
+            var aUser = await appUserRepository.All().FirstAsync();
 
             //Act
             var newDistributorKey = await distributorService.GenerateNewDistributorKeyAsync(aUser.Email);
 
-            //Assert
             var expectedDistributorKey = distKeysRepository.AllAsNoTracking()
                  .Include(key => key.BankAccount)
                  .FirstOrDefault(k => k.KeyCode.ToString() == newDistributorKey);
 
+            //Assert
             Assert.True(Guid.TryParse(newDistributorKey, out _));
             Assert.Equal(expectedDistributorKey?.BankAccount.AccountNumber, aUser.BankAccounts.First().AccountNumber);
 

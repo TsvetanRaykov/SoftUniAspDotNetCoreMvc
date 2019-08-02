@@ -8,7 +8,7 @@
     <environment names="Development,Development2">
 
         <link rel="icon" href="@Url.Content("~/images/favicon.png")" />
-
+        <link href="~/css/reset-css.css" rel="stylesheet" />
         <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" rel="stylesheet">
@@ -37,8 +37,11 @@
         <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
-        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        
 
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
+        <link rel="icon" href="@Url.Content("~/images/favicon.png")" />
+        <link href="~/css/reset-css.css" rel="stylesheet" />
 
         <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700,800,900" rel="stylesheet">
 
@@ -59,11 +62,11 @@
         <link rel="stylesheet" href="~/css/flaticon.css">
         <link rel="stylesheet" href="~/css/icomoon.css">
 
-        <link href="~/lib/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <link href="~/lib/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css" rel="stylesheet"/>
 
         <link rel="stylesheet" href="~/css/style.css">
 
-        <link href="~/css/site.min.css" rel="stylesheet" />
+        <link href="~/css/site.min.css" rel="stylesheet"/>
     </environment>
 </head>
 <body>
