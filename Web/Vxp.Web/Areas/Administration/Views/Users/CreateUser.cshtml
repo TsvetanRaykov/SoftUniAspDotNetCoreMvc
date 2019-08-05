@@ -20,7 +20,7 @@
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="w-33">
                     <div class="form-group">
-                        <select title="RoleId" class="form-control" asp-for="Role" asp-items="@Model.AvailableRoles" onchange="switchFormRoleMode(this.options[this.selectedIndex].text)"></select>
+                        <select title="RoleName" class="form-control" asp-for="Role" asp-items="@Model.AvailableRoles" onchange="switchFormRoleMode(this.options[this.selectedIndex].text)"></select>
                         <span asp-validation-for="@Model.Role" class="text-danger"></span>
                     </div>
                     <div class="form-group">

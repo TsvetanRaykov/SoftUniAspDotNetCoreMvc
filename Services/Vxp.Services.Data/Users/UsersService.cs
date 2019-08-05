@@ -156,5 +156,18 @@
 
             return true;
         }
+
+        public async Task<bool> UpdateUserPasswordAsync(string userId, string password)
+        {
+            var userFromDb = await this._userManager.FindByIdAsync(userId);
+            if (userFromDb == null)
+            {
+                return false;
+            }
+            await this._userManager.RemovePasswordAsync(userFromDb);
+            await this._userManager.AddPasswordAsync(userFromDb, password);
+
+            return true;
+        }
     }
 }

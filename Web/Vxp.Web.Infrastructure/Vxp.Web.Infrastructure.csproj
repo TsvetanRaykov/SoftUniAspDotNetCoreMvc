@@ -14,11 +14,6 @@
     <EmbeddedResource Remove="ViewComponents\**" />
     <None Remove="ViewComponents\**" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="ModelBinders\BankAccountToSelectListItemModelBinder.cs" />
-    <Compile Remove="ModelBinders\BankAccountToSelectListItemModelBinderProvider.cs" />
-  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>

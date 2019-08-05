@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Vxp.Web.Infrastructure.ModelBinders
+namespace Vxp.Web.ViewModels.ModelBinders
 {
     public class KvpStringListToSelectListModelBinder : IModelBinder
     {

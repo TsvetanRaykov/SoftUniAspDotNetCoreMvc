@@ -1,8 +1,8 @@
 ﻿namespace Vxp.Web.ViewModels.Administration.Users
 {
     using AutoMapper;
-    using Vxp.Data.Models;
-    using Vxp.Services.Mapping;
+    using Data.Models;
+    using Services.Mapping;
 
     public class AddUserDistributorViewModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
     {

@@ -1,23 +1,29 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-
-namespace Vxp.Web.ViewModels.Components
+﻿namespace Vxp.Web.ViewModels.Components
 {
+    using Common;
+    using Data.Models;
+    using Infrastructure.Attributes.Validation;
+    using Services.Mapping;
+    using System.ComponentModel.DataAnnotations;
+
     public class EditUserProfileViewComponentCompanyModel : IMapFrom<Company>, IMapTo<Company>
     {
+        public string RoleName { get; set; }
+
         public EditUserProfileViewComponentCompanyModel()
         {
             this.ContactAddress = new EditUserProfileViewComponentAddressModel();
             this.ShippingAddress = new EditUserProfileViewComponentAddressModel();
         }
 
-        [Required(AllowEmptyStrings = false)]
         [Display(Name = "Company name")]
         [StringLength(30)]
+        [RequiredInSpecificRoles(compareRoleProperty: nameof(RoleName), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName,
+            ErrorMessage = "The Company name is required.")]
         public string Name { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
+        [RequiredInSpecificRoles(compareRoleProperty: nameof(RoleName), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName,
+            ErrorMessage = "The Company BIN is required.")]
         [Display(Name = "Business number")]
         [StringLength(15)]
         public string BusinessNumber { get; set; }

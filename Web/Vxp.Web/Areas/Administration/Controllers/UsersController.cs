@@ -1,19 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-using Vxp.Common;
-using Vxp.Data.Models;
-using Vxp.Services.Data.Users;
-using Vxp.Services.Mapping;
-using Vxp.Web.ViewModels.Administration.Users;
-using Vxp.Web.ViewModels.Components;
-
-
-namespace Vxp.Web.Areas.Administration.Controllers
+﻿namespace Vxp.Web.Areas.Administration.Controllers
 {
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Common;
+    using Data.Models;
+    using Vxp.Services.Data.Users;
+    using Services.Mapping;
+    using Vxp.Web.ViewModels.Administration.Users;
+    using ViewModels.Components;
+
     public class UsersController : AdministrationController
     {
 
@@ -37,7 +36,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
             var viewModel = new AddUserInputModel
             {
-                Role = GlobalConstants.Roles.DistributorRoleName // RoleId dropdown selected item
+                Role = GlobalConstants.Roles.DistributorRoleName // RoleName dropdown selected item
             };
 
             await this.ApplyRolesAndDistributorsToAddUserInputModel(viewModel);
@@ -69,7 +68,10 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
             var userModel = userModels.FirstOrDefault();
 
-            userModel = userModel ?? new EditUserProfileViewComponentModel();
+            userModel = userModel ?? new EditUserProfileViewComponentModel
+            {
+                IsNewUser = true
+            };
 
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(userModel);
 
@@ -82,21 +84,33 @@ namespace Vxp.Web.Areas.Administration.Controllers
         {
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(inputModel);
 
-            if (!this.ModelState.IsValid)
+            if (this.ModelState.IsValid && this._usersService.UpdateUser(inputModel))
             {
-                //TODO: Implement the server validation logic
-
-                return this.View("EditUser", inputModel);
+                inputModel.SuccessMessage = $"{inputModel.UserName} data has been updated.";
             }
-
-            var test = this._usersService.UpdateUser(inputModel);
-
-            inputModel.SuccessMessage = $"{inputModel.UserName} data has been updated.";
 
             return this.View("EditUser", inputModel);
         }
 
-        //public IActionResult UpdateAccount()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(EditUserProfileViewComponentResetPasswordModel inputModel)
+        {
+            var userModels = await this._usersService
+                .GetAll<EditUserProfileViewComponentModel>(u => u.Id == inputModel.UserId);
+
+            var userModel = userModels.Single();
+            await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(userModel);
+
+            if (this.ModelState.IsValid)
+            {
+                if (await this._usersService.UpdateUserPasswordAsync(inputModel.UserId, inputModel.Password))
+                {
+                    userModel.SuccessMessage = $"{userModel.UserName} password has been set.";
+                }
+            }
+            return this.View("EditUser", userModel);
+        }
 
         private async Task ApplyRolesAndDistributorsToAddUserInputModel(AddUserInputModel addUserInputModel)
         {
@@ -105,7 +119,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
             var vendors = await this._usersService
                 .GetAllInRoleAsync<AddUserDistributorViewModel>(GlobalConstants.Roles.VendorRoleName);
-                
+
 
             addUserInputModel.AvailableRoles = this._roleManager.Roles
                 .Select(role => new SelectListItem(
@@ -128,7 +142,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
         {
             userModel.AvailableCountries = await this._usersService.GetAllCountriesAsync();
             userModel.AvailableRoles = await this._roleManager.Roles.To<SelectListItem>().ToListAsync();
-            userModel.AvailableRoles.ForEach(r => { r.Selected = r.Value == userModel.RoleId; });
+            userModel.AvailableRoles.ForEach(r => { r.Selected = r.Value == userModel.RoleName; });
             userModel.Company = userModel.Company ?? new EditUserProfileViewComponentCompanyModel();
             userModel.Company.ContactAddress = userModel.Company.ContactAddress ?? new EditUserProfileViewComponentAddressModel();
             userModel.Company.ShippingAddress = userModel.Company.ShippingAddress ?? new EditUserProfileViewComponentAddressModel();

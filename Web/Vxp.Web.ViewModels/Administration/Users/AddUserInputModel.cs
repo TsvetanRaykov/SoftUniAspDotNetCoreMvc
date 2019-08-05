@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Vxp.Common;
 using Vxp.Services.Mapping;
 using Vxp.Services.Models.Administration.Users;
 using Vxp.Web.Infrastructure.Attributes.Validation;
@@ -59,7 +60,7 @@ namespace Vxp.Web.ViewModels.Administration.Users
         public string Address { get; set; }
 
         [DisplayName("Contact Email")]
-        [RequireVendorPartner(nameof(Role))]
+        [RequiredInSpecificRoles(compareRoleProperty: nameof(Role), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName)]
         [EmailAddress]
         public string ContactEmail { get; set; }
 
@@ -73,22 +74,22 @@ namespace Vxp.Web.ViewModels.Administration.Users
         public string Role { get; set; }
 
         [DisplayName("Company Name")]
-        [RequireVendorPartner(nameof(Role))]
+        [RequiredInSpecificRoles(compareRoleProperty: nameof(Role), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName)]
         [StringLength(100)]
         public string CompanyName { get; set; }
 
         [DisplayName("VAT Number")]
-        [RequireVendorPartner(nameof(Role))]
+        [RequiredInSpecificRoles(compareRoleProperty: nameof(Role), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName)]
         [StringLength(100)]
         public string CompanyVatNumber { get; set; }
 
         [DisplayName("Bank Account Number")]
-        [RequireVendorPartner(nameof(Role))]
+        [RequiredInSpecificRoles(compareRoleProperty: nameof(Role), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName)]
         [StringLength(30)]
         public string AccountNumber { get; set; }
 
         [DisplayName("BIC Code")]
-        [RequireVendorPartner(nameof(Role))]
+        [RequiredInSpecificRoles(compareRoleProperty: nameof(Role), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName)]
         [StringLength(30)]
         public string BicCode { get; set; }
 
@@ -97,7 +98,7 @@ namespace Vxp.Web.ViewModels.Administration.Users
         public string SwiftCode { get; set; }
 
         [DisplayName("Bank Name")]
-        [RequireVendorPartner(nameof(Role))]
+        [RequiredInSpecificRoles(compareRoleProperty: nameof(Role), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName)]
         [StringLength(100)]
         public string BankName { get; set; }
 

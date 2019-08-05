@@ -4,16 +4,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Microsoft.AspNetCore.Identity;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
-using Vxp.Web.Infrastructure.ModelBinders;
+using Vxp.Web.Infrastructure.Attributes.Validation;
+using Vxp.Web.ViewModels.ModelBinders;
 
 namespace Vxp.Web.ViewModels.Components
 {
 
     public class EditUserProfileViewComponentModel : IMapFrom<ApplicationUser>, IMapTo<ApplicationUser>, IHaveCustomMappings
     {
+        public bool IsNewUser { get; set; }
+
         public EditUserProfileViewComponentModel()
         {
             this.BankAccounts = new HashSet<SelectListItem>();
@@ -32,7 +34,7 @@ namespace Vxp.Web.ViewModels.Components
         [Required(AllowEmptyStrings = false)]
         [Display(Name = "Role")]
         [StringLength(36)]
-        public string RoleId { get; set; }
+        public string RoleName { get; set; }
 
         [Required]
         [Display(Name = "Email")]
@@ -49,6 +51,7 @@ namespace Vxp.Web.ViewModels.Components
         [StringLength(50, ErrorMessage = "{0} must be at least {2} symbols", MinimumLength = 3)]
         public string LastName { get; set; }
 
+        [RequiredWhenNewUser(nameof(IsNewUser))]
         [Display(Name = "Password")]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
@@ -85,7 +88,7 @@ namespace Vxp.Web.ViewModels.Components
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<ApplicationRole, SelectListItem>()
-                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Name));
 
             configuration.CreateMap<BankAccount, SelectListItem>()
@@ -94,7 +97,7 @@ namespace Vxp.Web.ViewModels.Components
 
             configuration.CreateMap<ApplicationUser, EditUserProfileViewComponentModel>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.RoleId, opt => opt.MapFrom(src => src.Roles.First().RoleId))
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Roles.First().Role.Name))
                 .ForMember(dest => dest.AvailableDistributors,
                     opt => opt.MapFrom(src => src.Distributors.Select(d => new SelectListItem
                     {
@@ -106,7 +109,6 @@ namespace Vxp.Web.ViewModels.Components
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.BankAccounts, opt => opt.Ignore())
                 .ForMember(dest => dest.Distributors, opt => opt.Ignore());
-
         }
     }
 }

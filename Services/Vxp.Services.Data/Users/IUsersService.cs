@@ -20,5 +20,7 @@ namespace Vxp.Services.Data.Users
         Task<string> CreateUser<TViewModel>(TViewModel userModel);
 
         bool UpdateUser<TViewModel>(TViewModel userModel);
+
+        Task<bool> UpdateUserPasswordAsync(string userId, string password);
     }
 }

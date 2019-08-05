@@ -1,23 +1,19 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Vxp.Common;
 
 namespace Vxp.Web.Infrastructure.Attributes.Validation
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class RequireVendorPartnerAttribute : ValidationAttribute
+    public class RequiredInSpecificRolesAttribute : ValidationAttribute
     {
         private readonly string _compareRoleProperty;
-        private readonly string[] _requiredRoles = new[]
-        {
-            GlobalConstants.Roles.VendorRoleName,
-            GlobalConstants.Roles.DistributorRoleName
-        };
+        private readonly string[] _requiredRoles;
 
-        public RequireVendorPartnerAttribute(string compareRoleProperty)
+        public RequiredInSpecificRolesAttribute(string compareRoleProperty, params string[] requiredRoles)
         {
             this._compareRoleProperty = compareRoleProperty;
+            this._requiredRoles = requiredRoles;
         }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
