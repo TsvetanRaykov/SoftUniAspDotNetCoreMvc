@@ -41,7 +41,7 @@ namespace Vxp.Web.Areas.Identity.Pages.Account
         [TempData]
         public string ErrorMessage { get; set; }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(this.ErrorMessage))
             {
@@ -50,12 +50,26 @@ namespace Vxp.Web.Areas.Identity.Pages.Account
 
             returnUrl = returnUrl ?? this.Url.Content("~/");
 
+            if (this.User.Identity.IsAuthenticated)
+            {
+                if (this.User.IsInRole(GlobalConstants.Roles.AdministratorRoleName))
+                {
+                    return this.RedirectToAction("Index", "Dashboard", new { area = "Administration" });
+                }
+
+
+                return this.LocalRedirect(returnUrl);
+            }
+
+
             // Clear the existing external cookie to ensure a clean login process
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
             this.ExternalLogins = (await this._signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             this.ReturnUrl = returnUrl;
+
+            return this.Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -70,12 +84,6 @@ namespace Vxp.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     this._logger.LogInformation("User logged in.");
-
-                    if (this.User.IsInRole(GlobalConstants.Roles.AdministratorRoleName))
-                    {
-                        return this.RedirectToAction("Index","Dashboard");
-                    }
-
 
                     return this.LocalRedirect(returnUrl);
                 }

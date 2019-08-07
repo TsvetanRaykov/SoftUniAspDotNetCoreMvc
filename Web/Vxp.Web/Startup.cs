@@ -73,7 +73,10 @@ namespace Vxp.Web
                     options.AllowAreas = true;
                     options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
                     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
-                });
+                })
+                .AddSessionStateTempDataProvider();
+
+            services.AddSession();
 
             services
                 .ConfigureApplicationCookie(options =>
@@ -139,16 +142,17 @@ namespace Vxp.Web
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
 
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                 if (env.IsDevelopment())
                 {
-                    //var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
                     //dbContext.Database.EnsureDeleted();
                     //dbContext.Database.Migrate();
-                    //new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+
                 }
 
-
+                new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
             if (env.IsDevelopment())
@@ -165,6 +169,9 @@ namespace Vxp.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseSession();
+
             app.UseAuthentication();
 
             app.UseResponseCompression();

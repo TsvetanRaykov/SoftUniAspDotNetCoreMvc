@@ -349,5 +349,4 @@ MigrationBackup/
 appsettings.Production.json
 #*.min.css
 #*.min.js
-/Web/Vxp.Web/New Text Document.txt
 /Web/Vxp.Web/appsettings.Development.json

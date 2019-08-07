@@ -1,4 +1,7 @@
-﻿using Vxp.Common;
+﻿using System;
+using System.Diagnostics;
+using Vxp.Common;
+using Vxp.Web.ViewModels;
 
 namespace Vxp.Web.Controllers
 {
@@ -8,6 +11,7 @@ namespace Vxp.Web.Controllers
     {
         public IActionResult Index()
         {
+
             if (!this.User.Identity.IsAuthenticated)
             {
                 return this.View();
@@ -30,7 +34,10 @@ namespace Vxp.Web.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error() => this.View();
+        public IActionResult Error()
+        {
+            return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
+        }
 
         public IActionResult Technology()
         {

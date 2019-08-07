@@ -241,25 +241,25 @@
             </div>
             <div class="modal-body">
                 <form asp-controller="Users" asp-action="ResetPassword" method="post">
-                    <input asp-for="UserId" type="hidden" />
+                    <input asp-for="UserId" type="hidden" value="@Model.UserId" />
                     <div>
                         <div class="py-1"></div>
                         <div class="w-100">
                             <label asp-for="@Model.Password" class="vxp-form-control-label"></label>
-                            <input asp-for="@Model.Password" class="form-control text-dark font-weight-bold" placeholder="Password" value="@Model.Password"/>
+                            <input asp-for="@Model.Password" class="form-control text-dark font-weight-bold" placeholder="Password" value="@Model.Password" />
                             <span asp-validation-for="@Model.Password" class="text-danger"></span>
                         </div>
                         <div class="py-1"></div>
                         <div class="w-100 align-self-end">
                             <label asp-for="@Model.ConfirmPassword" class="vxp-form-control-label"></label>
-                            <input asp-for="@Model.ConfirmPassword" class="form-control text-dark font-weight-bold" placeholder="Confirm password" value="@Model.ConfirmPassword"/>
+                            <input asp-for="@Model.ConfirmPassword" class="form-control text-dark font-weight-bold" placeholder="Confirm password" value="@Model.ConfirmPassword" />
                             <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="pt-3 d-flex">
                         <div class="w-50 d-flex flex-nowrap align-content-end">
-                            <input id="btnResetPasswordSubmit" type="submit" value="Submit" class="btn btn-success"/>
-                            <input type="button" value="Cancel" class="btn btn-secondary ml-1" data-dismiss="modal" aria-label="Close"/>
+                            <input id="btnResetPasswordSubmit" type="submit" value="Submit" class="btn btn-success" />
+                            <input type="button" value="Cancel" class="btn btn-secondary ml-1" data-dismiss="modal" aria-label="Close" />
                         </div>
                         <div class="w-50">
                             <div class="text-danger vxp-validation-errors-placeholder"></div>

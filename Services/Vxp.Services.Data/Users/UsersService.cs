@@ -148,8 +148,28 @@
                 return false;
             }
 
+
             userFromDb.FirstName = applicationUser.FirstName;
             userFromDb.LastName = applicationUser.LastName;
+            userFromDb.UserName = applicationUser.UserName;
+            userFromDb.Company = applicationUser.Company;
+
+            if (userFromDb.Company.Name == null)
+            {
+                userFromDb.Company = null;
+            }
+            else
+            {
+                if (userFromDb.Company.ContactAddress.AddressLocation == null)
+                {
+                    userFromDb.Company.ContactAddress = null;
+                }
+
+                if (userFromDb.Company.ShippingAddress.AddressLocation == null)
+                {
+                    userFromDb.Company.ShippingAddress = null;
+                }
+            }
 
             this._usersRepository.Update(userFromDb);
             this._usersRepository.SaveChangesAsync().GetAwaiter().GetResult();

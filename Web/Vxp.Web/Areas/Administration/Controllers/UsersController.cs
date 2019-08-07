@@ -1,4 +1,6 @@
-﻿namespace Vxp.Web.Areas.Administration.Controllers
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+namespace Vxp.Web.Areas.Administration.Controllers
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -75,6 +77,11 @@
 
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(userModel);
 
+            if (this.TempData.ContainsKey("EditUserViewMessage"))
+            {
+                userModel.SuccessMessage = this.TempData["EditUserViewMessage"] as string;
+            }
+
             return this.View("EditUser", userModel);
         }
 
@@ -86,7 +93,12 @@
 
             if (this.ModelState.IsValid && this._usersService.UpdateUser(inputModel))
             {
-                inputModel.SuccessMessage = $"{inputModel.UserName} data has been updated.";
+                this.TempData["EditUserViewMessage"] = $"{inputModel.UserName} data has been updated.";
+            }
+
+            if (this.TempData.ContainsKey("EditUserViewMessage"))
+            {
+                inputModel.SuccessMessage = this.TempData["EditUserViewMessage"] as string;
             }
 
             return this.View("EditUser", inputModel);
@@ -94,8 +106,19 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(EditUserProfileViewComponentResetPasswordModel inputModel)
+        public async Task<IActionResult> ResetPassword(EditUserProfileViewComponentModel inputModel)
         {
+            var validationPropertyNames = new[] { nameof(inputModel.UserId), nameof(inputModel.Password), nameof(inputModel.ConfirmPassword) };
+
+            foreach (var property in this.ModelState)
+            {
+                if (!validationPropertyNames.Contains(property.Key))
+                {
+                    this.ModelState[property.Key].Errors.Clear();
+                    this.ModelState[property.Key].ValidationState = ModelValidationState.Valid;
+                }
+            }
+
             var userModels = await this._usersService
                 .GetAll<EditUserProfileViewComponentModel>(u => u.Id == inputModel.UserId);
 
@@ -106,11 +129,37 @@
             {
                 if (await this._usersService.UpdateUserPasswordAsync(inputModel.UserId, inputModel.Password))
                 {
-                    userModel.SuccessMessage = $"{userModel.UserName} password has been set.";
+                    this.TempData["EditUserViewMessage"] = $"{userModel.UserName} password has been set.";
                 }
             }
-            return this.View("EditUser", userModel);
+
+            return this.RedirectToAction("Edit", new { id = inputModel.UserId });
+            //return this.View("EditUser", userModel);
         }
+
+        [AcceptVerbs("Post")]
+        public IActionResult VerifyBusinessNumber([FromForm(Name = "Company.Name")] string companyName, [FromForm(Name = "Company.BusinessNumber")] string businessNumber)
+        {
+            if (string.IsNullOrWhiteSpace(companyName) && !string.IsNullOrEmpty(businessNumber))
+            {
+                return this.Json("The Business number require Company.");
+            }
+
+            return this.Json(true);
+        }
+
+        [AcceptVerbs("Post")]
+        public IActionResult VerifyCompanyName([FromForm(Name = "Company.Name")] string companyName, [FromForm(Name = "Company.BusinessNumber")] string businessNumber)
+        {
+            if (string.IsNullOrWhiteSpace(businessNumber) && !string.IsNullOrEmpty(companyName))
+            {
+                return this.Json("The Company must have Business number.");
+            }
+
+            return this.Json(true);
+        }
+
+        #region private
 
         private async Task ApplyRolesAndDistributorsToAddUserInputModel(AddUserInputModel addUserInputModel)
         {
@@ -148,5 +197,7 @@
             userModel.Company.ShippingAddress = userModel.Company.ShippingAddress ?? new EditUserProfileViewComponentAddressModel();
             userModel.ContactAddress = userModel.ContactAddress ?? new EditUserProfileViewComponentAddressModel();
         }
+
+        #endregion
     }
 }
