@@ -10,16 +10,17 @@
             public const string CustomerRoleName = "Customer";
         }
 
-        public static class Email
+        public static class SystemEmail
         {
-            public const string SystemEmailSendFromEmail = "noreply@vertexdesign.bg";
-            public const string SystemEmailSendFromName = "VERTEX DESIGN LTD.";
+            public const string SendFromEmail = "noreply@vertexdesign.bg";
+            public const string SendFromName = "VERTEX DESIGN LTD.";
         }
 
         public static class ErrorMessages
         {
-            public const string RequiredField = "{0} is required.";
+            public const string RequiredField = "The {0} is required.";
             public const string EmailInvalid = "The {0} field is not a valid e-mail address.";
+            public const string PhoneInvalid = "The {0} field is not a valid phone.";
         }
     }
 }

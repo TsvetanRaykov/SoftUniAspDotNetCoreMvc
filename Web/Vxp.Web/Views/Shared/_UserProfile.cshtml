@@ -1,21 +1,6 @@
 ﻿@using Vxp.Common
 @model Vxp.Web.ViewModels.Users.EditUserProfileViewModel
-<style type="text/css">
-    .vxp-section-edit-user-shipping-address {
-    }
 
-    .vxp-section-edit-user-company-info {
-    }
-
-    .vxp-section-edit-user-bank-accounts {
-    }
-
-    .vxp-section-edit-user-distributors {
-    }
-
-    .country-selector {
-    }
-</style>
 <form id="formUserDetails" class="w-100" method="post">
     <input type="hidden" asp-for="@Model.UserId" value="@Model.UserId" />
     <div class="d-flex mb-1">
@@ -33,17 +18,17 @@
                     <div class="vxp-edit-user-form-container container-fluid border rounded">
                         @foreach (var distributor in Model.AvailableDistributors)
                         {
-                            <div class="row px-1">
-                                <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@distributor.Text</div>
-                                <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="new DistributorEditForm('@distributor.Value')">Edit</button></div>
-                            </div>
+                        <div class="row px-1">
+                            <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@distributor.Text</div>
+                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="OpenDistributorManageForm('@distributor.Value')">Edit</button></div>
+                        </div>
 
                             var distributorKey = $"{distributor.Value}:{distributor.Text}";
-                            <input type="hidden" name="AvailableDistributors" value="@distributorKey" />
+                        <input type="hidden" name="AvailableDistributors" value="@distributorKey" />
                         }
                         <div class="row px-1">
                             <div class="col-xl-10 col-sm-8">...</div>
-                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0  w-100 border" onclick="new DistributorEditForm()">Add</button></div>
+                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0  w-100 border" onclick="OpenDistributorManageForm()">Add</button></div>
                         </div>
                     </div>
                 </div>
@@ -55,17 +40,17 @@
                     <div class="vxp-edit-user-form-container container-fluid border rounded">
                         @foreach (var bankAccount in Model.BankAccounts)
                         {
-                            <div class="row px-1">
-                                <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@bankAccount.Text</div>
-                                <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="new BankAccountEditForm(@bankAccount.Value)">Edit</button></div>
-                            </div>
+                        <div class="row px-1">
+                            <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@bankAccount.Text</div>
+                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="OpenBankAccountManageForm(@bankAccount.Value)">Edit</button></div>
+                        </div>
                             var accountKey = $"{bankAccount.Value}:{bankAccount.Text}";
-                            <input type="hidden" name="BankAccounts" value="@accountKey" />
+                        <input type="hidden" name="BankAccounts" value="@accountKey" />
                         }
 
                         <div class="row px-1">
                             <div class="col-xl-10 col-sm-8">...</div>
-                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="new BankAccountEditForm()">Add</button></div>
+                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="OpenBankAccountManageForm()">Add</button></div>
                         </div>
                     </div>
                 </div>
@@ -331,7 +316,8 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <input type="hidden" name="customer-id" value="@Model.UserName" />
+                    <input type="hidden" name="customer-email" value="@Model.UserName" />
+                    <input type="hidden" name="customer-id" value="@Model.UserId" />
                     <input type="hidden" name="distributor-id" />
                     <div id="distributor-description-list" class="d-flex flex-column text-dark">
                         <div class="pb-1">
@@ -438,24 +424,51 @@
 </div>
 
 <script src="~/js/BankAccountEditForm.js" on-content-loaded></script>
-<script src="~/js/DistributorEditForm.js" on-content-loaded></script>
+<script src="~/js/DistributorEditForm.js" on-content-loaded>
+</script>
 
 <script on-content-loaded>
+
+    function OpenDistributorManageForm(distributorId) {
+        if ($("form").valid() === false) {
+            $("#component-notifier").notify("Solve the errors first.",
+                {
+                    "position": "right",
+                    "className": "error"
+                });
+            return;
+        }
+
+        let distributorEditForm = new DistributorEditForm(distributorId);
+    }
+
+    function OpenBankAccountManageForm(bankAccountId) {
+        if ($("form").valid() === false) {
+            $("#component-notifier").notify("Solve the errors first.",
+                {
+                    "position": "right",
+                    "className": "error"
+                });
+            return;
+        }
+        let bankAccountEditForm = new BankAccountEditForm(bankAccountId);
+    }
+
     window.onload = () => {
 
-    $('#edit-user-form-role-selector').on('change', function () {
-        switchFormRoleMode(this.options[this.selectedIndex].text);
-    });
+        $('#edit-user-form-role-selector').on('change', function () {
+            switchFormRoleMode(this.options[this.selectedIndex].text);
+        });
 
-    let initialFormMode = $('#edit-user-form-role-selector option:selected').text();
+        let initialFormMode = $('#edit-user-form-role-selector option:selected').text();
 
-    let distributorsSection = $('.vxp-section-edit-user-distributors');
+        let distributorsSection = $('.vxp-section-edit-user-distributors');
 
-    function switchFormRoleMode(selectedRole) {
+        function switchFormRoleMode(selectedRole) {
 
-        distributorsSection.hide();
+            distributorsSection.hide();
 
-        switch (selectedRole) {
+            switch (selectedRole) {
 
             case '@GlobalConstants.Roles.AdministratorRoleName':
                 break;
@@ -471,35 +484,35 @@
                 break;
             default:
                 break;
+            }
         }
-    }
 
-    switchFormRoleMode(initialFormMode);
+        switchFormRoleMode(initialFormMode);
 
-    if ("@Model.SuccessMessage") {
+        if ("@Model.SuccessMessage") {
 
-        $("#component-notifier").notify("@Model.SuccessMessage",
-            {
-                "position": "right",
-                "className": "success"
+            $("#component-notifier").notify("@Model.SuccessMessage",
+                {
+                    "position": "right",
+                    "className": "success"
+                });
+        }
+
+        $(function () {
+            let availableCountries = @Html.Raw(Json.Serialize(Model.AvailableCountries));
+            $(".country-selector").autocomplete({
+                source: availableCountries
             });
-    }
-
-    $(function () {
-        let availableCountries = @Html.Raw(Json.Serialize(Model.AvailableCountries));
-        $(".country-selector").autocomplete({
-            source: availableCountries
         });
-    });
 
 
-    $('#modalBankAccount, #modalDistributor, #modalResetPassword').modal({
-        "backdrop": "static",
-        "keyboard": false,
-        "show": false
-    });
+        $('#modalBankAccount, #modalDistributor, #modalResetPassword').modal({
+            "backdrop": "static",
+            "keyboard": false,
+            "show": false
+        });
 
-    $('#modalBankAccount, #modalDistributor, #modalResetPassword, #modal-loader').appendTo("body");
+        $('#modalBankAccount, #modalDistributor, #modalResetPassword, #modal-loader').appendTo("body");
 
-};
+    };
 </script>

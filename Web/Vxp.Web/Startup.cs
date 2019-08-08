@@ -120,8 +120,8 @@ namespace Vxp.Web
                 return new SendGridEmailSender(
                     logger,
                     this._configuration["Authentication:SendGridApiKey"],
-                    GlobalConstants.Email.SystemEmailSendFromEmail,
-                    GlobalConstants.Email.SystemEmailSendFromName);
+                    GlobalConstants.SystemEmail.SendFromEmail,
+                    GlobalConstants.SystemEmail.SendFromName);
             });
 
             services.AddTransient<IUsersService, UsersService>();

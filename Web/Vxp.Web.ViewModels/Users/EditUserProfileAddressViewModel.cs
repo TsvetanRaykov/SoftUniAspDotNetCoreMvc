@@ -1,38 +1,46 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-using Vxp.Web.Infrastructure.Attributes.Validation;
-
-namespace Vxp.Web.ViewModels.Users
+﻿namespace Vxp.Web.ViewModels.Users
 {
+    using System.ComponentModel.DataAnnotations;
+    using Common;
+    using Data.Models;
+    using Services.Mapping;
+    using Infrastructure.Attributes.Validation;
+
     public class EditUserProfileAddressViewModel : IMapFrom<Address>, IMapTo<Address>
     {
-        private const string RequiredAsAGroupErrorMessage = "{0} is required.";
+        private const string RequiredGroupId = "Grp01";
+
         public string RoleName { get; set; }
 
         [Display(Name = "City")]
         [StringLength(50)]
-        [RequiredAsAGroup("Grp01", ErrorMessage = RequiredAsAGroupErrorMessage)]
+        [RequiredAsAGroup(RequiredGroupId, 
+            ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         public string City { get; set; }
 
         [Display(Name = "Address Location")]
         [StringLength(100)]
-        [RequiredAsAGroup("Grp01")]
+        [RequiredAsAGroup(RequiredGroupId, 
+            ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         public string AddressLocation { get; set; }
 
         [RegularExpression(@"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
-            ErrorMessage = "The {0} field is not a valid e-mail address.")]
-        [RequiredAsAGroup("Grp01")]
+            ErrorMessage = GlobalConstants.ErrorMessages.EmailInvalid)]
+        [RequiredAsAGroup(RequiredGroupId, 
+            ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         public string Email { get; set; }
 
-        [RegularExpression(@"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$", ErrorMessage = "The {0} field is not a valid phone.")]
+        [RegularExpression(@"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$", 
+            ErrorMessage = GlobalConstants.ErrorMessages.PhoneInvalid)]
         [Display(Name = "Phone number")]
-        [RequiredAsAGroup("Grp01")]
+        [RequiredAsAGroup(RequiredGroupId, 
+            ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         public string Phone { get; set; }
 
         [Display(Name = "Country name")]
         [StringLength(30)]
-        [RequiredAsAGroup("Grp01")]
+        [RequiredAsAGroup(RequiredGroupId, 
+            ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         public string CountryName { get; set; }
     }
 }

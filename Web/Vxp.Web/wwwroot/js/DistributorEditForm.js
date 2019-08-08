@@ -12,9 +12,10 @@
         this.deleteButton = $("#btnDistributorFormDelete");
         this.distSelector = $("#dist-form-selector");
 
-        this.errorPaceholder = $("#modalDistributor .vxp-validation-errors-placeholder");
+        this.errorPlaceholder = $("#modalDistributor .vxp-validation-errors-placeholder");
 
         this.customerId = this.form.find('input[name="customer-id"]').val();
+        this.customerEmail = this.form.find('input[name="customer-email"]').val();
 
         this.fields = {
             distName: $("#dist-name"),
@@ -64,7 +65,7 @@
                 this.deleteButton.hide();
                 this.distSelector.show()
                 this.submitButton.show();
-                this.Run = () => this.load(`${this.apiBaseUrl}GetAvailable/${this.customerId}`);
+                this.Run = () => this.load(`${this.apiBaseUrl}GetAvailable/${this.customerEmail}`);
                 break;
             default: // update
                 this.submitButton.val("Update");
@@ -114,7 +115,7 @@
             }
         }
 
-        this.errorPaceholder.text("");
+        this.errorPlaceholder.text("");
     }
 
     populate(data) {
@@ -161,11 +162,12 @@
             type: this.method,
             contentType: 'application/json',
             data: JSON.stringify({
-                CustomerEmail: this.customerId,
+                CustomerId: this.customerId,
+                CustomerEmail: this.customerEmail,
                 DistributorEmail: this.distributorId
             }),
             success: function () {
-                window.location.reload();
+                window.location = window.location.href;
             },
             error: function (data) {
                 let response = JSON.parse(data.responseText);
@@ -182,7 +184,7 @@
                     }
                 }
 
-                that.errorPaceholder.html(errors.join("<br/>"));
+                that.errorPlaceholder.html(errors.join("<br/>"));
             },
             complete: function () {
                 // ignore
@@ -227,11 +229,12 @@
             type: "POST",
             contentType: 'application/json',
             data: JSON.stringify({
-                CustomerEmail: this.customerId,
+                CustomerId: this.customerId,
+                CustomerEmail: this.customerEmail,
                 DistributorEmail: this.distributorId
             }),
             success: () => {
-                window.location.reload();
+                window.location = window.location.href;
             },
             error: (data) => {
                 console.error(data);

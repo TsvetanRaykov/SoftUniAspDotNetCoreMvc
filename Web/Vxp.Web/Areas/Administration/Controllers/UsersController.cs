@@ -134,7 +134,6 @@ namespace Vxp.Web.Areas.Administration.Controllers
             }
 
             return this.RedirectToAction("Edit", new { id = inputModel.UserId });
-            //return this.View("EditUser", userModel);
         }
 
         [AcceptVerbs("Post")]

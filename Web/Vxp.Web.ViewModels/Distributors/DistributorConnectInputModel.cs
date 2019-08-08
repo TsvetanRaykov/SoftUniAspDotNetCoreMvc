@@ -13,5 +13,9 @@ namespace Vxp.Web.ViewModels.Distributors
         [EmailAddress]
         [Display(Name = "Distributor email")]
         public string DistributorEmail { get; set; }
+
+        [Required]
+        [StringLength(36)]
+        public string CustomerId { get; set; }
     }
 }

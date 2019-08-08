@@ -7,7 +7,7 @@
 
     this.submitButton = $("#btnBankAccountSubmit");
     this.deleteButton = $("#btnBankAccountDelete");
-    this.errorPaceholder = $("#modalBankAccount .vxp-validation-errors-placeholder");
+    this.errorPlaceholder = $("#modalBankAccount .vxp-validation-errors-placeholder");
 
     this.ownerId = this.form.find('input[name="owner-id"]').val();
 
@@ -29,7 +29,7 @@
             }
         }
 
-        this.errorPaceholder.text("");
+        this.errorPlaceholder.text("");
     }
 
     this.load = () => {
@@ -105,7 +105,7 @@
 
     this.Run();
 
-   
+
 
     this.submit = () => {
 
@@ -126,7 +126,7 @@
                 swiftCode: this.inputFields.swiftCode.val()
             }),
             success: function () {
-                window.location.reload();
+                window.location = window.location.href;
             },
             error: function (data) {
                 let response = JSON.parse(data.responseText);
@@ -144,7 +144,7 @@
                     }
                 }
 
-                that.errorPaceholder.html(errors.join("<br/>"));
+                that.errorPlaceholder.html(errors.join("<br/>"));
             },
             complete: function () {
                 // ignore
@@ -182,7 +182,7 @@
             url: "/api/BankAccounts/" + this.accountId,
             type: "DELETE",
             success: () => {
-                window.location.reload();
+                window.location = window.location.href;
             },
             error: (data) => {
                 console.error(data);
