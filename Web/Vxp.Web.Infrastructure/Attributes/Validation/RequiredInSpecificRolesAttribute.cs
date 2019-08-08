@@ -29,9 +29,7 @@ namespace Vxp.Web.Infrastructure.Attributes.Validation
 
             var comparisonValue = (string)compareRolePropertyInfo.GetValue(validationContext.ObjectInstance);
 
-            var currentValue = (string)value;
-
-            if (string.IsNullOrWhiteSpace(currentValue) && this._requiredRoles.Contains(comparisonValue))
+            if (value == null && this._requiredRoles.Contains(comparisonValue))
             {
                 return new ValidationResult(this.ErrorMessage);
             }
