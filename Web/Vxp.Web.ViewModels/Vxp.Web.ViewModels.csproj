@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Components\EditUserProfileViewComponentResetPasswordModel.cs" />
+    <Compile Remove="Users\EditUserProfileViewComponentResetPasswordModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Vxp.Web.ViewModels.Users;
 
 namespace Vxp.Web.Areas.Administration.Controllers
 {
@@ -13,7 +14,6 @@ namespace Vxp.Web.Areas.Administration.Controllers
     using Vxp.Services.Data.Users;
     using Services.Mapping;
     using Vxp.Web.ViewModels.Administration.Users;
-    using ViewModels.Components;
 
     public class UsersController : AdministrationController
     {
@@ -66,11 +66,11 @@ namespace Vxp.Web.Areas.Administration.Controllers
         {
 
             var userModels = await this._usersService
-                .GetAll<EditUserProfileViewComponentModel>(u => u.Id == inputModel.Id);
+                .GetAll<EditUserProfileViewModel>(u => u.Id == inputModel.Id);
 
             var userModel = userModels.FirstOrDefault();
 
-            userModel = userModel ?? new EditUserProfileViewComponentModel
+            userModel = userModel ?? new EditUserProfileViewModel
             {
                 IsNewUser = true
             };
@@ -87,7 +87,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditUserProfileViewComponentModel inputModel)
+        public async Task<IActionResult> Edit(EditUserProfileViewModel inputModel)
         {
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(inputModel);
 
@@ -106,7 +106,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(EditUserProfileViewComponentModel inputModel)
+        public async Task<IActionResult> ResetPassword(EditUserProfileViewModel inputModel)
         {
             var validationPropertyNames = new[] { nameof(inputModel.UserId), nameof(inputModel.Password), nameof(inputModel.ConfirmPassword) };
 
@@ -120,7 +120,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
             }
 
             var userModels = await this._usersService
-                .GetAll<EditUserProfileViewComponentModel>(u => u.Id == inputModel.UserId);
+                .GetAll<EditUserProfileViewModel>(u => u.Id == inputModel.UserId);
 
             var userModel = userModels.Single();
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(userModel);
@@ -187,15 +187,15 @@ namespace Vxp.Web.Areas.Administration.Controllers
             }
         }
 
-        private async Task ApplyMissingPropertiesToEditUserProfileViewComponentModel(EditUserProfileViewComponentModel userModel)
+        private async Task ApplyMissingPropertiesToEditUserProfileViewComponentModel(EditUserProfileViewModel userModel)
         {
             userModel.AvailableCountries = await this._usersService.GetAllCountriesAsync();
             userModel.AvailableRoles = await this._roleManager.Roles.To<SelectListItem>().ToListAsync();
             userModel.AvailableRoles.ForEach(r => { r.Selected = r.Value == userModel.RoleName; });
-            userModel.Company = userModel.Company ?? new EditUserProfileViewComponentCompanyModel();
-            userModel.Company.ContactAddress = userModel.Company.ContactAddress ?? new EditUserProfileViewComponentAddressModel();
-            userModel.Company.ShippingAddress = userModel.Company.ShippingAddress ?? new EditUserProfileViewComponentAddressModel();
-            userModel.ContactAddress = userModel.ContactAddress ?? new EditUserProfileViewComponentAddressModel();
+            userModel.Company = userModel.Company ?? new EditUserProfileCompanyViewModel();
+            userModel.Company.ContactAddress = userModel.Company.ContactAddress ?? new EditUserProfileAddressViewModel();
+            userModel.Company.ShippingAddress = userModel.Company.ShippingAddress ?? new EditUserProfileAddressViewModel();
+            userModel.ContactAddress = userModel.ContactAddress ?? new EditUserProfileAddressViewModel();
         }
 
         #endregion

@@ -2,9 +2,9 @@
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 
-namespace Vxp.Web.ViewModels.Components
+namespace Vxp.Web.ViewModels.Users
 {
-    public class EditUserProfileViewComponentAddressModel : IMapFrom<Address>, IMapTo<Address>
+    public class EditUserProfileAddressViewModel : IMapFrom<Address>, IMapTo<Address>
     {
         public string RoleName { get; set; }
 

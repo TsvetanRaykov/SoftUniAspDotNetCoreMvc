@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Vxp.Services.Data.BankAccounts;
-using Vxp.Web.ViewModels.Components;
+using Vxp.Web.ViewModels.Users;
 
 namespace Vxp.Web.Controllers
 {
@@ -20,7 +20,7 @@ namespace Vxp.Web.Controllers
         public ActionResult<string> Get(int id)
         {
             var bankAccount = this._bankAccountsService
-                .GetAllBankAccounts<EditUserProfileViewComponentModelBankAccountModel>()
+                .GetAllBankAccounts<EditUserProfileBankAccountViewModel>()
                 .FirstOrDefault(x => x.Id == id);
             if (bankAccount == null)
             {
@@ -31,7 +31,7 @@ namespace Vxp.Web.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update(EditUserProfileViewComponentModelBankAccountModel bankAccountModel)
+        public async Task<ActionResult> Update(EditUserProfileBankAccountViewModel bankAccountModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -47,7 +47,7 @@ namespace Vxp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(EditUserProfileViewComponentModelBankAccountModel bankAccountModel)
+        public async Task<ActionResult> Create(EditUserProfileBankAccountViewModel bankAccountModel)
         {
             if (!this.ModelState.IsValid)
             {

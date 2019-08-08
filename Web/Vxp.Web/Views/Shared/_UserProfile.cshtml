@@ -1,5 +1,5 @@
 ﻿@using Vxp.Common
-@model Vxp.Web.ViewModels.Components.EditUserProfileViewComponentModel
+@model Vxp.Web.ViewModels.Users.EditUserProfileViewModel
 <style type="text/css">
     .vxp-section-edit-user-shipping-address {
     }
@@ -441,75 +441,65 @@
 <script src="~/js/DistributorEditForm.js" on-content-loaded></script>
 
 <script on-content-loaded>
-
     window.onload = () => {
 
-        $('#edit-user-form-role-selector').on('change', function () {
-            switchFormRoleMode(this.options[this.selectedIndex].text);
-        });
+    $('#edit-user-form-role-selector').on('change', function () {
+        switchFormRoleMode(this.options[this.selectedIndex].text);
+    });
 
-        let initialFormMode = $('#edit-user-form-role-selector option:selected').text();
+    let initialFormMode = $('#edit-user-form-role-selector option:selected').text();
 
-        let distributorsSection = $('.vxp-section-edit-user-distributors');
+    let distributorsSection = $('.vxp-section-edit-user-distributors');
 
-        function switchFormRoleMode(selectedRole) {
+    function switchFormRoleMode(selectedRole) {
 
-            distributorsSection.hide();
+        distributorsSection.hide();
 
-            switch (selectedRole) {
+        switch (selectedRole) {
 
             case '@GlobalConstants.Roles.AdministratorRoleName':
-               // console.log('Administrator');
                 break;
 
             case '@GlobalConstants.Roles.VendorRoleName':
-                //console.log('Vendor');
                 break;
 
             case '@GlobalConstants.Roles.DistributorRoleName':
-                //console.log('Distributor');
                 break;
 
             case '@GlobalConstants.Roles.CustomerRoleName':
                 distributorsSection.show();
-                //console.log('Customer');
                 break;
-
             default:
-                //console.log('Default');
                 break;
-            }
         }
+    }
 
-        switchFormRoleMode(initialFormMode);
+    switchFormRoleMode(initialFormMode);
 
-        if ("@Model.SuccessMessage") {
+    if ("@Model.SuccessMessage") {
 
-            $("#component-notifier").notify("@Model.SuccessMessage",
-                {
-                    "position": "right",
-                    "className": "success"
-                });
-        }
-
-        $(function() {
-            let availableCountries = @Html.Raw(Json.Serialize(Model.AvailableCountries));
-            $(".country-selector").autocomplete({
-                source: availableCountries
+        $("#component-notifier").notify("@Model.SuccessMessage",
+            {
+                "position": "right",
+                "className": "success"
             });
+    }
+
+    $(function () {
+        let availableCountries = @Html.Raw(Json.Serialize(Model.AvailableCountries));
+        $(".country-selector").autocomplete({
+            source: availableCountries
         });
+    });
 
-        //$("#btnResetPasswordSubmit").off("click").on("click", function() {
 
-        //});
+    $('#modalBankAccount, #modalDistributor, #modalResetPassword').modal({
+        "backdrop": "static",
+        "keyboard": false,
+        "show": false
+    });
 
-        $('#modalBankAccount, #modalDistributor, #modalResetPassword').modal({
-            "backdrop": "static",
-            "keyboard": false,
-            "show": false
-        });
+    $('#modalBankAccount, #modalDistributor, #modalResetPassword, #modal-loader').appendTo("body");
 
-        $('#modalBankAccount, #modalDistributor, #modalResetPassword, #modal-loader').appendTo("body");
-
-    };
+};
 </script>

@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
-using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-
-namespace Vxp.Web.ViewModels.Components
+﻿namespace Vxp.Web.ViewModels.Users
 {
-    public class EditUserProfileViewComponentModelBankAccountModel : IMapFrom<BankAccount>, IMapTo<BankAccount>, IHaveCustomMappings
+    using System.ComponentModel.DataAnnotations;
+    using AutoMapper;
+    using Data.Models;
+    using Services.Mapping;
+
+    public class EditUserProfileBankAccountViewModel : IMapFrom<BankAccount>, IMapTo<BankAccount>, IHaveCustomMappings
     {
         public int? Id { get; set; }
 
@@ -34,7 +34,7 @@ namespace Vxp.Web.ViewModels.Components
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<EditUserProfileViewComponentModelBankAccountModel, BankAccount>()
+            configuration.CreateMap<EditUserProfileBankAccountViewModel, BankAccount>()
                 .ForMember(dest => dest.Owner, opt => opt.Ignore())
                 .ForMember(dest => dest.DistributorKeys, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())

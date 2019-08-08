@@ -1,29 +1,28 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-using Vxp.Web.Infrastructure.Attributes.Validation;
-using Vxp.Web.ViewModels.ModelBinders;
-
-namespace Vxp.Web.ViewModels.Components
+﻿namespace Vxp.Web.ViewModels.Users
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using AutoMapper;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Data.Models;
+    using Services.Mapping;
+    using Infrastructure.Attributes.Validation;
+    using ModelBinders;
 
-    public class EditUserProfileViewComponentModel : IMapFrom<ApplicationUser>, IMapTo<ApplicationUser>, IHaveCustomMappings
+    public class EditUserProfileViewModel : IMapFrom<ApplicationUser>, IMapTo<ApplicationUser>, IHaveCustomMappings
     {
         public bool IsNewUser { get; set; }
 
-        public EditUserProfileViewComponentModel()
+        public EditUserProfileViewModel()
         {
             this.BankAccounts = new HashSet<SelectListItem>();
             this.AvailableCountries = new HashSet<string>();
             this.AvailableDistributors = new HashSet<SelectListItem>();
             this.AvailableRoles = new List<SelectListItem>();
-            this.ContactAddress = new EditUserProfileViewComponentAddressModel();
-            this.Company = new EditUserProfileViewComponentCompanyModel();
+            this.ContactAddress = new EditUserProfileAddressViewModel();
+            this.Company = new EditUserProfileCompanyViewModel();
         }
 
         //AspNetUser
@@ -63,10 +62,10 @@ namespace Vxp.Web.ViewModels.Components
         public string ConfirmPassword { get; set; }
 
         //Company
-        public EditUserProfileViewComponentCompanyModel Company { get; set; }
+        public EditUserProfileCompanyViewModel Company { get; set; }
 
         //Address
-        public EditUserProfileViewComponentAddressModel ContactAddress { get; set; }
+        public EditUserProfileAddressViewModel ContactAddress { get; set; }
 
         [ModelBinder(typeof(KvpStringListToSelectListModelBinder))]
         public IEnumerable<SelectListItem> BankAccounts { get; set; }
@@ -95,7 +94,7 @@ namespace Vxp.Web.ViewModels.Components
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.AccountNumber));
 
-            configuration.CreateMap<ApplicationUser, EditUserProfileViewComponentModel>()
+            configuration.CreateMap<ApplicationUser, EditUserProfileViewModel>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Roles.First().Role.Name))
                 .ForMember(dest => dest.AvailableDistributors,
@@ -105,7 +104,7 @@ namespace Vxp.Web.ViewModels.Components
                         Text = $"{d.DistributorKey.BankAccount.Owner.Company.Name}"
                     })));
 
-            configuration.CreateMap<EditUserProfileViewComponentModel, ApplicationUser>()
+            configuration.CreateMap<EditUserProfileViewModel, ApplicationUser>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.BankAccounts, opt => opt.Ignore())
                 .ForMember(dest => dest.Distributors, opt => opt.Ignore());

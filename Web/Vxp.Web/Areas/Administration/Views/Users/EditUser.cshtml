@@ -1,4 +1,4 @@
-﻿@model Vxp.Web.ViewModels.Components.EditUserProfileViewComponentModel
+﻿@model Vxp.Web.ViewModels.Users.EditUserProfileViewModel
 
 @{
     this.ViewData["Title"] = "Edit User";
@@ -12,8 +12,7 @@
         <span class="icon mb-3 d-block icon-user"></span>
     </div>
 
-    @await Component.InvokeAsync("EditUserProfile", @Model)
-
+    <partial name="_UserProfile" />
 
 </div>
 

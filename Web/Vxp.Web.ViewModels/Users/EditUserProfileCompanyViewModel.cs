@@ -1,21 +1,20 @@
-﻿namespace Vxp.Web.ViewModels.Components
+﻿using System.ComponentModel.DataAnnotations;
+namespace Vxp.Web.ViewModels.Users
 {
+    using Microsoft.AspNetCore.Mvc;
     using Common;
     using Data.Models;
-    using Infrastructure.Attributes.Validation;
     using Services.Mapping;
-    using System.ComponentModel.DataAnnotations;
-    using Microsoft.AspNetCore.Mvc;
+    using Infrastructure.Attributes.Validation;
 
-
-    public class EditUserProfileViewComponentCompanyModel : IMapFrom<Company>, IMapTo<Company>
+    public class EditUserProfileCompanyViewModel : IMapFrom<Company>, IMapTo<Company>
     {
         public string RoleName { get; set; }
 
-        public EditUserProfileViewComponentCompanyModel()
+        public EditUserProfileCompanyViewModel()
         {
-            this.ContactAddress = new EditUserProfileViewComponentAddressModel();
-            this.ShippingAddress = new EditUserProfileViewComponentAddressModel();
+            this.ContactAddress = new EditUserProfileAddressViewModel();
+            this.ShippingAddress = new EditUserProfileAddressViewModel();
         }
 
         [Display(Name = "Company name")]
@@ -32,9 +31,9 @@
         [Remote(action: "VerifyBusinessNumber", controller: "Users", AdditionalFields = nameof(Name), HttpMethod = "Post")]
         public string BusinessNumber { get; set; }
 
-        public EditUserProfileViewComponentAddressModel ContactAddress { get; set; }
+        public EditUserProfileAddressViewModel ContactAddress { get; set; }
 
-        public EditUserProfileViewComponentAddressModel ShippingAddress { get; set; }
+        public EditUserProfileAddressViewModel ShippingAddress { get; set; }
 
     }
 }
