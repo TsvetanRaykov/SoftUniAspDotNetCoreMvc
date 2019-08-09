@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Vxp.Common;
 
 namespace Vxp.Web.Infrastructure.Attributes.Validation
 {
@@ -14,13 +15,11 @@ namespace Vxp.Web.Infrastructure.Attributes.Validation
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            this.ErrorMessage = this.ErrorMessageString;
-
             var propertyInfo = validationContext.ObjectType.GetProperty(this._booleanProperty);
 
             if (propertyInfo == null)
             {
-                throw new ArgumentException("Property with this name not found");
+                throw new ArgumentException(GlobalConstants.ErrorMessages.PropertyNotFound);
             }
 
             var comparisonValue = (bool)propertyInfo.GetValue(validationContext.ObjectInstance);
@@ -30,7 +29,7 @@ namespace Vxp.Web.Infrastructure.Attributes.Validation
 
             if (string.IsNullOrWhiteSpace(currentValue) && comparisonValue)
             {
-                return new ValidationResult(this.ErrorMessage);
+                return new ValidationResult(string.Format(this.ErrorMessageString, validationContext.DisplayName));
             }
 
             return ValidationResult.Success;

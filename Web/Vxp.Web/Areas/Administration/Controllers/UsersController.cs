@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Vxp.Web.ViewModels.Users;
-
-namespace Vxp.Web.Areas.Administration.Controllers
+﻿namespace Vxp.Web.Areas.Administration.Controllers
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -14,6 +11,9 @@ namespace Vxp.Web.Areas.Administration.Controllers
     using Vxp.Services.Data.Users;
     using Services.Mapping;
     using Vxp.Web.ViewModels.Administration.Users;
+    using System;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
+    using ViewModels.Users;
 
     public class UsersController : AdministrationController
     {
@@ -36,23 +36,31 @@ namespace Vxp.Web.Areas.Administration.Controllers
         public async Task<IActionResult> Create()
         {
 
-            var viewModel = new AddUserInputModel
+            var viewModel = new UserProfileViewModel
             {
-                Role = GlobalConstants.Roles.DistributorRoleName // RoleName dropdown selected item
+                RoleName = GlobalConstants.Roles.DistributorRoleName, // Role dropdown selected item by default
+                IsNewUser = true,
+                UserId = Guid.NewGuid().ToString()
             };
 
-            await this.ApplyRolesAndDistributorsToAddUserInputModel(viewModel);
+            await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(viewModel);
 
             return this.View("CreateUser", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(AddUserInputModel inputModel)
+        public async Task<IActionResult> Create(UserProfileViewModel inputModel)
         {
             if (!this.ModelState.IsValid)
             {
-                await this.ApplyRolesAndDistributorsToAddUserInputModel(inputModel);
+                await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(inputModel);
+
+
+                if (this.ModelState[nameof(inputModel.Password)].ValidationState == ModelValidationState.Invalid)
+                {
+                    TempData["ErrorMessage"] = this.ModelState[nameof(inputModel.Password)].Errors.FirstOrDefault()?.ErrorMessage;
+                }
 
                 return this.View("CreateUser", inputModel);
             }
@@ -66,11 +74,11 @@ namespace Vxp.Web.Areas.Administration.Controllers
         {
 
             var userModels = await this._usersService
-                .GetAll<EditUserProfileViewModel>(u => u.Id == inputModel.Id);
+                .GetAll<UserProfileViewModel>(u => u.Id == inputModel.Id);
 
             var userModel = userModels.FirstOrDefault();
 
-            userModel = userModel ?? new EditUserProfileViewModel
+            userModel = userModel ?? new UserProfileViewModel
             {
                 IsNewUser = true
             };
@@ -87,7 +95,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditUserProfileViewModel inputModel)
+        public async Task<IActionResult> Edit(UserProfileViewModel inputModel)
         {
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(inputModel);
 
@@ -106,7 +114,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(EditUserProfileViewModel inputModel)
+        public async Task<IActionResult> ResetPassword(UserProfileViewModel inputModel)
         {
             var validationPropertyNames = new[] { nameof(inputModel.UserId), nameof(inputModel.Password), nameof(inputModel.ConfirmPassword) };
 
@@ -120,7 +128,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
             }
 
             var userModels = await this._usersService
-                .GetAll<EditUserProfileViewModel>(u => u.Id == inputModel.UserId);
+                .GetAll<UserProfileViewModel>(u => u.Id == inputModel.UserId);
 
             var userModel = userModels.Single();
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(userModel);
@@ -186,7 +194,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
             }
         }
 
-        private async Task ApplyMissingPropertiesToEditUserProfileViewComponentModel(EditUserProfileViewModel userModel)
+        private async Task ApplyMissingPropertiesToEditUserProfileViewComponentModel(UserProfileViewModel userModel)
         {
             userModel.AvailableCountries = await this._usersService.GetAllCountriesAsync();
             userModel.AvailableRoles = await this._roleManager.Roles.To<SelectListItem>().ToListAsync();

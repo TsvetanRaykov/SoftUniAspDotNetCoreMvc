@@ -1,4 +1,6 @@
-﻿namespace Vxp.Web.ViewModels.Users
+﻿using Vxp.Common;
+
+namespace Vxp.Web.ViewModels.Users
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -11,11 +13,11 @@
     using Infrastructure.Attributes.Validation;
     using ModelBinders;
 
-    public class EditUserProfileViewModel : IMapFrom<ApplicationUser>, IMapTo<ApplicationUser>, IHaveCustomMappings
+    public class UserProfileViewModel : IMapFrom<ApplicationUser>, IMapTo<ApplicationUser>, IHaveCustomMappings
     {
         public bool IsNewUser { get; set; }
 
-        public EditUserProfileViewModel()
+        public UserProfileViewModel()
         {
             this.BankAccounts = new HashSet<SelectListItem>();
             this.AvailableCountries = new HashSet<string>();
@@ -50,7 +52,8 @@
         [StringLength(50, ErrorMessage = "{0} must be at least {2} symbols", MinimumLength = 3)]
         public string LastName { get; set; }
 
-        [RequiredWhenNewUser(nameof(IsNewUser))]
+        [RequiredWhenNewUser(nameof(IsNewUser), 
+            ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         [Display(Name = "Password")]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
@@ -94,7 +97,7 @@
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.AccountNumber));
 
-            configuration.CreateMap<ApplicationUser, EditUserProfileViewModel>()
+            configuration.CreateMap<ApplicationUser, UserProfileViewModel>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Roles.First().Role.Name))
                 .ForMember(dest => dest.AvailableDistributors,
@@ -104,7 +107,7 @@
                         Text = $"{d.DistributorKey.BankAccount.Owner.Company.Name}"
                     })));
 
-            configuration.CreateMap<EditUserProfileViewModel, ApplicationUser>()
+            configuration.CreateMap<UserProfileViewModel, ApplicationUser>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.BankAccounts, opt => opt.Ignore())
                 .ForMember(dest => dest.Distributors, opt => opt.Ignore());

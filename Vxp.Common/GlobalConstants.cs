@@ -21,6 +21,7 @@
             public const string RequiredField = "The {0} is required.";
             public const string EmailInvalid = "The {0} field is not a valid e-mail address.";
             public const string PhoneInvalid = "The {0} field is not a valid phone.";
+            public const string PropertyNotFound = "Property with this name not found";
         }
     }
 }

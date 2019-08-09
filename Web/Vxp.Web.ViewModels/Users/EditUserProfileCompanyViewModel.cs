@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Vxp.Web.ViewModels.ModelBinders;
+
 namespace Vxp.Web.ViewModels.Users
 {
     using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,7 @@ namespace Vxp.Web.ViewModels.Users
 
     public class EditUserProfileCompanyViewModel : IMapFrom<Company>, IMapTo<Company>
     {
+        [ModelBinder(typeof(TransparentPropertyModelBinder))]
         public string RoleName { get; set; }
 
         public EditUserProfileCompanyViewModel()

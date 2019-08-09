@@ -18,6 +18,10 @@
   <ItemGroup>
     <Compile Remove="Controllers\UsersController.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Areas\Administration\Views\Users\CreateUser - Copy.cshtml" />
+  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>

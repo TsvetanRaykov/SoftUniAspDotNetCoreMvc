@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Vxp.Common;
 
 namespace Vxp.Web.Infrastructure.Attributes.Validation
 {
@@ -18,20 +19,19 @@ namespace Vxp.Web.Infrastructure.Attributes.Validation
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            this.ErrorMessage = this.ErrorMessageString;
 
             var compareRolePropertyInfo = validationContext.ObjectType.GetProperty(this._compareRoleProperty);
 
             if (compareRolePropertyInfo == null)
             {
-                throw new ArgumentException("Property with this name not found");
+                throw new ArgumentException(GlobalConstants.ErrorMessages.PropertyNotFound);
             }
 
             var comparisonValue = (string)compareRolePropertyInfo.GetValue(validationContext.ObjectInstance);
 
             if (value == null && this._requiredRoles.Contains(comparisonValue))
             {
-                return new ValidationResult(this.ErrorMessage);
+                return new ValidationResult(string.Format(this.ErrorMessageString, validationContext.DisplayName));
             }
 
             return ValidationResult.Success;
