@@ -37,8 +37,6 @@
 
         public DbSet<Company> Companies { get; set; }
 
-        public DbSet<Country> Countries { get; set; }
-
         public DbSet<PriceModifier> PriceModifiers { get; set; }
 
         public DbSet<DistributorKey> DistributorKeys { get; set; }
@@ -119,13 +117,9 @@
 
             ConfigureUserRoles(builder);
 
-            ConfigureAddress(builder);
-
             ConfigureBankAccount(builder);
 
             ConfigureCompany(builder);
-
-            ConfigureCountry(builder);
 
             ConfigureDistributorKey(builder);
 
@@ -332,11 +326,6 @@
             });
         }
 
-        private static void ConfigureCountry(ModelBuilder builder)
-        {
-            builder.Entity<Country>(e => e.HasKey(c => c.Id));
-        }
-
         private static void ConfigureCompany(ModelBuilder builder)
         {
             builder.Entity<Company>(entity =>
@@ -361,14 +350,6 @@
                 entity.Property(b => b.AccountNumber).IsRequired();
                 entity.Property(b => b.BicCode).IsRequired();
                 entity.Property(b => b.BankName).IsRequired();
-            });
-        }
-
-        private static void ConfigureAddress(ModelBuilder builder)
-        {
-            builder.Entity<Address>(entity =>
-            {
-                entity.HasOne(a => a.Country);
             });
         }
 

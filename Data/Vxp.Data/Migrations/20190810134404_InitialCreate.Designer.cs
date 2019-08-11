@@ -10,7 +10,7 @@ using Vxp.Data;
 namespace Vxp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190802131323_InitialCreate")]
+    [Migration("20190810134404_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,7 +122,8 @@ namespace Vxp.Data.Migrations
                     b.Property<string>("City")
                         .IsRequired();
 
-                    b.Property<int>("CountryId");
+                    b.Property<string>("CountryName")
+                        .IsRequired();
 
                     b.Property<DateTime>("CreatedOn");
 
@@ -139,8 +140,6 @@ namespace Vxp.Data.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
 
                     b.HasIndex("IsDeleted");
 
@@ -325,33 +324,6 @@ namespace Vxp.Data.Migrations
                     b.HasIndex("ShippingAddressId");
 
                     b.ToTable("Companies");
-                });
-
-            modelBuilder.Entity("Vxp.Data.Models.Country", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<string>("Language")
-                        .IsRequired();
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
-                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("Vxp.Data.Models.DistributorKey", b =>
@@ -846,14 +818,6 @@ namespace Vxp.Data.Migrations
                     b.HasOne("Vxp.Data.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Vxp.Data.Models.Address", b =>
-                {
-                    b.HasOne("Vxp.Data.Models.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

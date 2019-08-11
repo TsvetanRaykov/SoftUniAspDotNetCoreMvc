@@ -20,7 +20,7 @@ namespace Vxp.Web.Controllers
         public ActionResult<string> Get(int id)
         {
             var bankAccount = this._bankAccountsService
-                .GetAllBankAccounts<EditUserProfileBankAccountViewModel>()
+                .GetAllBankAccounts<UserProfileBankAccountViewModel>()
                 .FirstOrDefault(x => x.Id == id);
             if (bankAccount == null)
             {
@@ -31,7 +31,7 @@ namespace Vxp.Web.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Update(EditUserProfileBankAccountViewModel bankAccountModel)
+        public async Task<ActionResult> Update(UserProfileBankAccountViewModel bankAccountModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -47,7 +47,7 @@ namespace Vxp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(EditUserProfileBankAccountViewModel bankAccountModel)
+        public async Task<ActionResult> Create(UserProfileBankAccountViewModel bankAccountModel)
         {
             if (!this.ModelState.IsValid)
             {

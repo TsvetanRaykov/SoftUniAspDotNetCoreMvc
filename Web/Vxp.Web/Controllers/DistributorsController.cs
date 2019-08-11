@@ -25,16 +25,16 @@
         {
 
             var usrDistributors = this._distributorsService
-                .GetDistributorsForUser<EditUserProfileDistributorViewModel>(customerName).GetAwaiter().GetResult().Select(u => u.Email).ToHashSet();
-
+                .GetDistributorsForUser<UserProfileDistributorViewModel>(customerName).GetAwaiter().GetResult().Select(u => u.UserName).ToHashSet();
 
             var allDistributors = await this._usersService
-                .GetAllInRoleAsync<EditUserProfileDistributorViewModel>(GlobalConstants.Roles
+                .GetAllInRoleAsync<UserProfileDistributorViewModel>(GlobalConstants.Roles
                     .DistributorRoleName);
 
-            var availableDistributors = await
-                allDistributors.Where(d => !usrDistributors.Contains(d.Email)).ToArrayAsync();
-
+            var availableDistributors = await allDistributors
+                    .Where(d => !usrDistributors.Contains(d.UserName))
+                    .Where(d => d.UserName != customerName)
+                    .ToArrayAsync();
 
             return this.Ok(availableDistributors);
         }
@@ -43,7 +43,7 @@
         public async Task<ActionResult<string>> Get(string id)
         {
             var distributors = await
-                this._usersService.GetAll<EditUserProfileDistributorViewModel>(d => d.Id == id);
+                this._usersService.GetAll<UserProfileDistributorViewModel>(d => d.Id == id);
 
             if (!distributors.Any())
             {

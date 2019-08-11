@@ -18,8 +18,7 @@ namespace Vxp.Data.Models
         public string Phone { get; set; }
 
         [Required]
-        public int CountryId { get; set; }
-        public virtual Country Country { get; set; }
+        public string CountryName { get; set; }
 
     }
 }

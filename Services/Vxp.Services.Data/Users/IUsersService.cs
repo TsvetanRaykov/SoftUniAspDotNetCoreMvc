@@ -14,13 +14,15 @@ namespace Vxp.Services.Data.Users
 
         Task<IQueryable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName);
 
-        //TODO: Move to AddressesService or so
-        Task<IEnumerable<string>> GetAllCountriesAsync();
+        Task<string> CreateUser<TViewModel>(TViewModel userModel, string password, string role);
 
-        Task<string> CreateUser<TViewModel>(TViewModel userModel);
-
-        bool UpdateUser<TViewModel>(TViewModel userModel);
+        Task<bool> UpdateUser<TViewModel>(TViewModel userModel, IEnumerable<string> roleNames);
 
         Task<bool> UpdateUserPasswordAsync(string userId, string password);
+
+        Task<bool> DeleteUser(string userId);
+
+        Task<bool> RestoreUser(string userId);
+
     }
 }

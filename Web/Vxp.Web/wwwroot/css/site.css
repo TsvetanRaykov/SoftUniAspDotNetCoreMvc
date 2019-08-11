@@ -33,6 +33,11 @@
 .vxp-section {
     padding: 7rem 0;
     position: relative;
+    min-height: 100vh;
+}
+
+#admin-nav {
+    min-height: 85vh;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
@@ -145,7 +150,6 @@ input::placeholder {
 
 
 .vxp-table .btn {
-    padding: 0 10px;
     font-size: small;
 }
 
@@ -225,10 +229,27 @@ input::placeholder {
 .vxp-table-distributor {
     font-size: small;
 }
+
     .vxp-table-distributor th {
         width: 70px;
     }
+
     .vxp-table-distributor td {
         font-size: medium;
         color: black;
     }
+
+.nav-link {
+    display: block;
+    padding: 0 3rem;
+}
+
+.chosen-single span {
+    color: black;
+    font-weight: bold;
+}
+
+.vxp-user-deleted-table-row td {
+    text-decoration: line-through solid red;
+
+}

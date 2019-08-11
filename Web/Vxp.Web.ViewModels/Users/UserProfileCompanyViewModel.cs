@@ -9,15 +9,15 @@ namespace Vxp.Web.ViewModels.Users
     using Services.Mapping;
     using Infrastructure.Attributes.Validation;
 
-    public class EditUserProfileCompanyViewModel : IMapFrom<Company>, IMapTo<Company>
+    public class UserProfileCompanyViewModel : IMapFrom<Company>, IMapTo<Company>
     {
         [ModelBinder(typeof(TransparentPropertyModelBinder))]
         public string RoleName { get; set; }
 
-        public EditUserProfileCompanyViewModel()
+        public UserProfileCompanyViewModel()
         {
-            this.ContactAddress = new EditUserProfileAddressViewModel();
-            this.ShippingAddress = new EditUserProfileAddressViewModel();
+            this.ContactAddress = new UserProfileAddressViewModel();
+            this.ShippingAddress = new UserProfileAddressViewModel();
         }
 
         [Display(Name = "Company name")]
@@ -34,9 +34,9 @@ namespace Vxp.Web.ViewModels.Users
         [Remote(action: "VerifyBusinessNumber", controller: "Users", AdditionalFields = nameof(Name), HttpMethod = "Post")]
         public string BusinessNumber { get; set; }
 
-        public EditUserProfileAddressViewModel ContactAddress { get; set; }
+        public UserProfileAddressViewModel ContactAddress { get; set; }
 
-        public EditUserProfileAddressViewModel ShippingAddress { get; set; }
+        public UserProfileAddressViewModel ShippingAddress { get; set; }
 
     }
 }

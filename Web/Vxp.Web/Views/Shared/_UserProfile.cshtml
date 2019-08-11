@@ -1,63 +1,73 @@
 ﻿@using Vxp.Common
-@model Vxp.Web.ViewModels.Users.UserProfileViewModel
+@using Vxp.Web.ViewModels.Users
+@model UserProfileViewModel
 
 <form id="formUserDetails" class="w-100" method="post">
-    @*<input type="hidden" asp-for="@Model.UserId" value="@Model.UserId" />*@
     @Html.HiddenFor(x => x.UserId)
     @Html.HiddenFor(x => x.IsNewUser)
     <div class="d-flex mb-1">
         <div class="w-25 bg-light d-flex flex-column p-1 border rounded">
             <h6 class="bg-primary text-white p-1 rounded">Account data</h6>
-            <div class="w-100">
-                <label asp-for="@Model.RoleName" class="vxp-form-control-label"></label>
-                <select title="Role" class="form-control text-dark font-weight-bold" asp-for="RoleName" asp-items="Model.AvailableRoles" id="edit-user-form-role-selector"></select>
-                <span asp-validation-for="@Model.RoleName" class="text-danger"></span>
-            </div>
-            <div class="vxp-section-edit-user-distributors animated" style="display: none;">
-                <div class="py-1"></div>
-                <h6 class="bg-primary text-white p-1 rounded">Distributors</h6>
-                <div class="w-100">
-                    <div class="vxp-edit-user-form-container container-fluid border rounded">
-                        @foreach (var distributor in Model.AvailableDistributors)
-                        {
-                            <div class="row px-1">
-                                <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@distributor.Text</div>
-                                <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="OpenDistributorManageForm('@distributor.Value')">Edit</button></div>
-                            </div>
 
-                            var distributorKey = $"{distributor.Value}:{distributor.Text}";
-                            <input type="hidden" name="AvailableDistributors" value="@distributorKey" />
-                        }
-                        <div class="row px-1">
-                            <div class="col-xl-10 col-sm-8">...</div>
-                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0  w-100 border" onclick="OpenDistributorManageForm()">Add</button></div>
+            @if (!Model.IsNewUser)
+            {
+                <div class="w-100">
+                    <label asp-for="@Model.RoleName" class="vxp-form-control-label"></label>
+                    <select title="Role" class="form-control text-dark font-weight-bold" asp-for="RoleName" asp-items="Model.AvailableRoles" id="edit-user-form-role-selector"></select>
+                    <span asp-validation-for="@Model.RoleName" class="text-danger"></span>
+                </div>
+
+                <div class="vxp-section-edit-user-distributors animated" style="display: none;">
+                    <div class="py-1"></div>
+                    <h6 class="bg-primary text-white p-1 rounded">Distributors</h6>
+                    <div class="w-100">
+                        <div class="vxp-edit-user-form-container container-fluid border rounded">
+                            @foreach (var distributor in Model.AvailableDistributors)
+                            {
+                                <div class="row px-1">
+                                    <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@distributor.Text</div>
+                                    <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="OpenDistributorManageForm('@distributor.Value')">Edit</button></div>
+                                </div>
+
+                                var distributorKey = $"{distributor.Value}:{distributor.Text}";
+                                <input type="hidden" name="AvailableDistributors" value="@distributorKey" />
+                            }
+                            <div class="row px-1">
+                                <div class="col-xl-10 col-sm-8">...</div>
+                                <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0  w-100 border" onclick="OpenDistributorManageForm()">Add</button></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="vxp-section-edit-user-bank-accounts animated">
-                <div class="py-1"></div>
-                <h6 class="bg-primary text-white p-1 rounded">Bank accounts</h6>
-                <div class="w-100">
-                    <div class="vxp-edit-user-form-container container-fluid border rounded">
-                        @foreach (var bankAccount in Model.BankAccounts)
-                        {
-                            <div class="row px-1">
-                                <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@bankAccount.Text</div>
-                                <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="OpenBankAccountManageForm(@bankAccount.Value)">Edit</button></div>
-                            </div>
-                            var accountKey = $"{bankAccount.Value}:{bankAccount.Text}";
-                            <input type="hidden" name="BankAccounts" value="@accountKey" />
-                        }
+                <div class="vxp-section-edit-user-bank-accounts animated">
+                    <div class="py-1"></div>
+                    <h6 class="bg-primary text-white p-1 rounded">Bank accounts</h6>
+                    <div class="w-100">
+                        <div class="vxp-edit-user-form-container container-fluid border rounded">
+                            @foreach (var bankAccount in Model.BankAccounts)
+                            {
+                                <div class="row px-1">
+                                    <div class="col-xl-10 col-sm-8 text-dark font-weight-bold">@bankAccount.Text</div>
+                                    <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="OpenBankAccountManageForm(@bankAccount.Value)">Edit</button></div>
+                                </div>
+                                var accountKey = $"{bankAccount.Value}:{bankAccount.Text}";
+                                <input type="hidden" name="BankAccounts" value="@accountKey" />
+                            }
 
-                        <div class="row px-1">
-                            <div class="col-xl-10 col-sm-8">...</div>
-                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="OpenBankAccountManageForm()">Add</button></div>
+                            <div class="row px-1">
+                                <div class="col-xl-10 col-sm-8">...</div>
+                                <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="OpenBankAccountManageForm()">Add</button></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="h-100"></div>
+                <div class="h-100"></div>
+            }
+            else
+            {
+                @Html.HiddenFor(x => x.RoleName)
+            }
+
             <div class="w-100">
                 <label asp-for="@Model.UserName" class="vxp-form-control-label"></label>
                 <input asp-for="@Model.UserName" class="form-control font-weight-bold" placeholder="Email" value="@Model.UserName" />
@@ -87,9 +97,7 @@
                     <div class="py-1"></div>
                     <button class="btn btn-outline-success w-100" type="button" data-toggle="modal" data-target="#modalResetPassword">Reset password</button>
                 </div>
-
             }
-
 
         </div>
         <div class="px-1"></div>
@@ -108,8 +116,11 @@
             </div>
             <div class="py-1"></div>
             <div class="w-100">
+                @*<label asp-for="@Model.ContactAddress.CountryName" class="vxp-form-control-label"></label>
+                    <input asp-for="@Model.ContactAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.ContactAddress.CountryName" />
+                    <span asp-validation-for="@Model.ContactAddress.CountryName" class="text-danger"></span>*@
                 <label asp-for="@Model.ContactAddress.CountryName" class="vxp-form-control-label"></label>
-                <input asp-for="@Model.ContactAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.ContactAddress.CountryName" />
+                <select title="Country name" class="form-control text-dark font-weight-bold chosen" asp-for="@Model.ContactAddress.CountryName" asp-items="@Model.AvailableCountries"></select>
                 <span asp-validation-for="@Model.ContactAddress.CountryName" class="text-danger"></span>
             </div>
             <div class="py-1"></div>
@@ -153,8 +164,11 @@
             </div>
             <div class="py-1"></div>
             <div class="w-100">
+                @*<label asp-for="@Model.Company.ContactAddress.CountryName" class="vxp-form-control-label"></label>
+                    <input asp-for="@Model.Company.ContactAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.Company.ContactAddress.CountryName" />
+                    <span asp-validation-for="@Model.Company.ContactAddress.CountryName" class="text-danger"></span>*@
                 <label asp-for="@Model.Company.ContactAddress.CountryName" class="vxp-form-control-label"></label>
-                <input asp-for="@Model.Company.ContactAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.Company.ContactAddress.CountryName" />
+                <select title="Country name" class="form-control text-dark font-weight-bold chosen" asp-for="@Model.Company.ContactAddress.CountryName" asp-items="@Model.AvailableCountries"></select>
                 <span asp-validation-for="@Model.Company.ContactAddress.CountryName" class="text-danger"></span>
             </div>
             <div class="py-1"></div>
@@ -186,8 +200,11 @@
         <div class="vxp-section-edit-user-shipping-address w-25 bg-light d-flex flex-column p-1 border rounded">
             <h6 class="bg-primary text-white p-1 rounded">Shipping address</h6>
             <div class="w-100">
+                @*<label asp-for="@Model.Company.ShippingAddress.CountryName" class="vxp-form-control-label"></label>
+                    <input asp-for="@Model.Company.ShippingAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.Company.ShippingAddress.CountryName" />
+                    <span asp-validation-for="@Model.Company.ShippingAddress.CountryName" class="text-danger"></span>*@
                 <label asp-for="@Model.Company.ShippingAddress.CountryName" class="vxp-form-control-label"></label>
-                <input asp-for="@Model.Company.ShippingAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.Company.ShippingAddress.CountryName" />
+                <select title="Country name" class="form-control text-dark font-weight-bold chosen" asp-for="@Model.Company.ShippingAddress.CountryName" asp-items="@Model.AvailableCountries"></select>
                 <span asp-validation-for="@Model.Company.ShippingAddress.CountryName" class="text-danger"></span>
             </div>
             <div class="py-1"></div>
@@ -198,7 +215,7 @@
             </div>
             <div class="py-1"></div>
             <div class="w-100">
-                <label asp-for="@Model.Company.ShippingAddress.City" class="vxp-form-control-label"></label>
+                <label asp-for="@Model.Company.ShippingAddress.AddressLocation" class="vxp-form-control-label"></label>
                 <input asp-for="@Model.Company.ShippingAddress.AddressLocation" class="form-control text-dark font-weight-bold" placeholder="Address" value="@Model.Company.ShippingAddress.AddressLocation" />
                 <span asp-validation-for="@Model.Company.ShippingAddress.AddressLocation" class="text-danger"></span>
             </div>
@@ -216,19 +233,33 @@
             </div>
         </div>
     </div>
-    <div class="d-flex my-3 align-content-start">
-        <div class="w-25 d-flex pr-1" id="component-notifier">
-            <button class="w-50 btn btn-primary rounded" type="submit">Update</button>
-            <div class="px-1"></div>
-            <button class="w-50 btn btn-primary rounded" type="button">Delete</button>
+    @if (@Model.IsNewUser)
+    {
+        <div class="d-flex my-3 align-content-start">
+            <div class="w-25 d-flex pr-1" id="component-notifier">
+                <button class="w-50 btn btn-primary rounded" type="submit">Register</button>
+                <div class="px-1"></div>
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="d-flex my-3 align-content-start">
+            <div class="w-25 d-flex pr-1" id="component-notifier">
+                <button class="w-50 btn btn-primary rounded" type="submit">Update</button>
+                <div class="px-1"></div>
+                <button class="w-50 btn btn-primary rounded" type="button" data-toggle="modal" data-target="#modalDeleteUser">Delete</button>
+
+            </div>
+        </div>
+    }
 
 </form>
 
 @if (!Model.IsNewUser)
 {
     <partial name="_UserProfileResetPassword" />
+    <partial name="_UserProfileDeleteUser" model="@Model.UserId" />
 }
 
 <!-- Modal Bank Account -->
@@ -392,6 +423,7 @@
         </div>
     </div>
 </div>
+
 <div id="modal-loader" class="modal vxp-modal-loader" data-backdrop="static" data-keyboard="false" tabindex="-1">
     <div class="modal-dialog modal-sm">
         <div class="vxp-loader"></div>
@@ -426,78 +458,73 @@
     }
 
 
+    window.onload = () => {
 
-        window.onload = () => {
+        if ("@Model.SuccessMessage") {
 
-            if (`@TempData["ErrorMessage"]`) {
-                notifyError(`@TempData["ErrorMessage"]`);
-            }
-
-            function notifyError(message) {
-                $("#component-notifier").notify(message,
-                    {
-                        "position": "right",
-                        "className": "error"
-                    });
-            }
-
-            $('#edit-user-form-role-selector').on('change',
-                function() {
-                    switchFormRoleMode(this.options[this.selectedIndex].text);
+            $("#component-notifier").notify("@Model.SuccessMessage",
+                {
+                    "position": "right",
+                    "className": "success"
                 });
+        }
 
-            let initialFormMode = $('#edit-user-form-role-selector option:selected').text();
 
-            let distributorsSection = $('.vxp-section-edit-user-distributors');
+        if (`@TempData["ErrorMessage"]`) {
+            notifyError(`@TempData["ErrorMessage"]`);
+        }
 
-            function switchFormRoleMode(selectedRole) {
-
-                distributorsSection.hide();
-
-                switch (selectedRole) {
-                case '@GlobalConstants.Roles.AdministratorRoleName':
-                    break;
-
-                case '@GlobalConstants.Roles.VendorRoleName':
-                    break;
-
-                case '@GlobalConstants.Roles.DistributorRoleName':
-                    break;
-
-                case '@GlobalConstants.Roles.CustomerRoleName':
-                    distributorsSection.show();
-                    break;
-                default:
-                    break;
-                }
-            }
-
-            switchFormRoleMode(initialFormMode);
-
-            if ("@Model.SuccessMessage") {
-
-                $("#component-notifier").notify("@Model.SuccessMessage",
-                    {
-                        "position": "right",
-                        "className": "success"
-                    });
-            }
-
-            $(function() {
-                let availableCountries = @Html.Raw(Json.Serialize(Model.AvailableCountries));
-                $(".country-selector").autocomplete({
-                    source: availableCountries
+        function notifyError(message) {
+            $("#component-notifier").notify(message,
+                {
+                    "position": "right",
+                    "className": "error"
                 });
+        }
+
+        $('#edit-user-form-role-selector').on('change',
+            function () {
+                switchFormRoleMode(this.options[this.selectedIndex].text);
             });
 
+        let initialFormMode = $('#edit-user-form-role-selector option:selected').text();
 
-            $('#modalBankAccount, #modalDistributor, #modalResetPassword').modal({
-                "backdrop": "static",
-                "keyboard": false,
-                "show": false
-            });
+        let distributorsSection = $('.vxp-section-edit-user-distributors');
 
-            $('#modalBankAccount, #modalDistributor, #modalResetPassword, #modal-loader').appendTo("body");
+        function switchFormRoleMode(selectedRole) {
 
-        };
+            distributorsSection.hide();
+
+            switch (selectedRole) {
+            case '@GlobalConstants.Roles.AdministratorRoleName':
+                break;
+
+            case '@GlobalConstants.Roles.VendorRoleName':
+                break;
+
+            case '@GlobalConstants.Roles.DistributorRoleName':
+                break;
+
+            case '@GlobalConstants.Roles.CustomerRoleName':
+                distributorsSection.show();
+                break;
+            default:
+                break;
+            }
+        }
+
+        switchFormRoleMode(initialFormMode);
+
+
+        $('#modalBankAccount, #modalDistributor, #modalResetPassword').modal({
+            "backdrop": "static",
+            "keyboard": false,
+            "show": false
+        });
+
+        $('#modalBankAccount, #modalDistributor, #modalResetPassword, #modal-loader, #modalDeleteUser').appendTo("body");
+
+        $(".chosen").chosen();
+    };
+
 </script>

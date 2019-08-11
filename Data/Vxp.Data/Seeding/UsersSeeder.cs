@@ -1,13 +1,13 @@
-﻿using System.Linq;
-
+﻿
 namespace Vxp.Data.Seeding
 {
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using Vxp.Common;
-    using Vxp.Data.Models;
+    using Models;
 
     public class UsersSeeder : ISeeder
     {
@@ -28,7 +28,7 @@ namespace Vxp.Data.Seeding
                     AddressLocation = "121 Fake Str.",
                     Email = "tsvetan.raykov@gmail.com",
                     City = "Lovech",
-                    Country = dbContext.Countries.Find(1),
+                    CountryName = "Bulgaria",
                     Phone = "0889999888"
                 }
             };

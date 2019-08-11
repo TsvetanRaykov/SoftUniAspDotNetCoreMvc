@@ -51,4 +51,8 @@
     <ProjectReference Include="..\Vxp.Data.Models\Vxp.Data.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

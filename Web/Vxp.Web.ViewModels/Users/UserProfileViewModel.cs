@@ -17,18 +17,18 @@ namespace Vxp.Web.ViewModels.Users
     {
         public bool IsNewUser { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public UserProfileViewModel()
         {
             this.BankAccounts = new HashSet<SelectListItem>();
-            this.AvailableCountries = new HashSet<string>();
-            this.AvailableDistributors = new HashSet<SelectListItem>();
+            this.AvailableCountries = new List<SelectListItem>();
+            this.AvailableDistributors = new List<SelectListItem>();
             this.AvailableRoles = new List<SelectListItem>();
-            this.ContactAddress = new EditUserProfileAddressViewModel();
-            this.Company = new EditUserProfileCompanyViewModel();
+            this.ContactAddress = new UserProfileAddressViewModel();
+            this.Company = new UserProfileCompanyViewModel();
         }
 
-        //AspNetUser
-        [Required(AllowEmptyStrings = false)]
         [StringLength(36)]
         public string UserId { get; set; }
 
@@ -40,6 +40,7 @@ namespace Vxp.Web.ViewModels.Users
         [Required]
         [Display(Name = "Email")]
         [EmailAddress]
+
         public string UserName { get; set; }
 
         [Required(AllowEmptyStrings = false)]
@@ -52,7 +53,7 @@ namespace Vxp.Web.ViewModels.Users
         [StringLength(50, ErrorMessage = "{0} must be at least {2} symbols", MinimumLength = 3)]
         public string LastName { get; set; }
 
-        [RequiredWhenNewUser(nameof(IsNewUser), 
+        [RequiredWhenNewUser(nameof(IsNewUser),
             ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         [Display(Name = "Password")]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -65,10 +66,11 @@ namespace Vxp.Web.ViewModels.Users
         public string ConfirmPassword { get; set; }
 
         //Company
-        public EditUserProfileCompanyViewModel Company { get; set; }
+        public UserProfileCompanyViewModel Company { get; set; }
 
         //Address
-        public EditUserProfileAddressViewModel ContactAddress { get; set; }
+
+        public UserProfileAddressViewModel ContactAddress { get; set; }
 
         [ModelBinder(typeof(KvpStringListToSelectListModelBinder))]
         public IEnumerable<SelectListItem> BankAccounts { get; set; }
@@ -83,7 +85,8 @@ namespace Vxp.Web.ViewModels.Users
         [ModelBinder(typeof(KvpStringListToSelectListModelBinder))]
         public ICollection<SelectListItem> AvailableDistributors { get; set; }
 
-        public IEnumerable<string> AvailableCountries { get; set; }
+        [ModelBinder(typeof(KvpStringListToSelectListModelBinder))]
+        public ICollection<SelectListItem> AvailableCountries { get; set; }
 
         public string SuccessMessage { get; set; }
 

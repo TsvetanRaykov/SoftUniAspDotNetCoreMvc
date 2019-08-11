@@ -1,25 +1,44 @@
-﻿@using Vxp.Web.ViewModels.Administration.Users
-@{
+﻿@{
     Layout = "_Layout";
     var sideMenuSelected = ViewData["sidebarMenu"] as string;
+
+    var subMenuContentUsers = new[] { "List", "Create" };
+    var subMenuContentSettings = new[] { "Settings" };
 }
 
 <section class="vxp-section ftco-no-pb ftco-services mb-3">
     <div class="container-fluid">
 
         <div class="row no-gutters">
-            <div class="col-md-5 col-lg-2 ftco-animate py-4 nav-link-wrap">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a asp-area="Administration" asp-controller="Users" asp-action="List" class="nav-link px-4 py-1 @(sideMenuSelected=="Users" ? "active" : string.Empty)" role="tab"><span class="mr-3"></span> Users</a>
-                    <a asp-area="Administration" asp-controller="Dashboard" asp-action="Settings" class="nav-link px-4 py-1 @(sideMenuSelected=="Settings" ? "active" : string.Empty)" role="tab"><span class="mr-3"></span> Settings</a>
-                </div>
+            <div class="col-md-5 col-lg-2 ftco-animate py-4 nav-link-wrap" id="admin-nav">
+                <ul class="nav flex-column flex-nowrap nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" data-toggle="collapse" href="#admin-users"> Users</a>
+                        <div id="admin-users" class="collapse @(subMenuContentUsers.Contains(sideMenuSelected) ? "show" : string.Empty)" data-parent="#admin-nav">
+                            <ul class="nav flex-column ml-3">
+                                <li class="nav-item">
+                                    <a class="nav-link text-light @(sideMenuSelected == "List" ? "active" : string.Empty)" asp-area="Administration" asp-controller="Users" asp-action="List"><span class="mr-2"></span> List</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light @(sideMenuSelected == "Create" ? "active" : string.Empty)" asp-area="Administration" asp-controller="Users" asp-action="Create"><span class="mr-2"></span> Register</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <a class="nav-link text-white" data-toggle="collapse" href="#admin-settings"> Settings</a>
+                        <div id="admin-settings" class="collapse  @(subMenuContentSettings.Contains(sideMenuSelected) ? "show" : string.Empty)" data-parent="#admin-nav">
+                            <ul class="nav flex-column ml-3">
+                                <li class="nav-item">
+                                    <a class="nav-link text-light @(sideMenuSelected == "Settings" ? "active" : string.Empty)" asp-area="Administration" asp-controller="Dashboard" asp-action="Settings"><span class="mr-2"></span> Settings</a>
+                                </li>
+                            </ul>
+                        </div>
+                </ul>
+
             </div>
 
             <div class="col-md-7 col-lg-10 ftco-animate px-4 px-md-5 ">
-
                 <div class="tab-content pl-4" id="v-pills-tabContent">
-
-                    <div class="tab-pane fade py-0 py-lg-5 show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
+                    <div class="tab-pane fade py-0 pb-lg-5 show active" id="v-pills-1" role="tabpanel" aria-labelledby="v-pills-1-tab">
                         @RenderBody()
                     </div>
                 </div>

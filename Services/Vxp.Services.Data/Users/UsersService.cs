@@ -1,42 +1,39 @@
-﻿namespace Vxp.Services.Data.Users
+﻿using System.Collections.Generic;
+
+namespace Vxp.Services.Data.Users
 {
     using Mapping;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
+    using System;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Threading.Tasks;
     using Vxp.Data.Common.Repositories;
     using Vxp.Data.Models;
-    using Vxp.Services.Models.Administration.Users;
-    using System;
-    using System.Linq.Expressions;
 
     public class UsersService : IUsersService
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IDeletableEntityRepository<ApplicationUser> _usersRepository;
-        private readonly IDeletableEntityRepository<Country> _countriesRepository;
         private readonly IDistributorsService _distributorsService;
 
         public UsersService(
             RoleManager<ApplicationRole> roleManager,
             UserManager<ApplicationUser> userManager,
             IDeletableEntityRepository<ApplicationUser> usersRepository,
-            IDeletableEntityRepository<Country> countriesRepository,
             IDistributorsService distributorsService)
         {
             this._roleManager = roleManager;
             this._userManager = userManager;
             this._usersRepository = usersRepository;
-            this._countriesRepository = countriesRepository;
             this._distributorsService = distributorsService;
         }
 
         public Task<IQueryable<TViewModel>> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
         {
-            var query = this._usersRepository.AllAsNoTracking()
+            var query = this._usersRepository.AllWithDeleted()
                 .Include(user => user.Company)
                 .Include(user => user.Roles)
                 .ThenInclude(role => role.Role)
@@ -63,81 +60,26 @@
             return Task.Run(() => applicationUsersInRole.To<TViewModel>());
         }
 
-        public async Task<IEnumerable<string>> GetAllCountriesAsync()
+        public async Task<string> CreateUser<TViewModel>(TViewModel userModel, string password, string role)
         {
-            return await this._countriesRepository
-                .AllAsNoTrackingWithDeleted()
-                .Select(x => x.Name)
-                .OrderBy(x => x)
-                .ToListAsync();
+            var applicationUser = AutoMapper.Mapper.Map<ApplicationUser>(userModel);
+
+            if (string.IsNullOrWhiteSpace(applicationUser.Company?.Name))
+            {
+                applicationUser.Company = null;
+            }
+
+            var user = await this._userManager.CreateAsync(applicationUser, password);
+
+            if (!user.Succeeded) { return null; }
+
+            await this._userManager.AddToRoleAsync(applicationUser, role);
+
+            return applicationUser.Id;
+
         }
 
-        public async Task<string> CreateUser<TViewModel>(TViewModel userModel)
-        {
-
-            var inputUsers = new HashSet<TViewModel> { userModel };
-            var serviceUsers = inputUsers.AsQueryable().To<CreateUserServiceModel>();
-            var applicationUsers = serviceUsers.To<ApplicationUser>();
-
-            var serviceUser = serviceUsers.First();
-            var applicationUser = applicationUsers.First();
-
-            if (applicationUser.ContactAddress != null)
-            {
-                var countryFromDb = this._countriesRepository
-                    .AllAsNoTrackingWithDeleted()
-                    .FirstOrDefault(c => c.Name == serviceUser.Country);
-
-                if (countryFromDb == null) // seed
-                {
-                    countryFromDb = new Country
-                    {
-                        Name = serviceUser.Country,
-                        Language = serviceUser.Country
-                    };
-
-                    await this._countriesRepository.AddAsync(countryFromDb);
-                    await this._countriesRepository.SaveChangesAsync();
-                }
-
-                applicationUser.ContactAddress.CountryId = countryFromDb.Id;
-            }
-
-            string newDistributorKey = null;
-
-            if (!string.IsNullOrWhiteSpace(serviceUser.DistributorId))
-            {
-                var distributor = await this._userManager.FindByIdAsync(serviceUser.DistributorId);
-                if (distributor == null)
-                {
-                    return null;
-                }
-
-                newDistributorKey = await this._distributorsService.GenerateNewDistributorKeyAsync(distributor.UserName);
-            }
-
-            var user = await this._userManager.CreateAsync(applicationUser, serviceUser.Password);
-
-            if (user.Succeeded)
-            {
-                await this._userManager.AddToRoleAsync(applicationUser, serviceUser.Role);
-
-                if (!string.IsNullOrWhiteSpace(newDistributorKey))
-                {
-                    if (!await this._distributorsService.AddCustomerToDistributorAsync(applicationUser.UserName, newDistributorKey))
-                    {
-                        await this._userManager.DeleteAsync(applicationUser);
-                        return null;
-                    }
-                }
-
-                return applicationUser.Id;
-            }
-
-            return null;
-        }
-
-        public bool UpdateUser<TViewModel>(TViewModel userModel)
+        public async Task<bool> UpdateUser<TViewModel>(TViewModel userModel, IEnumerable<string> roleNames)
         {
             var applicationUser = AutoMapper.Mapper.Map<ApplicationUser>(userModel);
 
@@ -148,11 +90,7 @@
                 return false;
             }
 
-
-            userFromDb.FirstName = applicationUser.FirstName;
-            userFromDb.LastName = applicationUser.LastName;
-            userFromDb.UserName = applicationUser.UserName;
-            userFromDb.Company = applicationUser.Company;
+            AutoMapper.Mapper.Map(userModel, userFromDb);
 
             if (userFromDb.Company.Name == null)
             {
@@ -171,6 +109,14 @@
                 }
             }
 
+            var currentRoles = await this._userManager.GetRolesAsync(userFromDb);
+            await this._userManager.RemoveFromRolesAsync(userFromDb, currentRoles);
+
+            foreach (var roleName in roleNames)
+            {
+                await this._userManager.AddToRoleAsync(userFromDb, roleName);
+            }
+
             this._usersRepository.Update(userFromDb);
             this._usersRepository.SaveChangesAsync().GetAwaiter().GetResult();
 
@@ -184,9 +130,28 @@
             {
                 return false;
             }
+
             await this._userManager.RemovePasswordAsync(userFromDb);
             await this._userManager.AddPasswordAsync(userFromDb, password);
 
+            return true;
+        }
+
+        public async Task<bool> DeleteUser(string userId)
+        {
+            var userFromDb = await this._usersRepository.GetByIdWithDeletedAsync(userId);
+            if (userFromDb == null) { return false; }
+            this._usersRepository.Delete(userFromDb);
+            await this._usersRepository.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RestoreUser(string userId)
+        {
+            var userFromDb = await this._usersRepository.GetByIdWithDeletedAsync(userId);
+            if (userFromDb == null) { return false; }
+            this._usersRepository.Undelete(userFromDb);
+            await this._usersRepository.SaveChangesAsync();
             return true;
         }
     }

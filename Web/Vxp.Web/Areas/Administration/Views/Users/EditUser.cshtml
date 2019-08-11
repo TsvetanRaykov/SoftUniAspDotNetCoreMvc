@@ -1,18 +1,15 @@
 ﻿@model Vxp.Web.ViewModels.Users.UserProfileViewModel
 
 @{
-    this.ViewData["Title"] = "Edit User";
+    this.ViewData["Title"] = "Update User";
     this.ViewData["sidebarMenu"] = "Users";
 }
-
-@addTagHelper *, Vxp.Web
 
 <div class="d-lg-flex">
     <div class="mr-md-4 mr-lg-5">
         <span class="icon mb-3 d-block icon-user"></span>
     </div>
-
-    <partial name="_UserProfile" />
-
+    <h3 class="mb-4 float-left">@Model.UserName</h3>
 </div>
 
+<partial name="_UserProfile" />

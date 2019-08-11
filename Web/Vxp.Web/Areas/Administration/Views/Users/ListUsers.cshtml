@@ -3,63 +3,70 @@
 
 @{
     this.ViewData["Title"] = "List Users";
-    this.ViewData["sidebarMenu"] = "Users";
+    this.ViewData["sidebarMenu"] = "List";
 }
 
-<div class="d-lg-flex">
+<div class="d-lg-flex position-absolute">
     <div class="mr-md-4 mr-lg-5">
         <span class="icon mb-3 d-block icon-users"></span>
     </div>
-    <div class="text">
-        <h3 class="mb-4 float-left">Users</h3>
-        <a asp-area="Administration" asp-controller="Users" asp-action="Create" class="btn btn-primary py-3 px-lg-5 text-nowrap float-right">Add New</a>
+    <h3 class="float-left">Users</h3>
 
-        <table class="vxp-table table rounded display hover cell-border" style="width: 100%">
-            <thead>
-                <tr>
-                    <th>Role</th>
-                    <th>Name</th>
-                    <th>Country</th>
-                    <th>Address</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    @*<th>Deleted</th>*@
-                    <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model)
-                {
-                    <tr>
-                        <td>@user.Role</td>
-                        <td>@user.FirstName @user.LastName</td>
-                        <td>@user.ContactAddressCountryName</td>
-                        <td>@user.ContactAddressAddressLocation, @user.ContactAddressCity</td>
-                        <td><a href="mailto:@user.Email" target="_top">@user.Email </a></td>
-                        <td>@user.ContactAddressPhone</td>
-                        @*<td>@(user.IsDeleted ? "yes" : "no")</td>*@
-                        <td class="text-right">
-                            <a class="btn btn-link btn-light" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Role</th>
-                    <th>Name</th>
-                    <th>Country</th>
-                    <th>Address</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    @*<th>Deleted</th>*@
-                    <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
-                </tr>
-            </tfoot>
-        </table>
-
-    </div>
 </div>
+
+@Html.AntiForgeryToken()
+
+<table class="vxp-table table rounded display hover cell-border" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Role</th>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+
+            string className = user.IsDeleted ? "vxp-user-deleted-table-row" : string.Empty;
+
+            <tr class="@className">
+                <td>@user.Role</td>
+                <td>@user.FirstName @user.LastName</td>
+                <td>@user.ContactAddressCountryName</td>
+                <td>@user.ContactAddressAddressLocation, @user.ContactAddressCity</td>
+                <td><a href="mailto:@user.UserName" target="_top">@user.UserName </a></td>
+                <td>@user.ContactAddressPhone</td>
+                <td class="text-right">
+                    @if (user.IsDeleted)
+                    {
+                        <a class="btn btn-link btn-outline-danger w-100 confirm-user-restore" asp-action="Restore" data-user-id="@user.Id">Restore</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-link btn-outline-success w-100" asp-action="Update" asp-route-id="@user.Id">Edit</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Role</th>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
+        </tr>
+    </tfoot>
+</table>
 
 @section Scripts
 {
@@ -69,7 +76,58 @@
             $('.vxp-table').DataTable({
                 "lengthChange": false
             });
-        });
-    </script>
 
+            $(".confirm-user-restore").off("click").on("click",
+                function (a) {
+
+                    a.preventDefault();
+
+                    window.bootbox.confirm({
+                        title: "Confirm restore",
+                        message: "This user will be restored.",
+                        //className: "",
+                        buttons: {
+                            confirm: {
+                                label: "Ok",
+                                className: "btn-success"
+                            },
+                            cancel: {
+                                label: "Cancel",
+                                className: "btn-secondary"
+                            }
+                        },
+                        swapButtonOrder: true,
+                        centerVertical: false,
+                        callback: function (result) {
+                            if (result) {
+                                let userId = a.currentTarget.dataset["userId"];
+                                let token = $('input[name="__RequestVerificationToken"]').val();
+                                $.ajax({
+                                    url: a.currentTarget.href,
+                                    type: "POST",
+                                    headers: {
+                                        'RequestVerificationToken': token
+                                    },
+                                    data: {
+                                        userId: userId
+                                    },
+                                    success: () => {
+                                        window.location = window.location.href;
+                                    },
+                                    error: (data) => {
+                                        console.error(data);
+                                    },
+                                    complete: () => {
+                                        // ignore
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
+
+        });
+
+
+    </script>
 }

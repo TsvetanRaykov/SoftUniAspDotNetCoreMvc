@@ -6,6 +6,8 @@
     <title>@this.ViewData["Title"] - VERTEX</title>
 
     <link rel="icon" href="@Url.Content("~/images/favicon.png")" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css" integrity="sha256-EH/CzgoJbNED+gZgymswsIOrM9XhIbdSJ6Hwro09WE4=" crossorigin="anonymous" />
 
     <environment names="Development">
 
@@ -130,7 +132,7 @@
         <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
 
         <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="~/js/popper.min.js"></script>
 
         <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -153,7 +155,9 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
 
     </environment>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" integrity="sha256-c4gVE6fn+JRKMRvqjoDp+tlG4laudNYrXI1GncbfAYY=" crossorigin="anonymous"></script>
 
-    @this.RenderSection("Scripts", required: false)
+@this.RenderSection("Scripts", required: false)
 </body>
 </html>

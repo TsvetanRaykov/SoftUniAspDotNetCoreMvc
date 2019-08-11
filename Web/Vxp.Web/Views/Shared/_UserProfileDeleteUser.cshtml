@@ -1,0 +1,32 @@
+﻿@model string
+<!-- Modal Reset Password -->
+<div class="modal fade" id="modalDeleteUser" tabindex="-1" role="dialog" aria-labelledby="modalDeleteUserLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Users" asp-action="Delete" method="post">
+                    <input asp-for="@Model" type="hidden" name="UserId" />
+                    <div>
+                        Are you sure to mark this user as deleted?
+                    </div>
+                    <div class="pt-3 d-flex">
+                        <div class="w-50 d-flex flex-nowrap align-content-end">
+                            <input type="submit" value="Submit" class="btn btn-success" />
+                            <input type="button" value="Cancel" class="btn btn-secondary ml-1" data-dismiss="modal" aria-label="Close" />
+                        </div>
+                        <div class="w-50">
+                            <div class="text-danger vxp-validation-errors-placeholder"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

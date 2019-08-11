@@ -3,7 +3,7 @@
 let guestImage = $(".hero-wrap.js-full-height");
 
 if (guestImage.length === 0) {
-   
+
 
     let navbar = $('.ftco_navbar');
     let sd = $('.js-scroll-wrap');

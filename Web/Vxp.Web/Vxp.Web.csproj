@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-Vxp-BBB373B5-EF3F-4DBB-B8AA-7152CEC275BF</UserSecretsId>
-	<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -43,5 +43,9 @@
     <ProjectReference Include="..\..\Services\Vxp.Services\Vxp.Services.csproj" />
     <ProjectReference Include="..\Vxp.Web.Infrastructure\Vxp.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\Vxp.Web.ViewModels\Vxp.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\AllCountriesInTheWorlds.csv" />
   </ItemGroup>
 </Project>

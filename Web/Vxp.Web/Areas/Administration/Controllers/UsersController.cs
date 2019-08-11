@@ -1,19 +1,21 @@
 ﻿namespace Vxp.Web.Areas.Administration.Controllers
 {
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using Microsoft.EntityFrameworkCore;
-    using System.Linq;
-    using System.Threading.Tasks;
     using Common;
     using Data.Models;
-    using Vxp.Services.Data.Users;
-    using Services.Mapping;
-    using Vxp.Web.ViewModels.Administration.Users;
-    using System;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.ModelBinding;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
+    using Services.Mapping;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
     using ViewModels.Users;
+    using Vxp.Services.Data.Users;
+    using Vxp.Web.ViewModels.Administration.Users;
 
     public class UsersController : AdministrationController
     {
@@ -38,9 +40,8 @@
 
             var viewModel = new UserProfileViewModel
             {
-                RoleName = GlobalConstants.Roles.DistributorRoleName, // Role dropdown selected item by default
+                RoleName = GlobalConstants.Roles.AdministratorRoleName, // Role dropdown selected item by default
                 IsNewUser = true,
-                UserId = Guid.NewGuid().ToString()
             };
 
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(viewModel);
@@ -52,6 +53,12 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(UserProfileViewModel inputModel)
         {
+
+            if (string.IsNullOrEmpty(inputModel.ContactAddress?.CountryName))
+            {
+                this.ModelState.AddModelError("ContactAddress.CountryName", string.Format(GlobalConstants.ErrorMessages.RequiredField, "CountryName"));
+            }
+
             if (!this.ModelState.IsValid)
             {
                 await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(inputModel);
@@ -65,12 +72,20 @@
                 return this.View("CreateUser", inputModel);
             }
 
-            var newUserId = await this._usersService.CreateUser(inputModel);
+            var newUserId = await this._usersService.CreateUser(inputModel, inputModel.Password, inputModel.RoleName);
 
-            return this.RedirectToAction(nameof(this.List));
+            if (!string.IsNullOrEmpty(newUserId))
+            {
+                this.TempData["UserProfileViewMessage"] = $"{inputModel.UserName} has been created.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"{inputModel.UserName} cannot be created.";
+            }
+            return this.RedirectToAction(nameof(this.Update), new { id = newUserId });
         }
 
-        public async Task<IActionResult> Edit(UserIdInputModel inputModel)
+        public async Task<IActionResult> Update(UserIdInputModel inputModel)
         {
 
             var userModels = await this._usersService
@@ -85,9 +100,9 @@
 
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(userModel);
 
-            if (this.TempData.ContainsKey("EditUserViewMessage"))
+            if (this.TempData.ContainsKey("UserProfileViewMessage"))
             {
-                userModel.SuccessMessage = this.TempData["EditUserViewMessage"] as string;
+                userModel.SuccessMessage = this.TempData["UserProfileViewMessage"] as string;
             }
 
             return this.View("EditUser", userModel);
@@ -95,21 +110,42 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UserProfileViewModel inputModel)
+        public async Task<IActionResult> Update(UserProfileViewModel inputModel)
         {
             await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(inputModel);
 
-            if (this.ModelState.IsValid && this._usersService.UpdateUser(inputModel))
+            if (string.IsNullOrEmpty(inputModel.ContactAddress?.CountryName))
             {
-                this.TempData["EditUserViewMessage"] = $"{inputModel.UserName} data has been updated.";
+                this.ModelState.AddModelError("ContactAddress.CountryName", string.Format(GlobalConstants.ErrorMessages.RequiredField, "CountryName"));
             }
 
-            if (this.TempData.ContainsKey("EditUserViewMessage"))
+            if (this.ModelState.IsValid && await this._usersService.UpdateUser(inputModel, new[] { inputModel.RoleName }))
             {
-                inputModel.SuccessMessage = this.TempData["EditUserViewMessage"] as string;
+                this.TempData["UserProfileViewMessage"] = $"{inputModel.UserName} data has been updated.";
+            }
+
+            if (this.TempData.ContainsKey("UserProfileViewMessage"))
+            {
+                inputModel.SuccessMessage = this.TempData["UserProfileViewMessage"] as string;
             }
 
             return this.View("EditUser", inputModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete([FromForm] string userId)
+        {
+            await this._usersService.DeleteUser(userId);
+            return this.RedirectToAction("List");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Restore([FromForm]string userId)
+        {
+            await this._usersService.RestoreUser(userId);
+            return this.Ok();
         }
 
         [HttpPost]
@@ -137,11 +173,11 @@
             {
                 if (await this._usersService.UpdateUserPasswordAsync(inputModel.UserId, inputModel.Password))
                 {
-                    this.TempData["EditUserViewMessage"] = $"{userModel.UserName} password has been set.";
+                    this.TempData["UserProfileViewMessage"] = $"{userModel.UserName} password has been set.";
                 }
             }
 
-            return this.RedirectToAction("Edit", new { id = inputModel.UserId });
+            return this.RedirectToAction("Update", new { id = inputModel.UserId });
         }
 
         [AcceptVerbs("Post")]
@@ -168,41 +204,42 @@
 
         #region private
 
-        private async Task ApplyRolesAndDistributorsToAddUserInputModel(AddUserInputModel addUserInputModel)
+        private async Task ApplyMissingPropertiesToEditUserProfileViewComponentModel(UserProfileViewModel userModel)
         {
-            var distributors = await this._usersService
-                .GetAllInRoleAsync<AddUserDistributorViewModel>(GlobalConstants.Roles.DistributorRoleName);
 
             var vendors = await this._usersService
                 .GetAllInRoleAsync<AddUserDistributorViewModel>(GlobalConstants.Roles.VendorRoleName);
 
-
-            addUserInputModel.AvailableRoles = this._roleManager.Roles
-                .Select(role => new SelectListItem(
-                    role.Name,
-                    role.Name,
-                    role.Name == addUserInputModel.Role,
-                    false)).ToList();
-
-            addUserInputModel.AvailableDistributors = distributors.Select(x => new SelectListItem(x.DisplayName, x.Id, x.Id == addUserInputModel.DistributorId)).ToList();
-            addUserInputModel.AvailableDistributors.Add(new SelectListItem("- Select Distributor -", string.Empty, addUserInputModel.DistributorId == null, true));
-            addUserInputModel.AvailableCountries = this._usersService.GetAllCountriesAsync().GetAwaiter().GetResult();
+            userModel.AvailableRoles = await this._roleManager.Roles.To<SelectListItem>().ToListAsync();
+            userModel.AvailableRoles.ForEach(r => { r.Selected = r.Value == userModel.RoleName; });
+            userModel.Company = userModel.Company ?? new UserProfileCompanyViewModel();
+            userModel.Company.ContactAddress = userModel.Company.ContactAddress ?? new UserProfileAddressViewModel();
+            userModel.Company.ShippingAddress = userModel.Company.ShippingAddress ?? new UserProfileAddressViewModel();
+            userModel.ContactAddress = userModel.ContactAddress ?? new UserProfileAddressViewModel();
 
             if (vendors.Any())
             {
-                addUserInputModel.AvailableRoles.RemoveAll(r => r.Text == GlobalConstants.Roles.VendorRoleName);
+                userModel.AvailableRoles.RemoveAll(r => r.Text == GlobalConstants.Roles.VendorRoleName);
             }
-        }
 
-        private async Task ApplyMissingPropertiesToEditUserProfileViewComponentModel(UserProfileViewModel userModel)
-        {
-            userModel.AvailableCountries = await this._usersService.GetAllCountriesAsync();
-            userModel.AvailableRoles = await this._roleManager.Roles.To<SelectListItem>().ToListAsync();
-            userModel.AvailableRoles.ForEach(r => { r.Selected = r.Value == userModel.RoleName; });
-            userModel.Company = userModel.Company ?? new EditUserProfileCompanyViewModel();
-            userModel.Company.ContactAddress = userModel.Company.ContactAddress ?? new EditUserProfileAddressViewModel();
-            userModel.Company.ShippingAddress = userModel.Company.ShippingAddress ?? new EditUserProfileAddressViewModel();
-            userModel.ContactAddress = userModel.ContactAddress ?? new EditUserProfileAddressViewModel();
+            var assembly = Assembly.GetEntryAssembly();
+            var resourceStream = assembly?.GetManifestResourceStream("Vxp.Web.Resources.AllCountriesInTheWorlds.csv");
+
+            if (resourceStream != null)
+            {
+                var allCountries = new HashSet<SelectListItem>();
+                using (var reader = new StreamReader(resourceStream))
+                {
+                    string country;
+                    while ((country = reader.ReadLine()) != null)
+                    {
+                        allCountries.Add(new SelectListItem(country, country));
+                    }
+                }
+
+                allCountries.Add(new SelectListItem("- Select Country -", string.Empty, true, true));
+                userModel.AvailableCountries = allCountries;
+            }
         }
 
         #endregion
