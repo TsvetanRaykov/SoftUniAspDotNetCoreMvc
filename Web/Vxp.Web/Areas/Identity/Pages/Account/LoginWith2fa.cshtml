@@ -4,34 +4,32 @@
     ViewData["Title"] = "Two-factor authentication";
 }
 
-<h1>@ViewData["Title"]</h1>
-<hr />
-<p>Your login is protected with an authenticator app. Enter your authenticator code below.</p>
-<div class="row">
-    <div class="col-md-4">
-        <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
-            <input asp-for="RememberMe" type="hidden" />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.TwoFactorCode"></label>
-                <input asp-for="Input.TwoFactorCode" class="form-control" autocomplete="off" />
-                <span asp-validation-for="Input.TwoFactorCode" class="text-danger"></span>
+<div class="w-50 ftco-animate pr-5" data-scrollax=" properties: { translateY: '70%' }">
+    <div class="h-20 mb-3"></div>
+    <p class="mb-4 text-white" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+        Your login is protected with an authenticator app. Enter your authenticator code below.
+    </p>
+    <form method="post" asp-route-returnUrl="@Model.ReturnUrl" class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+        <input asp-for="RememberMe" type="hidden" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label class="text-white" asp-for="Input.TwoFactorCode"></label>
+            <input asp-for="Input.TwoFactorCode" class="form-control text-danger" autocomplete="off" />
+            <span asp-validation-for="Input.TwoFactorCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <div class="checkbox">
+                <label class="text-white" asp-for="Input.RememberMachine">
+                    <input asp-for="Input.RememberMachine" />
+                    @Html.DisplayNameFor(m => m.Input.RememberMachine)
+                </label>
             </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label asp-for="Input.RememberMachine">
-                        <input asp-for="Input.RememberMachine" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMachine)
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Log in</button>
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="w-33 btn btn-primary py-3 text-nowrap">Log in</button>
+        </div>
+    </form>
 </div>
-<p>
-    Don't have access to your authenticator device? You can
-    <a id="recovery-code-login" asp-page="./LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl">log in with a recovery code</a>.
-</p>
+<div class="w-50" data-scrollax="properties: { translateY: '70%' }">
+    <partial name="_RequestAccessPartial" />
+</div>

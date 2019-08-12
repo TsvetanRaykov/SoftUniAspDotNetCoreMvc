@@ -1,0 +1,20 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+
+}
+
+<section class="hero-wrap js-full-height" style="background-image: url('@Url.Content("~/images/bg_2.jpg")');" data-section="home">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="no-gutters slider-text js-full-height" data-scrollax-parent="true">
+            <div class="d-flex vxp-section">
+
+                
+                    @this.RenderBody()
+
+
+
+            </div>
+        </div>
+    </div>
+</section>

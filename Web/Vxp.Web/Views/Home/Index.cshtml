@@ -1,17 +1,11 @@
 ﻿@{
+    Layout = "_LayoutGuest";
     this.ViewData["Title"] = "Home";
 }
 
-<section class="hero-wrap js-full-height" style="background-image: url('@Url.Content("~/images/bg_2.jpg")');" data-section="home">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row no-gutters slider-text js-full-height align-items-center justify-content-end"
-             data-scrollax-parent="true">
-
-
-            <partial name="_RequestAccessPartial" model="@true" />
-
-
-        </div>
-    </div>
-</section>
+<div class="w-50 ftco-animate pr-5" data-scrollax=" properties: { translateY: '70%' }">
+    
+</div>
+<div class="w-50 ftco-animate" data-scrollax="properties: { translateY: '70%' }">
+    <partial name="_RequestAccessPartial" />
+</div>

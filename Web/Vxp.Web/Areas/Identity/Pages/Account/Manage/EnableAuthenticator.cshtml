@@ -23,8 +23,8 @@
         </li>
         <li>
             <p>Scan the QR Code or enter this key <kbd>@Model.SharedKey</kbd> into your two factor authenticator app. Spaces and casing do not matter.</p>
-            <div class="alert alert-info">To enable QR code generation please read our <a href="https://go.microsoft.com/fwlink/?Linkid=852423">documentation</a>.</div>
-            <div id="qrCode"></div>
+            @*<div class="alert alert-info">To enable QR code generation please read our <a href="https://go.microsoft.com/fwlink/?Linkid=852423">documentation</a>.</div>*@
+            <canvas id="qrCode"></canvas>
             <div id="qrCodeData" data-url="@Html.Raw(@Model.AuthenticatorUri)"></div>
         </li>
         <li>
@@ -48,3 +48,19 @@
         </li>
     </ol>
 </div>
+
+@section Scripts {
+
+    <script type="text/javascript" src="~/lib/qrcode/build/qrcode.min.js"></script>
+    <script type="text/javascript">
+
+
+        QRCode.toDataURL(document.getElementById("qrCode"),
+            "@Html.Raw(Model.AuthenticatorUri)",
+            {
+                width: 150,
+                height: 150
+            });
+
+    </script>
+}
