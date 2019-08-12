@@ -31,7 +31,7 @@
 
         public async Task<IActionResult> List()
         {
-            var viewModel = await this._usersService.GetAll<ListUserViewModel>().GetAwaiter().GetResult().ToListAsync();
+            var viewModel = await this._usersService.GetAllWithDeleted<ListUserViewModel>().GetAwaiter().GetResult().ToListAsync();
             return this.View("ListUsers", viewModel);
         }
 
@@ -87,7 +87,6 @@
 
         public async Task<IActionResult> Update(UserIdInputModel inputModel)
         {
-
             var userModels = await this._usersService
                 .GetAll<UserProfileViewModel>(u => u.Id == inputModel.Id);
 
@@ -181,7 +180,7 @@
         }
 
         [AcceptVerbs("Post")]
-        public IActionResult VerifyBusinessNumber([FromForm(Name = "Company.Name")] string companyName, [FromForm(Name = "Company.BusinessNumber")] string businessNumber)
+        public IActionResult ValidateBusinessNumber([FromForm(Name = "Company.Name")] string companyName, [FromForm(Name = "Company.BusinessNumber")] string businessNumber)
         {
             if (string.IsNullOrWhiteSpace(companyName) && !string.IsNullOrEmpty(businessNumber))
             {
@@ -192,13 +191,23 @@
         }
 
         [AcceptVerbs("Post")]
-        public IActionResult VerifyCompanyName([FromForm(Name = "Company.Name")] string companyName, [FromForm(Name = "Company.BusinessNumber")] string businessNumber)
+        public IActionResult ValidateCompanyName([FromForm(Name = "Company.Name")] string companyName, [FromForm(Name = "Company.BusinessNumber")] string businessNumber)
         {
             if (string.IsNullOrWhiteSpace(businessNumber) && !string.IsNullOrEmpty(companyName))
             {
                 return this.Json("The Company must have Business number.");
             }
 
+            return this.Json(true);
+        }
+
+        [AcceptVerbs("Post")]
+        public async Task<IActionResult> ValidateNewUsername([FromForm] string userName, [FromForm] bool isNewUser)
+        {
+            if (isNewUser && await this._usersService.IsRegistered(userName))
+            {
+                return this.Json("This email is already in use.");
+            }
             return this.Json(true);
         }
 

@@ -24,14 +24,16 @@ namespace Vxp.Web.ViewModels.Users
         [StringLength(30)]
         [RequiredInSpecificRoles(compareRoleProperty: nameof(RoleName), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName,
             ErrorMessage = "The Company name is required.")]
-        [Remote(action: "VerifyCompanyName", controller: "Users", AdditionalFields = nameof(BusinessNumber), HttpMethod = "Post")]
+        // [Remote(action: "ValidateCompanyName", controller: "Users", AdditionalFields = nameof(BusinessNumber), HttpMethod = "Post")]
+        [RequiredAsAGroup("Grp02", ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         public string Name { get; set; }
 
         [Display(Name = "Business number")]
         [StringLength(15)]
         [RequiredInSpecificRoles(compareRoleProperty: nameof(RoleName), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName,
             ErrorMessage = "The Company BIN is required.")]
-        [Remote(action: "VerifyBusinessNumber", controller: "Users", AdditionalFields = nameof(Name), HttpMethod = "Post")]
+        //[Remote(action: "ValidateBusinessNumber", controller: "Users", AdditionalFields = nameof(Name), HttpMethod = "Post")]
+        [RequiredAsAGroup("Grp02", ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         public string BusinessNumber { get; set; }
 
         public UserProfileAddressViewModel ContactAddress { get; set; }

@@ -1,6 +1,4 @@
-﻿using Vxp.Common;
-
-namespace Vxp.Web.ViewModels.Users
+﻿namespace Vxp.Web.ViewModels.Users
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -12,6 +10,8 @@ namespace Vxp.Web.ViewModels.Users
     using Services.Mapping;
     using Infrastructure.Attributes.Validation;
     using ModelBinders;
+    using Common;
+
 
     public class UserProfileViewModel : IMapFrom<ApplicationUser>, IMapTo<ApplicationUser>, IHaveCustomMappings
     {
@@ -38,31 +38,35 @@ namespace Vxp.Web.ViewModels.Users
         public string RoleName { get; set; }
 
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "Login email")]
         [EmailAddress]
-
+        [Remote(action: "ValidateNewUsername", controller: "Users", AdditionalFields = nameof(IsNewUser), HttpMethod = "Post")]
         public string UserName { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [Display(Name = "First name")]
-        [StringLength(50, ErrorMessage = "{0} must be at least {2} symbols", MinimumLength = 3)]
+        [StringLength(50,
+            ErrorMessage = "{0} must be at least {2} symbols", MinimumLength = 3)]
         public string FirstName { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [Display(Name = "Last name")]
-        [StringLength(50, ErrorMessage = "{0} must be at least {2} symbols", MinimumLength = 3)]
+        [StringLength(50,
+            ErrorMessage = "{0} must be at least {2} symbols", MinimumLength = 3)]
         public string LastName { get; set; }
 
         [RequiredWhenNewUser(nameof(IsNewUser),
             ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         [Display(Name = "Password")]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(100,
+            ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Display(Name = "Confirm password")]
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Compare("Password",
+            ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
         //Company

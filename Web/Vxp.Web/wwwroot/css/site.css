@@ -239,6 +239,10 @@ input::placeholder {
         color: black;
     }
 
+.vxp-user-profile-ddl {
+    height: 68px;
+}
+
 .nav-link {
     display: block;
     padding: 0 3rem;
@@ -249,7 +253,7 @@ input::placeholder {
     font-weight: bold;
 }
 
-.vxp-user-deleted-table-row td {
+.vxp-deleted-row,
+.vxp-deleted-row td {
     text-decoration: line-through solid red;
-
 }

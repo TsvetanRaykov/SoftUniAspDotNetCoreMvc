@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Vxp.Common;
+    using Common;
     using Vxp.Web.Controllers;
 
     [Authorize(Roles = GlobalConstants.Roles.AdministratorRoleName)]

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Vxp.Services.Data.Users
+﻿namespace Vxp.Services.Data.Users
 {
     using Mapping;
     using Microsoft.AspNetCore.Identity;
@@ -11,45 +9,29 @@ namespace Vxp.Services.Data.Users
     using System.Threading.Tasks;
     using Vxp.Data.Common.Repositories;
     using Vxp.Data.Models;
+    using System.Collections.Generic;
 
     public class UsersService : IUsersService
     {
-        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IDeletableEntityRepository<ApplicationUser> _usersRepository;
-        private readonly IDistributorsService _distributorsService;
 
         public UsersService(
-            RoleManager<ApplicationRole> roleManager,
             UserManager<ApplicationUser> userManager,
-            IDeletableEntityRepository<ApplicationUser> usersRepository,
-            IDistributorsService distributorsService)
+            IDeletableEntityRepository<ApplicationUser> usersRepository)
         {
-            this._roleManager = roleManager;
             this._userManager = userManager;
             this._usersRepository = usersRepository;
-            this._distributorsService = distributorsService;
         }
 
         public Task<IQueryable<TViewModel>> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
         {
-            var query = this._usersRepository.AllWithDeleted()
-                .Include(user => user.Company)
-                .Include(user => user.Roles)
-                .ThenInclude(role => role.Role)
-                .Include(user => user.BankAccounts)
-                .Include(user => user.Distributors)
-                .ThenInclude(distributorUser => distributorUser.DistributorKey)
-                .ThenInclude(distributorKey => distributorKey.BankAccount)
-                .ThenInclude(bankAccount => bankAccount.Owner)
-                .ThenInclude(bankAccountOwner => bankAccountOwner.Company).AsQueryable();
+            return GetAllUsers<TViewModel>(false, exp);
+        }
 
-            if (exp != null)
-            {
-                query = query.Where(exp);
-            }
-
-            return Task.Run(() => query.To<TViewModel>());
+        public Task<IQueryable<TViewModel>> GetAllWithDeleted<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null)
+        {
+            return GetAllUsers<TViewModel>(true, exp);
         }
 
         public Task<IQueryable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName)
@@ -67,6 +49,17 @@ namespace Vxp.Services.Data.Users
             if (string.IsNullOrWhiteSpace(applicationUser.Company?.Name))
             {
                 applicationUser.Company = null;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(applicationUser.Company.ContactAddress?.City))
+                {
+                    applicationUser.Company.ContactAddress = null;
+                }
+                if (string.IsNullOrEmpty(applicationUser.Company.ShippingAddress?.City))
+                {
+                    applicationUser.Company.ShippingAddress = null;
+                }
             }
 
             var user = await this._userManager.CreateAsync(applicationUser, password);
@@ -153,6 +146,34 @@ namespace Vxp.Services.Data.Users
             this._usersRepository.Undelete(userFromDb);
             await this._usersRepository.SaveChangesAsync();
             return true;
+        }
+
+        public Task<bool> IsRegistered(string userName)
+        {
+            var userExists = this._usersRepository.AllAsNoTrackingWithDeleted().FirstOrDefault(u => u.UserName == userName);
+            return Task.Run(() => userExists != null);
+        }
+
+        private Task<IQueryable<TViewModel>> GetAllUsers<TViewModel>(bool includeDeleted,
+            Expression<Func<ApplicationUser, bool>> exp = null)
+        {
+            var query = (includeDeleted ? this._usersRepository.AllWithDeleted() : this._usersRepository.All())
+                .Include(user => user.Company)
+                .Include(user => user.Roles)
+                .ThenInclude(role => role.Role)
+                .Include(user => user.BankAccounts)
+                .Include(user => user.Distributors)
+                .ThenInclude(distributorUser => distributorUser.DistributorKey)
+                .ThenInclude(distributorKey => distributorKey.BankAccount)
+                .ThenInclude(bankAccount => bankAccount.Owner)
+                .ThenInclude(bankAccountOwner => bankAccountOwner.Company).AsQueryable();
+
+            if (exp != null)
+            {
+                query = query.Where(exp);
+            }
+
+            return Task.Run(() => query.To<TViewModel>());
         }
     }
 }

@@ -32,7 +32,7 @@
         @foreach (var user in Model)
         {
 
-            string className = user.IsDeleted ? "vxp-user-deleted-table-row" : string.Empty;
+            string className = user.IsDeleted ? "vxp-deleted-row" : string.Empty;
 
             <tr class="@className">
                 <td>@user.Role</td>
