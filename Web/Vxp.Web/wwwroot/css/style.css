@@ -12059,19 +12059,9 @@ h1, h2, h3, h4, h5,
         }
 }
 
-/*.form-control {
-    height: 60px !important;
-    background: #fff !important;
-    color: #000000 !important;
-    font-size: 18px;
-    border-radius: 5px;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-}*/
-
-    .form-control:focus, .form-control:active {
-        border-color: #000000;
-    }
+.form-control:focus, .form-control:active {
+    border-color: #000000;
+}
 
 textarea.form-control {
     height: inherit !important;
@@ -12777,7 +12767,7 @@ textarea.form-control {
     color: rgba(255, 255, 255, 0.7) !important;
 }
 
-    /*.block-9 .form-control::-webkit-input-placeholder {
+/*.block-9 .form-control::-webkit-input-placeholder {
         color: rgba(255, 255, 255, 0.7) !important;
     }
 

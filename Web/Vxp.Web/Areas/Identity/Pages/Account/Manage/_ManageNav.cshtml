@@ -2,13 +2,13 @@
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
-    <ul class="nav nav-pills flex-column">
-        <li class="nav-item"><a class="nav-link vxp-underline @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index"><span>Profile</span></a></li>
-        <li class="nav-item"><a class="nav-link vxp-underline @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword"><span>Password</span></a></li>
-        @if (hasExternalLogins)
-        {
-            <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link vxp-underline @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins"><span>External logins</span></a></li>
-        }
-        <li class="nav-item"><a class="nav-link vxp-underline @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication"><span>Two-factor authentication</span></a></li>
-        <li class="nav-item"><a class="nav-link vxp-underline @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData"><span>Personal data</span></a></li>
-    </ul>
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item"><a class="nav-link vxp-underline-primary @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index"><span>Profile</span></a></li>
+    <li class="nav-item"><a class="nav-link vxp-underline-primary @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword"><span>Password</span></a></li>
+    @if (hasExternalLogins)
+    {
+        <li id="external-logins" class="nav-item"><a id="external-login" class="nav-link vxp-underline-primary @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="./ExternalLogins"><span>External logins</span></a></li>
+    }
+    <li class="nav-item"><a class="nav-link vxp-underline-primary @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication"><span>Two-factor authentication</span></a></li>
+    <li class="nav-item"><a class="nav-link vxp-underline-primary @ManageNavPages.PersonalDataNavClass(ViewContext)" id="personal-data" asp-page="./PersonalData"><span>Personal data</span></a></li>
+</ul>

@@ -22,3 +22,26 @@ if (guestImage.length === 0) {
 
     navbar.removeClass('ftco_navbar');
 }
+
+function SetUnderlinedNavLinks(navbar, v) {
+
+    console.log(v);
+
+    var navItems = $(navbar).find("a.nav-link");
+
+    if (v < 150) {
+        for (var i = 0; i < navItems.length; i++) {
+            $(navItems[i]).removeClass("vxp-underline-primary");
+            if (!$(navItems[i]).hasClass("vxp-underline-light")) {
+                $(navItems[i]).addClass("vxp-underline-light");
+            }
+        }
+    } else {
+        for (var i = 0; i < navItems.length; i++) {
+            $(navItems[i]).removeClass("vxp-underline-light");
+            if (!$(navItems[i]).hasClass("vxp-underline-primary")) {
+                $(navItems[i]).addClass("vxp-underline-primary");
+            }
+        }
+    }
+}
