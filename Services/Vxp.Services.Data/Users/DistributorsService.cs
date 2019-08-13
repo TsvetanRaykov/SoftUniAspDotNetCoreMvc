@@ -77,13 +77,8 @@ namespace Vxp.Services.Data.Users
 
             if (!await this._userManager.IsInRoleAsync(customerFromDb, GlobalConstants.Roles.CustomerRoleName))
             {
-                await this._userManager.RemoveFromRolesAsync(customerFromDb, new[]
-                {
-                    GlobalConstants.Roles.DistributorRoleName,
-                    GlobalConstants.Roles.VendorRoleName,
-                    GlobalConstants.Roles.AdministratorRoleName,
-                });
-
+                var roles = await this._userManager.GetRolesAsync(customerFromDb);
+                await this._userManager.RemoveFromRolesAsync(customerFromDb, roles.ToArray());
                 await this._userManager.AddToRoleAsync(customerFromDb, GlobalConstants.Roles.CustomerRoleName);
             }
 

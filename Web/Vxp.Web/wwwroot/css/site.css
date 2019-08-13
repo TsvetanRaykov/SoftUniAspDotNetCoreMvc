@@ -130,6 +130,7 @@ input::placeholder {
 .vxp-edit-user-form-container {
     width: 100%;
     font-size: small;
+    padding-right: 0;
 }
 
     .vxp-edit-user-form-container [class^="col"] {

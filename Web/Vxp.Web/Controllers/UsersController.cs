@@ -1,16 +1,16 @@
-﻿namespace Vxp.Web.Controllers
-{
-    using Common;
-    using Data.Models;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using ViewModels.Users;
-    using Vxp.Services.Data.Users;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Vxp.Data.Models;
+using Vxp.Services.Data.Users;
+using Vxp.Web.Controllers;
+using Vxp.Web.ViewModels.Users;
 
+namespace Vxp.Web.Areas.Users.Controllers
+{
     [Authorize]
     public class UsersController : BaseController
     {
@@ -23,7 +23,7 @@
             this._usersService = usersService;
             this._roleManager = roleManager;
         }
-     
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(UserProfileViewModel inputModel)
@@ -43,7 +43,7 @@
                 .GetAll<UserProfileViewModel>(u => u.Id == inputModel.UserId);
 
             var userModel = userModels.Single();
-            await this.ApplyMissingPropertiesToEditUserProfileViewComponentModel(userModel);
+            await this._usersService.PopulateCommonUserModelProperties(userModel);
 
             if (this.ModelState.IsValid)
             {
@@ -55,6 +55,13 @@
 
             return this.RedirectToAction("Update", new { id = inputModel.UserId });
         }
+
+        public IActionResult Profile()
+        {
+            return this.View();
+        }
+
+        #region Remote Validations
 
         [AcceptVerbs("Post")]
         public IActionResult ValidateBusinessNumber([FromForm(Name = "Company.Name")] string companyName, [FromForm(Name = "Company.BusinessNumber")] string businessNumber)
@@ -86,13 +93,6 @@
                 return this.Json("This email is already in use.");
             }
             return this.Json(true);
-        }
-
-        #region private
-
-        private async Task ApplyMissingPropertiesToEditUserProfileViewComponentModel(UserProfileViewModel userModel)
-        {
-            await this._usersService.PopulateCommonUserModelProperties(userModel);
         }
 
         #endregion

@@ -47,11 +47,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Administration\Views\Users\" />
-    <Folder Include="Areas\Users\Controllers\" />
-    <Folder Include="Areas\Users\Data\" />
-    <Folder Include="Areas\Users\Models\" />
-    <Folder Include="Areas\Users\Views\" />
-    <Folder Include="Views\Users\" />
     <Folder Include="wwwroot\lib\build\" />
     <Folder Include="wwwroot\lib\qrcode\build\" />
   </ItemGroup>
