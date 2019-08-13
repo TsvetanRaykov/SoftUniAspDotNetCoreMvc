@@ -121,7 +121,7 @@
     populate(data) {
 
         this.fields.distName.text(`${data.firstName} ${data.lastName}`);
-        this.fields.distEmail.text(data.email);
+        this.fields.distEmail.text(data.userName);
         this.fields.distContactAddress.text(
             `${data.contactAddress.addressLocation}, ${data.contactAddress.city}, ${data.contactAddress
                 .countryName}`);
@@ -133,7 +133,7 @@
         this.fields.distBankIban.text(data.bankAccount.accountNumber);
         this.fields.distBankBic.text(data.bankAccount.bicCode);
         this.fields.distBankSwift.text(data.bankAccount.swiftCode);
-        this.distributorId = data.email;
+        this.distributorId = data.userName;
     }
 
     reset() {
@@ -146,7 +146,11 @@
         }
 
         this.distSelector.find('option').each(function (index, element) {
-            if (index > 0) { $(element).remove(); }
+            if (index > 0) { $(element).remove(); } else {
+                $(element).selected = true;
+                $(element).disabled = true;
+            }
+
         });
 
         this.submitButton.attr('disabled', 'disabled');

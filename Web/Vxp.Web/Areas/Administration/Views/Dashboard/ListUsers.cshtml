@@ -44,11 +44,11 @@
                 <td class="text-right">
                     @if (user.IsDeleted)
                     {
-                        <a class="btn btn-link btn-outline-danger w-100 confirm-user-restore" asp-action="Restore" data-user-id="@user.Id">Restore</a>
+                        <a class="btn btn-link btn-outline-danger w-100 confirm-user-restore" asp-action="RestoreUser" data-user-id="@user.Id">Restore</a>
                     }
                     else
                     {
-                        <a class="btn btn-link btn-outline-success w-100" asp-action="Update" asp-route-id="@user.Id">Edit</a>
+                        <a class="btn btn-link btn-outline-success w-100" asp-action="EditUser" asp-route-id="@user.Id">Edit</a>
                     }
 
                 </td>

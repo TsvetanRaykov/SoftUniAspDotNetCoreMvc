@@ -25,8 +25,6 @@ if (guestImage.length === 0) {
 
 function SetUnderlinedNavLinks(navbar, v) {
 
-    console.log(v);
-
     var navItems = $(navbar).find("a.nav-link");
 
     if (v < 150) {

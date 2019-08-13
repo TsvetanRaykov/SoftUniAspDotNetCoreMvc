@@ -2,6 +2,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Vxp.Common;
 using Vxp.Data.Common.Repositories;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
@@ -10,6 +12,7 @@ namespace Vxp.Services.Data.Users
 {
     public class DistributorsService : IDistributorsService
     {
+        private UserManager<ApplicationUser> _userManager;
         private readonly IDeletableEntityRepository<ApplicationUser> _usersRepository;
         private readonly IRepository<DistributorUser> _distributorUsersRepository;
         private readonly IRepository<DistributorKey> _distributorKeysRepository;
@@ -17,12 +20,13 @@ namespace Vxp.Services.Data.Users
         public DistributorsService(
             IDeletableEntityRepository<ApplicationUser> usersRepository,
             IRepository<DistributorUser> distributorUsersRepository,
-            IRepository<DistributorKey> distributorKeysRepository
-            )
+            IRepository<DistributorKey> distributorKeysRepository,
+            UserManager<ApplicationUser> userManager)
         {
             this._usersRepository = usersRepository;
             this._distributorUsersRepository = distributorUsersRepository;
             this._distributorKeysRepository = distributorKeysRepository;
+            this._userManager = userManager;
         }
 
         public async Task<string> GenerateNewDistributorKeyAsync(string distributorName)
@@ -46,7 +50,10 @@ namespace Vxp.Services.Data.Users
 
         public async Task<bool> AddCustomerToDistributorAsync(string customerName, string distributorKey)
         {
-            var customerFromDb = await this._usersRepository.AllAsNoTracking().FirstOrDefaultAsync(u => u.UserName == customerName);
+            var customerFromDb = await this._usersRepository
+                .All()
+                .Include(u => u.Roles).ThenInclude(r => r.Role)
+                .FirstOrDefaultAsync(u => u.UserName == customerName);
 
             var distributorKeyFromDb = await this._usersRepository.All()
                 .SelectMany(u => u.BankAccounts
@@ -68,8 +75,19 @@ namespace Vxp.Services.Data.Users
             customerFromDb.Distributors.Add(newRelation);
             distributorKeyFromDb.Customers.Add(newRelation);
 
-            await this._usersRepository.SaveChangesAsync();
+            if (!await this._userManager.IsInRoleAsync(customerFromDb, GlobalConstants.Roles.CustomerRoleName))
+            {
+                await this._userManager.RemoveFromRolesAsync(customerFromDb, new[]
+                {
+                    GlobalConstants.Roles.DistributorRoleName,
+                    GlobalConstants.Roles.VendorRoleName,
+                    GlobalConstants.Roles.AdministratorRoleName,
+                });
 
+                await this._userManager.AddToRoleAsync(customerFromDb, GlobalConstants.Roles.CustomerRoleName);
+            }
+
+            await this._usersRepository.SaveChangesAsync();
             return true;
         }
 

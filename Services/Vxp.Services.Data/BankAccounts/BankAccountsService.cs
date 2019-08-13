@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Vxp.Data.Common.Repositories;
-using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-
-namespace Vxp.Services.Data.BankAccounts
+﻿namespace Vxp.Services.Data.BankAccounts
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Vxp.Data.Common.Repositories;
+    using Vxp.Data.Models;
+    using Mapping;
+
     public class BankAccountsService : IBankAccountsService
     {
         private readonly IDeletableEntityRepository<BankAccount> _bankAccountsRepository;
@@ -46,26 +45,12 @@ namespace Vxp.Services.Data.BankAccounts
             return true;
         }
 
-        public async Task<bool> UpdateBankAccount<TViewModel>(TViewModel bankAccount)
+        public async Task UpdateBankAccount<TViewModel>(TViewModel bankAccount)
         {
             var appBankAccount = AutoMapper.Mapper.Map<BankAccount>(bankAccount);
-
-            //var dbBankAccount = await this._bankAccountsRepository.GetByIdWithDeletedAsync(appBankAccount.Id);
-
-            //if (dbBankAccount == null)
-            //{
-            //    return false;
-            //}
-
-            //dbBankAccount.AccountNumber = appBankAccount.AccountNumber;
-            //dbBankAccount.BankName = appBankAccount.BankName;
-            //dbBankAccount.BicCode = appBankAccount.BicCode;
-            //dbBankAccount.SwiftCode = appBankAccount.SwiftCode;
-
             this._bankAccountsRepository.Update(appBankAccount);
             await this._bankAccountsRepository.SaveChangesAsync();
 
-            return true;
         }
     }
 }

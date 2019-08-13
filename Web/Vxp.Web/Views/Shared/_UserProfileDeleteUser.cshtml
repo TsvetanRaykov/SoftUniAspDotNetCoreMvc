@@ -1,5 +1,5 @@
 ﻿@model string
-<!-- Modal Reset Password -->
+<!-- Modal Delete User -->
 <div class="modal fade" id="modalDeleteUser" tabindex="-1" role="dialog" aria-labelledby="modalDeleteUserLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -10,7 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-controller="Users" asp-action="Delete" method="post">
+                <form asp-controller="Dashboard" asp-action="DeleteUser" asp-route-area="Administration" method="post">
                     <input asp-for="@Model" type="hidden" name="UserId" />
                     <div>
                         Are you sure to mark this user as deleted?

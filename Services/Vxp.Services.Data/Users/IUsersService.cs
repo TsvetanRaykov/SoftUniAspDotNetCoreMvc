@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Vxp.Data.Models;
+using Vxp.Web.ViewModels.Users;
 
 namespace Vxp.Services.Data.Users
 {
@@ -19,5 +20,6 @@ namespace Vxp.Services.Data.Users
         Task<bool> DeleteUser(string userId);
         Task<bool> RestoreUser(string userId);
         Task<bool> IsRegistered(string userName);
+        Task PopulateCommonUserModelProperties(UserProfileViewModel userProfile);
     }
 }

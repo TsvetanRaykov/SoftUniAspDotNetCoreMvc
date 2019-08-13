@@ -1,4 +1,10 @@
-﻿namespace Vxp.Services.Data.Users
+﻿using System.IO;
+using System.Reflection;
+using Vxp.Common;
+using Vxp.Web.ViewModels.Administration.Users;
+using Vxp.Web.ViewModels.Users;
+
+namespace Vxp.Services.Data.Users
 {
     using Mapping;
     using Microsoft.AspNetCore.Identity;
@@ -10,18 +16,22 @@
     using Vxp.Data.Common.Repositories;
     using Vxp.Data.Models;
     using System.Collections.Generic;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     public class UsersService : IUsersService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IDeletableEntityRepository<ApplicationUser> _usersRepository;
 
         public UsersService(
             UserManager<ApplicationUser> userManager,
-            IDeletableEntityRepository<ApplicationUser> usersRepository)
+            IDeletableEntityRepository<ApplicationUser> usersRepository,
+            RoleManager<ApplicationRole> roleManager)
         {
             this._userManager = userManager;
             this._usersRepository = usersRepository;
+            this._roleManager = roleManager;
         }
 
         public Task<IQueryable<TViewModel>> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
@@ -62,6 +72,7 @@
                 }
             }
 
+            applicationUser.Email = applicationUser.ContactAddress.Email;
             var user = await this._userManager.CreateAsync(applicationUser, password);
 
             if (!user.Succeeded) { return null; }
@@ -152,6 +163,42 @@
         {
             var userExists = this._usersRepository.AllAsNoTrackingWithDeleted().FirstOrDefault(u => u.UserName == userName);
             return Task.Run(() => userExists != null);
+        }
+
+        public async Task PopulateCommonUserModelProperties(UserProfileViewModel userModel)
+        {
+            var vendors = await this.GetAllInRoleAsync<AddUserDistributorViewModel>(GlobalConstants.Roles.VendorRoleName);
+
+            userModel.AvailableRoles = await this._roleManager.Roles.To<SelectListItem>().ToListAsync();
+            userModel.AvailableRoles.ForEach(r => { r.Selected = r.Value == userModel.RoleName; });
+            userModel.Company = userModel.Company ?? new UserProfileCompanyViewModel();
+            userModel.Company.ContactAddress = userModel.Company.ContactAddress ?? new UserProfileAddressViewModel();
+            userModel.Company.ShippingAddress = userModel.Company.ShippingAddress ?? new UserProfileAddressViewModel();
+            userModel.ContactAddress = userModel.ContactAddress ?? new UserProfileAddressViewModel();
+
+            if (vendors.Any())
+            {
+                userModel.AvailableRoles.RemoveAll(r => r.Text == GlobalConstants.Roles.VendorRoleName);
+            }
+
+            var assembly = Assembly.GetEntryAssembly();
+            var resourceStream = assembly?.GetManifestResourceStream("Vxp.Web.Resources.AllCountriesInTheWorlds.csv");
+
+            if (resourceStream != null)
+            {
+                var allCountries = new HashSet<SelectListItem>();
+                using (var reader = new StreamReader(resourceStream))
+                {
+                    string country;
+                    while ((country = reader.ReadLine()) != null)
+                    {
+                        allCountries.Add(new SelectListItem(country, country));
+                    }
+                }
+
+                allCountries.Add(new SelectListItem("- Select Country -", string.Empty, true, true));
+                userModel.AvailableCountries = allCountries;
+            }
         }
 
         private Task<IQueryable<TViewModel>> GetAllUsers<TViewModel>(bool includeDeleted,

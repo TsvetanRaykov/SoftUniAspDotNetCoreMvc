@@ -22,7 +22,6 @@ using Vxp.Services.Data.Settings;
 using Vxp.Services.Data.Users;
 using Vxp.Services.Mapping;
 using Vxp.Services.Messaging;
-using Vxp.Services.Models.Administration.Users;
 using Vxp.Web.ViewModels;
 using Vxp.Web.ViewModels.Administration.Dashboard;
 
@@ -134,8 +133,7 @@ namespace Vxp.Web
         {
             AutoMapperConfig.RegisterMappings(
                 typeof(ErrorViewModel).GetTypeInfo().Assembly,
-                typeof(IndexViewModel).GetTypeInfo().Assembly,
-                typeof(CreateUserServiceModel).GetTypeInfo().Assembly);
+                typeof(IndexViewModel).GetTypeInfo().Assembly);
 
 
             // Seed data on application startup

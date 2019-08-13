@@ -4,9 +4,13 @@
     ViewData["Title"] = "Confirm email";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div>
-    <p>
+<div class="w-50 ftco-animate pr-5" data-scrollax=" properties: { translateY: '70%' }">
+    <div class="h-20 mb-3"></div>
+
+    <h3 class="text-white">
         Thank you for confirming your email.
-    </p>
+    </h3>
+</div>
+<div class="w-50" data-scrollax="properties: { translateY: '70%' }">
+    <partial name="_RequestAccessPartial" />
 </div>

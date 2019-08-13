@@ -37,13 +37,9 @@ namespace Vxp.Web.Controllers
             {
                 return this.BadRequest();
             }
+            await this._bankAccountsService.UpdateBankAccount(bankAccountModel);
 
-            if (await this._bankAccountsService.UpdateBankAccount(bankAccountModel))
-            {
-                return this.Ok();
-            }
-
-            return this.BadRequest();
+            return this.Ok();
         }
 
         [HttpPost]

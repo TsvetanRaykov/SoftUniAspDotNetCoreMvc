@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using Vxp.Data.Models;
 
 namespace Vxp.Services.Data.BankAccounts
 {
@@ -11,6 +8,6 @@ namespace Vxp.Services.Data.BankAccounts
         Task<TViewModel> CreateBankAccount<TViewModel>(TViewModel bankAccount);
         IQueryable<TViewModel> GetAllBankAccounts<TViewModel>();
         Task<bool> RemoveBankAccountAsync(int bankAccountId);
-        Task<bool> UpdateBankAccount<TViewModel>(TViewModel bankAccount);
+        Task UpdateBankAccount<TViewModel>(TViewModel bankAccount);
     }
 }

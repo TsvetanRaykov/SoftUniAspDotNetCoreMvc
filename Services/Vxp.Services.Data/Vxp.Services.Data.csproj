@@ -16,8 +16,15 @@
     <ProjectReference Include="..\..\Data\Vxp.Data.Common\Vxp.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\Vxp.Data.Models\Vxp.Data.Models.csproj" />
     <ProjectReference Include="..\..\Vxp.Common\Vxp.Common.csproj" />
+    <ProjectReference Include="..\..\Web\Vxp.Web.ViewModels\Vxp.Web.ViewModels.csproj" />
     <ProjectReference Include="..\Vxp.Services.Mapping\Vxp.Services.Mapping.csproj" />
     <ProjectReference Include="..\Vxp.Services.Models\Vxp.Services.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.mvc.viewfeatures\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

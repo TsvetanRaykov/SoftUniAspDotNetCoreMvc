@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Administration\**" />
+    <EmbeddedResource Remove="Administration\**" />
+    <None Remove="Administration\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Data\Vxp.Data.Models\Vxp.Data.Models.csproj" />
     <ProjectReference Include="..\Vxp.Services.Mapping\Vxp.Services.Mapping.csproj" />
   </ItemGroup>
