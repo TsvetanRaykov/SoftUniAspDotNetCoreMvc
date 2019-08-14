@@ -1,6 +1,5 @@
 ﻿function BankAccountEditForm(accountId) {
 
-
     this.accountId = accountId;
     this.loader = $("#modal-loader");
     this.form = $("#modalBankAccount");
@@ -11,6 +10,8 @@
 
     this.ownerId = this.form.find('input[name="owner-id"]').val();
 
+    this.token = $('input[name="__RequestVerificationToken"]').val();
+
     this.inputFields = {
         bankName: this.form.find('input[name="bank-name"]'),
         accountNumber: this.form.find('input[name="account-number"]'),
@@ -19,7 +20,6 @@
     }
 
     this.deleteButton.off("click").on("click", () => this.confirmDelete());
-
 
     this.clearErrors = () => {
         const inputFields = this.inputFields;
@@ -33,10 +33,13 @@
     }
 
     this.load = () => {
-
+        
         $.ajax({
             url: "/api/BankAccounts/" + this.accountId,
             type: "GET",
+            headers: {
+                'RequestVerificationToken': this.token
+            },
             beforeSend: () => this.loader.modal('show'),
             success: (data) => {
                 this.inputFields.bankName.val(data.bankName);
@@ -116,6 +119,9 @@
         $.ajax({
             url: "/api/BankAccounts/",
             type: this.method,
+            headers: {
+                'RequestVerificationToken': this.token
+            },
             contentType: 'application/json',
             data: JSON.stringify({
                 id: this.accountId,
@@ -181,6 +187,9 @@
         $.ajax({
             url: "/api/BankAccounts/" + this.accountId,
             type: "DELETE",
+            headers: {
+                'RequestVerificationToken': this.token
+            },
             success: () => {
                 window.location = window.location.href;
             },

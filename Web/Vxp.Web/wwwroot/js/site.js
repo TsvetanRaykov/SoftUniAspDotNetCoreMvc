@@ -43,3 +43,26 @@ function SetUnderlinedNavLinks(navbar, v) {
         }
     }
 }
+
+function SendVerificationEmail(userId) {
+    let token = $('input[name="__RequestVerificationToken"]').val();
+    $.ajax({
+        url: "/Users/SendVerificationEmailAsync",
+        type: "POST",
+        headers: {
+            'RequestVerificationToken': token
+        },
+        data: {
+            userId: userId
+        },
+        success: () => {
+            window.location = window.location.href;
+        },
+        error: (data) => {
+            console.error(data);
+        },
+        complete: () => {
+            // ignore
+        }
+    });
+}

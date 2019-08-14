@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Vxp.Web.Infrastructure.Attributes.Validation;
-
-namespace Vxp.Web.ViewModels.Components
+﻿namespace Vxp.Web.ViewModels.Users
 {
-    public class EditUserProfileViewComponentResetPasswordModel
+    using System.ComponentModel.DataAnnotations;
+    using Infrastructure.Attributes.Validation;
+
+    public class UserProfileViewComponentResetPasswordModel
     {
         [Required(AllowEmptyStrings = false)]
         [StringLength(36)]

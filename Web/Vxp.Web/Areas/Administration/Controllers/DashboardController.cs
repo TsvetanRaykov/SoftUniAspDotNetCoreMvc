@@ -51,7 +51,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
             if (this.TempData.ContainsKey("UserProfileViewMessage"))
             {
-                userModel.SuccessMessage = this.TempData["UserProfileViewMessage"] as string;
+                userModel.StatusMessage = this.TempData["UserProfileViewMessage"] as string;
             }
 
             return this.View(userModel);
@@ -124,9 +124,9 @@ namespace Vxp.Web.Areas.Administration.Controllers
                     .FirstOrDefault(b => b.OwnerId == inputModel.UserId);
                 if (availableBankAccount == null)
                 {
-                    this.TempData["ErrorMessage"] =
-                        string.Format(GlobalConstants.ErrorMessages.RequiredField, "Bank account");
-                    this.ModelState.AddModelError("BankAccount", "BA error");
+                    var errorMessage = string.Format(GlobalConstants.ErrorMessages.RequiredField, "Bank account");
+                    this.TempData["ErrorMessage"] = errorMessage;
+                    this.ModelState.AddModelError("BankAccount", errorMessage);
                 }
             }
 
@@ -137,7 +137,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
             if (this.TempData.ContainsKey("UserProfileViewMessage"))
             {
-                inputModel.SuccessMessage = this.TempData["UserProfileViewMessage"] as string;
+                inputModel.StatusMessage = this.TempData["UserProfileViewMessage"] as string;
             }
 
             return this.View("EditUser", inputModel);

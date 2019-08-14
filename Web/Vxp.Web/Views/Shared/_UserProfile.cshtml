@@ -1,6 +1,11 @@
-﻿@using Vxp.Common
+﻿@using System.Security.Claims
+@using Vxp.Common
 @using Vxp.Web.ViewModels.Users
 @model UserProfileViewModel
+
+@{
+    var isAdmin = this.User.IsInRole(GlobalConstants.Roles.AdministratorRoleName);
+}
 
 <form id="formUserDetails" class="w-100" method="post">
     @Html.HiddenFor(x => x.UserId)
@@ -13,7 +18,16 @@
             {
                 <div class="w-100">
                     <label asp-for="@Model.RoleName" class="vxp-form-control-label"></label>
-                    <select title="Role" class="form-control text-dark font-weight-bold" asp-for="RoleName" asp-items="Model.AvailableRoles" id="edit-user-form-role-selector"></select>
+                    @if (isAdmin)
+                    {
+                        <select title="Role"
+                                class="form-control text-dark font-weight-bold" asp-for="@Model.RoleName" asp-items="@Model.AvailableRoles" id="edit-user-form-role-selector"></select>
+                    }
+                    else
+                    {
+                        <div class="form-control text-dark font-weight-bold">@Model.RoleName</div>
+                        @Html.HiddenFor(m => m.RoleName);
+                    }
                     <span asp-validation-for="@Model.RoleName" class="text-danger"></span>
                 </div>
 
@@ -70,8 +84,17 @@
 
             <div class="w-100">
                 <label asp-for="@Model.UserName" class="vxp-form-control-label"></label>
-                <input asp-for="@Model.UserName" class="form-control font-weight-bold" placeholder="Email" value="@Model.UserName" />
+                @if (isAdmin)
+                {
+                    <input asp-for="@Model.UserName" class="form-control font-weight-bold" placeholder="Email" value="@Model.UserName" />
+                }
+                else
+                {
+                    <div class="form-control text-dark font-weight-bold">@Model.UserName</div>
+                    @Html.HiddenFor(m => m.UserName);
+                }
                 <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+
             </div>
 
             @if (Model.IsNewUser)
@@ -93,10 +116,21 @@
             }
             else
             {
-                <div>
-                    <div class="py-1"></div>
-                    <button class="btn btn-outline-success w-100" type="button" data-toggle="modal" data-target="#modalResetPassword">Reset password</button>
-                </div>
+                @if (!Model.IsEmailConfirmed)
+                {
+                    <div>
+                        <div class="py-1"></div>
+                        <button class="btn btn-outline-success w-100" id="email-verification" type="button" onclick="SendVerificationEmail('@Model.UserId')">Send verification email</button>
+                    </div>
+                }
+
+                if (isAdmin && this.User.Identity.Name != Model.UserName)
+                {
+                    <div>
+                        <div class="py-1"></div>
+                        <button class="btn btn-outline-success w-100" type="button" data-toggle="modal" data-target="#modalResetPassword">Reset password</button>
+                    </div>
+                }
             }
 
         </div>
@@ -116,9 +150,6 @@
             </div>
             <div class="py-1"></div>
             <div class="w-100 vxp-user-profile-ddl">
-                @*<label asp-for="@Model.ContactAddress.CountryName" class="vxp-form-control-label"></label>
-                    <input asp-for="@Model.ContactAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.ContactAddress.CountryName" />
-                    <span asp-validation-for="@Model.ContactAddress.CountryName" class="text-danger"></span>*@
                 <label asp-for="@Model.ContactAddress.CountryName" class="vxp-form-control-label"></label>
                 <select title="Country name" class="form-control text-dark font-weight-bold chosen" asp-for="@Model.ContactAddress.CountryName" asp-items="@Model.AvailableCountries"></select>
                 <span asp-validation-for="@Model.ContactAddress.CountryName" class="text-danger"></span>
@@ -143,7 +174,7 @@
             </div>
             <div class="py-1"></div>
             <div class="w-100">
-                <label asp-for="@Model.ContactAddress.Email" class="vxp-form-control-label"></label>
+                <label asp-for="@Model.ContactAddress.Email" class="vxp-form-control-label">Contact Email</label>
                 <input asp-for="@Model.ContactAddress.Email" class="form-control text-dark font-weight-bold" placeholder="Contact Email" value="@Model.ContactAddress.Email" />
                 <span asp-validation-for="@Model.ContactAddress.Email" class="text-danger"></span>
             </div>
@@ -164,9 +195,6 @@
             </div>
             <div class="py-1"></div>
             <div class="w-100 vxp-user-profile-ddl">
-                @*<label asp-for="@Model.Company.ContactAddress.CountryName" class="vxp-form-control-label"></label>
-                    <input asp-for="@Model.Company.ContactAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.Company.ContactAddress.CountryName" />
-                    <span asp-validation-for="@Model.Company.ContactAddress.CountryName" class="text-danger"></span>*@
                 <label asp-for="@Model.Company.ContactAddress.CountryName" class="vxp-form-control-label"></label>
                 <select title="Country name" class="form-control text-dark font-weight-bold chosen" asp-for="@Model.Company.ContactAddress.CountryName" asp-items="@Model.AvailableCountries"></select>
                 <span asp-validation-for="@Model.Company.ContactAddress.CountryName" class="text-danger"></span>
@@ -191,8 +219,8 @@
             </div>
             <div class="py-1"></div>
             <div class="w-100">
-                <label asp-for="@Model.Company.ContactAddress.Email" class="vxp-form-control-label"></label>
-                <input asp-for="@Model.Company.ContactAddress.Email" class="form-control text-dark font-weight-bold" placeholder="Contact Email" value="@Model.Company.ContactAddress.Email" />
+                <label asp-for="@Model.Company.ContactAddress.Email" class="vxp-form-control-label">Business Email</label>
+                <input asp-for="@Model.Company.ContactAddress.Email" class="form-control text-dark font-weight-bold" placeholder="Business Email" value="@Model.Company.ContactAddress.Email" />
                 <span asp-validation-for="@Model.Company.ContactAddress.Email" class="text-danger"></span>
             </div>
         </div>
@@ -200,9 +228,6 @@
         <div class="vxp-section-edit-user-shipping-address w-25 bg-light d-flex flex-column p-1 border rounded">
             <h6 class="bg-primary text-white p-1 rounded">Shipping address</h6>
             <div class="w-100 vxp-user-profile-ddl">
-                @*<label asp-for="@Model.Company.ShippingAddress.CountryName" class="vxp-form-control-label"></label>
-                    <input asp-for="@Model.Company.ShippingAddress.CountryName" class="form-control text-dark font-weight-bold country-selector" placeholder="Country" value="@Model.Company.ShippingAddress.CountryName" />
-                    <span asp-validation-for="@Model.Company.ShippingAddress.CountryName" class="text-danger"></span>*@
                 <label asp-for="@Model.Company.ShippingAddress.CountryName" class="vxp-form-control-label"></label>
                 <select title="Country name" class="form-control text-dark font-weight-bold chosen" asp-for="@Model.Company.ShippingAddress.CountryName" asp-items="@Model.AvailableCountries"></select>
                 <span asp-validation-for="@Model.Company.ShippingAddress.CountryName" class="text-danger"></span>
@@ -227,8 +252,8 @@
             </div>
             <div class="py-1"></div>
             <div class="w-100">
-                <label asp-for="@Model.Company.ShippingAddress.Email" class="vxp-form-control-label"></label>
-                <input asp-for="@Model.Company.ShippingAddress.Email" class="form-control text-dark font-weight-bold" placeholder="Contact Email" value="@Model.Company.ShippingAddress.Email" />
+                <label asp-for="@Model.Company.ShippingAddress.Email" class="vxp-form-control-label">Shipping Contact Email</label>
+                <input asp-for="@Model.Company.ShippingAddress.Email" class="form-control text-dark font-weight-bold" placeholder="Shipping Contact Email" value="@Model.Company.ShippingAddress.Email" />
                 <span asp-validation-for="@Model.Company.ShippingAddress.Email" class="text-danger"></span>
             </div>
         </div>
@@ -460,9 +485,9 @@
 
     window.onload = () => {
 
-        if ("@Model.SuccessMessage") {
+        if ("@Model.StatusMessage") {
 
-            $("#component-notifier").notify("@Model.SuccessMessage",
+            $("#component-notifier").notify("@Model.StatusMessage",
                 {
                     "position": "right",
                     "className": "success"

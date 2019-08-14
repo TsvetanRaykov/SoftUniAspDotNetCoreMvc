@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Threading.Tasks;
-using Vxp.Services.Data.BankAccounts;
-using Vxp.Web.ViewModels.Users;
-
-namespace Vxp.Web.Controllers
+﻿namespace Vxp.Web.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Vxp.Services.Data.BankAccounts;
+    using ViewModels.Users;
 
     public class BankAccountsController : ApiController
     {
@@ -17,6 +16,7 @@ namespace Vxp.Web.Controllers
         }
 
         [HttpGet("{id}")]
+        [ValidateAntiForgeryToken]
         public ActionResult<string> Get(int id)
         {
             var bankAccount = this._bankAccountsService
@@ -31,6 +31,7 @@ namespace Vxp.Web.Controllers
         }
 
         [HttpPut]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Update(UserProfileBankAccountViewModel bankAccountModel)
         {
             if (!this.ModelState.IsValid)
@@ -43,6 +44,7 @@ namespace Vxp.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(UserProfileBankAccountViewModel bankAccountModel)
         {
             if (!this.ModelState.IsValid)
@@ -61,6 +63,7 @@ namespace Vxp.Web.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id)
         {
             if (await this._bankAccountsService.RemoveBankAccountAsync(id))

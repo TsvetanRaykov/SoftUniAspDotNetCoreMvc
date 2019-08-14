@@ -1,9 +1,12 @@
 ﻿using System.Linq;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Vxp.Data.Models;
 using Vxp.Services.Data.Users;
 using Vxp.Web.Controllers;
@@ -14,14 +17,15 @@ namespace Vxp.Web.Areas.Users.Controllers
     [Authorize]
     public class UsersController : BaseController
     {
-
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUsersService _usersService;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IEmailSender _emailSender;
 
-        public UsersController(IUsersService usersService, RoleManager<ApplicationRole> roleManager)
+        public UsersController(IUsersService usersService, IEmailSender emailSender, UserManager<ApplicationUser> userManager)
         {
             this._usersService = usersService;
-            this._roleManager = roleManager;
+            this._emailSender = emailSender;
+            this._userManager = userManager;
         }
 
         [HttpPost]
@@ -53,12 +57,36 @@ namespace Vxp.Web.Areas.Users.Controllers
                 }
             }
 
-            return this.RedirectToAction("Update", new { id = inputModel.UserId });
+            return this.RedirectToAction("EditUser", "Dashboard", new { id = inputModel.UserId, area = "Administration" });
         }
 
-        public IActionResult Profile()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendVerificationEmailAsync([FromForm] string userId)
         {
-            return this.View();
+            var user = await this._userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                this.TempData["ErrorMessage"] = $"Unable to load user with ID '{userId}'.";
+                return this.Ok();
+            }
+
+            var code = await this._userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            var callbackUrl = this.Url.Page(
+                "/Account/ConfirmEmail",
+                pageHandler: null,
+                values: new { area = "Identity", userId = userId, code = code },
+                protocol: this.Request.Scheme);
+
+
+            await this._emailSender.SendEmailAsync(user.UserName,
+                "Confirm your email",
+                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+            this.TempData["UserProfileViewMessage"] = "Verification email sent. Please check your email.";
+
+            return this.Ok();
         }
 
         #region Remote Validations

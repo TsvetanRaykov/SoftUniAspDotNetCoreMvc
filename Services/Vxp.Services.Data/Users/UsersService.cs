@@ -167,6 +167,8 @@ namespace Vxp.Services.Data.Users
 
         public async Task PopulateCommonUserModelProperties(UserProfileViewModel userModel)
         {
+            //TODO: Replace the partial view with a component and put this logic there
+
             var vendors = await this.GetAllInRoleAsync<AddUserDistributorViewModel>(GlobalConstants.Roles.VendorRoleName);
 
             userModel.AvailableRoles = await this._roleManager.Roles.To<SelectListItem>().ToListAsync();
@@ -199,6 +201,9 @@ namespace Vxp.Services.Data.Users
                 allCountries.Add(new SelectListItem("- Select Country -", string.Empty, true, true));
                 userModel.AvailableCountries = allCountries;
             }
+
+            var user = await this._userManager.FindByIdAsync(userModel.UserId);
+            userModel.IsEmailConfirmed = await this._userManager.IsEmailConfirmedAsync(user);
         }
 
         private Task<IQueryable<TViewModel>> GetAllUsers<TViewModel>(bool includeDeleted,

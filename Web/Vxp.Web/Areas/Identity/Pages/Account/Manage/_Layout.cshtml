@@ -2,21 +2,16 @@
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<div class="vxp-section">
-    @*<h1>Manage your account</h1>
+<div class="vxp-section pr-5">
 
-        <div>
-            <h4>Change your account settings</h4>
-            <hr />*@
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <partial name="_ManageNav" />
         </div>
-        <div class="col-md-9">
+        <div class="col-md-10">
             @RenderBody()
         </div>
     </div>
-    @*</div>*@
 </div>
 @section Scripts {
     @RenderSection("Scripts", required: false)

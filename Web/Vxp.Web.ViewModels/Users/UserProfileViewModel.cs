@@ -19,6 +19,8 @@
 
         public bool IsDeleted { get; set; }
 
+        public bool IsEmailConfirmed { get; set; }
+
         public UserProfileViewModel()
         {
             this.BankAccounts = new HashSet<SelectListItem>();
@@ -73,7 +75,6 @@
         public UserProfileCompanyViewModel Company { get; set; }
 
         //Address
-
         public UserProfileAddressViewModel ContactAddress { get; set; }
 
         [ModelBinder(typeof(KvpStringListToSelectListModelBinder))]
@@ -92,7 +93,7 @@
         [ModelBinder(typeof(KvpStringListToSelectListModelBinder))]
         public ICollection<SelectListItem> AvailableCountries { get; set; }
 
-        public string SuccessMessage { get; set; }
+        public string StatusMessage { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {

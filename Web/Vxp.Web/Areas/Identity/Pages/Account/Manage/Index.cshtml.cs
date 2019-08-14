@@ -1,33 +1,34 @@
 ﻿namespace Vxp.Web.Areas.Identity.Pages.Account.Manage
 {
-    using System;
-    using System.ComponentModel.DataAnnotations;
-    using System.Text.Encodings.Web;
-    using System.Threading.Tasks;
-
-    using Vxp.Data.Models;
-
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.UI.Services;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
+    using Data.Models;
+    using System.Linq;
+    using Common;
+    using Vxp.Services.Data.Users;
+    using Vxp.Web.ViewModels.Users;
 
-#pragma warning disable SA1649 // File name should match first type name
     public class IndexModel : PageModel
-#pragma warning restore SA1649 // File name should match first type name
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IEmailSender emailSender;
+        private readonly IUsersService _usersService;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUsersService usersService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.emailSender = emailSender;
+            this._usersService = usersService;
         }
 
         public string Username { get; set; }
@@ -38,29 +39,31 @@
         public string StatusMessage { get; set; }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public UserProfileViewModel Input { get; set; }
+
 
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await this.userManager.GetUserAsync(this.User);
-            if (user == null)
+            this.Username = user.UserName;
+
+            this.Input = this._usersService
+                .GetAll<UserProfileViewModel>(u => u.UserName == this.Username).GetAwaiter().GetResult().FirstOrDefault();
+
+            if (this.Input == null)
             {
                 return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
+            await this._usersService.PopulateCommonUserModelProperties(this.Input);
 
-            var userName = await this.userManager.GetUserNameAsync(user);
-            var email = await this.userManager.GetEmailAsync(user);
-            var phoneNumber = await this.userManager.GetPhoneNumberAsync(user);
-
-            this.Username = userName;
-
-            this.Input = new InputModel
+            if (this.TempData.ContainsKey("UserProfileViewMessage"))
             {
-                Email = email,
-                PhoneNumber = phoneNumber,
-            };
+                this.StatusMessage = this.TempData["UserProfileViewMessage"] as string;
+            }
 
-            this.IsEmailConfirmed = await this.userManager.IsEmailConfirmedAsync(user);
+            this.Input.StatusMessage = this.StatusMessage;
+
+            //this.IsEmailConfirmed = await this.userManager.IsEmailConfirmedAsync(user);
 
             return this.Page();
         }
@@ -78,30 +81,34 @@
                 return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
 
-            var email = await this.userManager.GetEmailAsync(user);
-            if (this.Input.Email != email)
+            await this._usersService.PopulateCommonUserModelProperties(this.Input);
+
+            if (string.IsNullOrEmpty(this.Input.ContactAddress?.CountryName))
             {
-                var setEmailResult = await this.userManager.SetEmailAsync(user, this.Input.Email);
-                if (!setEmailResult.Succeeded)
+                this.ModelState.AddModelError("ContactAddress.CountryName", string.Format(GlobalConstants.ErrorMessages.RequiredField, "CountryName"));
+            }
+
+            if (this.Input.RoleName == GlobalConstants.Roles.DistributorRoleName || this.Input.RoleName == GlobalConstants.Roles.VendorRoleName)
+            {
+                if (!this.Input.BankAccounts.Any())
                 {
-                    var userId = await this.userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
+                    var errorMessage = string.Format(GlobalConstants.ErrorMessages.RequiredField, "Bank account");
+                    this.TempData["ErrorMessage"] = errorMessage;
+                    this.ModelState.AddModelError("BankAccount", errorMessage);
                 }
             }
 
-            var phoneNumber = await this.userManager.GetPhoneNumberAsync(user);
-            if (this.Input.PhoneNumber != phoneNumber)
+            if (this.ModelState.IsValid && await this._usersService.UpdateUser(this.Input, new[] { this.Input.RoleName }))
             {
-                var setPhoneResult = await this.userManager.SetPhoneNumberAsync(user, this.Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    var userId = await this.userManager.GetUserIdAsync(user);
-                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
-                }
+                this.TempData["UserProfileViewMessage"] = $"{this.Input.UserName} data has been updated.";
             }
 
             await this.signInManager.RefreshSignInAsync(user);
-            this.StatusMessage = "Your profile has been updated";
+
+            if (this.TempData.ContainsKey("UserProfileViewMessage"))
+            {
+                this.StatusMessage = this.TempData["UserProfileViewMessage"] as string;
+            }
             return this.RedirectToPage();
         }
 
@@ -133,17 +140,6 @@
 
             this.StatusMessage = "Verification email sent. Please check your email.";
             return this.RedirectToPage();
-        }
-
-        public class InputModel
-        {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
-
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
         }
     }
 }
