@@ -21,6 +21,11 @@ namespace Vxp.Web.Controllers
                 return this.RedirectToAction("Index", "Dashboard", new { area = "Administration" });
             }
 
+            if (this.User.IsInRole(GlobalConstants.Roles.VendorRoleName))
+            {
+                return this.RedirectToAction("Index", "Products", new { area = "Vendor" });
+            }
+
             // TODO: Add redirection for customer, partner and vendor roles
 
             return this.View();

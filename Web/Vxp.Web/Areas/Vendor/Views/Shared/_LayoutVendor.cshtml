@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "_LayoutVendor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="vxp-section">
+    <div class="d-flex">
+        <div class="w-25">
+            <partial name="_VendorNav" />
+        </div>
+        <div class="w-75">@RenderBody()</div>
+    </div>
+</section>
+

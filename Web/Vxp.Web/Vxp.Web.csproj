@@ -16,7 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Areas\Administration\Views\Users\CreateUser - Copy.cshtml" />
+    <Compile Remove="Areas\Administration\Views\Users\**" />
+    <Content Remove="Areas\Administration\Views\Users\**" />
+    <EmbeddedResource Remove="Areas\Administration\Views\Users\**" />
+    <None Remove="Areas\Administration\Views\Users\**" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
@@ -46,7 +49,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Administration\Views\Users\" />
     <Folder Include="wwwroot\lib\build\" />
     <Folder Include="wwwroot\lib\qrcode\build\" />
   </ItemGroup>
