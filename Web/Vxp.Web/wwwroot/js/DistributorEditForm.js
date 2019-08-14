@@ -17,6 +17,8 @@
         this.customerId = this.form.find('input[name="customer-id"]').val();
         this.customerEmail = this.form.find('input[name="customer-email"]').val();
 
+        this.token = $('input[name="__RequestVerificationToken"]').val();
+
         this.fields = {
             distName: $("#dist-name"),
             distEmail: $("#dist-email"),
@@ -84,6 +86,9 @@
         $.ajax({
             url: url,
             type: "GET",
+            headers: {
+                'RequestVerificationToken': this.token
+            },
             beforeSend: () => this.loader.modal('show'),
             success: (dataArray) => {
                 if (this.mode !== "create") {
@@ -164,6 +169,9 @@
         $.ajax({
             url: this.apiBaseUrl,
             type: this.method,
+            headers: {
+                'RequestVerificationToken': this.token
+            },
             contentType: 'application/json',
             data: JSON.stringify({
                 CustomerId: this.customerId,
@@ -231,6 +239,9 @@
         $.ajax({
             url: this.apiBaseUrl + "disconnect/",
             type: "POST",
+            headers: {
+                'RequestVerificationToken': this.token
+            },
             contentType: 'application/json',
             data: JSON.stringify({
                 CustomerId: this.customerId,

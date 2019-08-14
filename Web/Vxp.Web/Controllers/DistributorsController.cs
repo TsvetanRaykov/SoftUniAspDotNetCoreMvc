@@ -21,6 +21,7 @@
         }
 
         [HttpGet("[action]/{customerName}")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<string>> GetAvailable(string customerName)
         {
 
@@ -40,6 +41,7 @@
         }
 
         [HttpGet("{id}")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<string>> Get(string id)
         {
             var distributors = await
@@ -54,6 +56,7 @@
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Connect(DistributorConnectInputModel inputModel)
         {
             if (this.ModelState.IsValid)
@@ -69,13 +72,11 @@
         }
 
         [HttpPost("[action]")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Disconnect(DistributorConnectInputModel inputModel)
         {
             if (this.ModelState.IsValid)
             {
-
-                //var distributorKey = await this._distributorsService.GenerateNewDistributorKeyAsync(inputModel.DistributorEmail);
-
                 if (await this._distributorsService.RemoveCustomerFromDistributorAsync(inputModel.CustomerEmail, inputModel.DistributorEmail))
                 {
                     return this.Ok();

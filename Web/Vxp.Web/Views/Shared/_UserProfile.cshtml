@@ -512,7 +512,7 @@
                 switchFormRoleMode(this.options[this.selectedIndex].text);
             });
 
-        let initialFormMode = $('#edit-user-form-role-selector option:selected').text();
+        //let initialFormMode = $('#edit-user-form-role-selector option:selected').text();
 
         let distributorsSection = $('.vxp-section-edit-user-distributors');
 
@@ -538,7 +538,7 @@
             }
         }
 
-        switchFormRoleMode(initialFormMode);
+        switchFormRoleMode("@Model.RoleName");
 
 
         $('#modalBankAccount, #modalDistributor, #modalResetPassword').modal({

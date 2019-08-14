@@ -103,7 +103,7 @@
 
             configuration.CreateMap<BankAccount, SelectListItem>()
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.AccountNumber));
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => $"{src.BankName} [{src.AccountNumber}]"));
 
             configuration.CreateMap<ApplicationUser, UserProfileViewModel>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
