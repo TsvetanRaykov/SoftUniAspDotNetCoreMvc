@@ -347,3 +347,7 @@ input::placeholder {
 .h-20 {
     height: 20% !important;
 }
+
+.w-20 {
+    width: 20% !important;
+}

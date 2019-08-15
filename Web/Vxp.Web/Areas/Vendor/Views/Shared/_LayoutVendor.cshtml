@@ -3,12 +3,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<section class="vxp-section">
-    <div class="d-flex">
-        <div class="w-25">
+<section class="vxp-section pr-2">
+    <div class="row">
+        <div class="col-md-2">
             <partial name="_VendorNav" />
         </div>
-        <div class="w-75">@RenderBody()</div>
+        <div class="col-md-10">@RenderBody()</div>
     </div>
 </section>
 

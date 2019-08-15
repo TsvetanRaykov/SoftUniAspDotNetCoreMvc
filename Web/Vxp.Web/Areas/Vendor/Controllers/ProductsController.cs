@@ -8,5 +8,18 @@ namespace Vxp.Web.Areas.Vendor.Controllers
         {
             return View();
         }
+
+        public IActionResult Create()
+        {
+            return this.View();
+        }
+        public IActionResult Categories()
+        {
+            return this.View();
+        }
+        public IActionResult Details()
+        {
+            return this.View();
+        }
     }
 }

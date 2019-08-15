@@ -1,4 +1,43 @@
 ﻿@using Vxp.Web.Areas.Vendor
-<ul class="nav nav-pills flex-column">
-    <li class="nav-item"><a class="nav-link vxp-underline-primary @VendorNavPages.IndexNavClass(ViewContext)" id="Products" asp-area="Vendor" asp-controller="Products" asp-action="Index"><span>Products</span></a></li>
-</ul>
+    <ul class="nav flex-column flex-nowrap nav-pills">
+
+        <li class="nav-item">
+            <a class="btn btn-primary w-100 text-left" data-toggle="collapse" href="#vendor-manage-categories">Products</a>
+            <div id="vendor-manage-categories" class="collapse show">
+                <ul class="nav flex-column">
+                    <li class="nav-item"><a class="nav-link vxp-underline-primary @VendorNavPages.IndexNavClass(ViewContext)" asp-area="Vendor" asp-controller="Products" asp-action="Index"><span>All</span></a></li>
+                    <li class="nav-item"><a class="nav-link vxp-underline-primary @VendorNavPages.CategoriesNavClass(ViewContext)" asp-area="Vendor" asp-controller="Products" asp-action="Categories"><span>Categories</span></a></li>
+                    <li class="nav-item"><a class="nav-link vxp-underline-primary @VendorNavPages.AddProductNavClass(ViewContext)" asp-area="Vendor" asp-controller="Products" asp-action="Create"><span>Add</span></a></li>
+                    <li class="nav-item"><a class="nav-link vxp-underline-primary @VendorNavPages.DetailsNavClass(ViewContext)" asp-area="Vendor" asp-controller="Products" asp-action="Details"><span>Common Details</span></a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="btn btn-primary w-100 text-left" data-toggle="collapse" href="#vendor-manage-distributors">Distributors</a>
+            <div id="vendor-manage-distributors" class="collapse show">
+                <ul class="nav flex-column ml-3">
+                    <li class="nav-item"><a class="nav-link vxp-underline-primary @VendorNavPages.IndexNavClass(ViewContext)" asp-area="Vendor" asp-controller="Products" asp-action="Index"><span>List</span></a></li>
+                    <li class="nav-item"><a class="nav-link vxp-underline-primary @VendorNavPages.AddProductNavClass(ViewContext)" asp-area="Vendor" asp-controller="Products" asp-action="Create"><span>Add</span></a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="btn btn-primary w-100 text-left" data-toggle="collapse" href="#vendor-manage-projects">Projects</a>
+            <div id="vendor-manage-projects" class="collapse show">
+                <ul class="nav flex-column ml-3">
+                    <li class="nav-item"><a class="nav-link vxp-underline-primary" href="#"><span>Link 1</span></a></li>
+                    <li class="nav-item"><a class="nav-link vxp-underline-primary" href="#"><span>Link 2</span></a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="btn btn-primary w-100 text-left" data-toggle="collapse" href="#vendor-manage-messages">Messages</a>
+            <div id="vendor-manage-messages" class="collapse show">
+                <ul class="nav flex-column ml-3">
+                    <li class="nav-item"><a class="nav-link vxp-underline-primary" href="#"><span>Link 1</span></a></li>
+                    <li class="nav-item"><a class="nav-link vxp-underline-primary" href="#"><span>Link 2</span></a></li>
+                </ul>
+            </div>
+        </li>
+
+    </ul>

@@ -1,0 +1,173 @@
+﻿
+
+
+<h4>Create Product</h4>
+
+<form id="formCreateProduct" class="w-100" method="post">
+    <div class="d-flex mb-1">
+        <div class="w-25 bg-light d-flex flex-column p-1 border rounded">
+            <h6 class="bg-primary text-white p-1 rounded">Account data</h6>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="ProductCategory">Category</label>
+                <select title="Category" class="form-control text-dark font-weight-bold" name="ProductCategory" id="ProductCategory">
+                    <option value="Distributor">Distributor</option>
+                    <option value="Customer">Customer</option>
+                    <option selected="selected" value="Administrator">Administrator</option>
+                </select>
+                <span class="text-danger field-validation-valid" data-valmsg-for="RoleName" data-valmsg-replace="true"></span>
+            </div>
+            <div class="vxp-section-edit-user-distributors animated" style="display: none;">
+                <div class="py-1"></div>
+                <h6 class="bg-primary text-white p-1 rounded">Distributors</h6>
+                <div class="w-100">
+                    <div class="vxp-edit-user-form-container container-fluid border rounded">
+                        <div class="row px-1">
+                            <div class="col-xl-10 col-sm-8">...</div>
+                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0  w-100 border" onclick="OpenDistributorManageForm()">Add</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="vxp-section-edit-user-bank-accounts animated">
+                <div class="py-1"></div>
+                <h6 class="bg-primary text-white p-1 rounded">Bank accounts</h6>
+                <div class="w-100">
+                    <div class="vxp-edit-user-form-container container-fluid border rounded">
+
+                        <div class="row px-1">
+                            <div class="col-xl-10 col-sm-8">...</div>
+                            <div class="col-xl-2 col-sm-4 text-right"><button type="button" class="btn btn-light rounded p-0 w-100 border" onclick="OpenBankAccountManageForm()">Add</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="h-100"></div>
+
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="UserName">Login email</label>
+                <input class="form-control font-weight-bold" placeholder="Email" value="tsvetan.raykov@gmail.com" type="email" data-val="true" data-val-email="The Login email field is not a valid e-mail address." data-val-remote="'Login email' is invalid." data-val-remote-additionalfields="*.UserName,*.IsNewUser" data-val-remote-type="Post" data-val-remote-url="/Users/ValidateNewUsername" data-val-required="The Login email field is required." id="UserName" name="UserName">
+                <span class="text-danger field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
+
+            </div>
+
+
+        </div>
+        <div class="px-1"></div>
+        <div class="w-25 bg-light d-flex flex-column p-1 border rounded">
+            <h6 class="bg-primary text-white p-1 rounded">Contact information</h6>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="FirstName">First name</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="First name" value="Tsvetan" type="text" data-val="true" data-val-length="First name must be at least 3 symbols" data-val-length-max="50" data-val-length-min="3" data-val-required="The First name field is required." id="FirstName" maxlength="50" name="FirstName">
+                <span class="text-danger field-validation-valid" data-valmsg-for="FirstName" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="LastName">Last name</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Last name" value="Raykov" type="text" data-val="true" data-val-length="Last name must be at least 3 symbols" data-val-length-max="50" data-val-length-min="3" data-val-required="The Last name field is required." id="LastName" maxlength="50" name="LastName">
+                <span class="text-danger field-validation-valid" data-valmsg-for="LastName" data-valmsg-replace="true"></span>
+            </div>
+
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="ContactAddress_City">City</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="City" value="Lovech" type="text" data-val="true" data-val-length="The field City must be a string with a maximum length of 50." data-val-length-max="50" id="ContactAddress_City" maxlength="50" name="ContactAddress.City">
+                <span class="text-danger field-validation-valid" data-valmsg-for="ContactAddress.City" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="ContactAddress_AddressLocation">Address Location</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Address" value="121 Fake Str." type="text" data-val="true" data-val-length="The field Address Location must be a string with a maximum length of 100." data-val-length-max="100" id="ContactAddress_AddressLocation" maxlength="100" name="ContactAddress.AddressLocation">
+                <span class="text-danger field-validation-valid" data-valmsg-for="ContactAddress.AddressLocation" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="ContactAddress_Phone">Phone number</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Phone" value="0889999888" type="text" data-val="true" data-val-regex="The Phone number field is not a valid phone." data-val-regex-pattern="^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" id="ContactAddress_Phone" name="ContactAddress.Phone">
+                <span class="text-danger field-validation-valid" data-valmsg-for="ContactAddress.Phone" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="ContactAddress_Email">Contact Email</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Contact Email" value="tsvetan.raykov@gmail.com" type="text" data-val="true" data-val-regex="The Email field is not a valid e-mail address." data-val-regex-pattern="^[a-zA-Z0-9.!#$%&amp;'*+/=?^_`{|}~-]+@@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" id="ContactAddress_Email" name="ContactAddress.Email">
+                <span class="text-danger field-validation-valid" data-valmsg-for="ContactAddress.Email" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="vxp-section-edit-user-company-info px-1 "></div>
+        <div class="vxp-section-edit-user-company-info w-25 bg-light d-flex flex-column p-1 border rounded">
+            <h6 class="bg-primary text-white p-1 rounded">Company information</h6>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="Company_Name">Company name</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Company name" value="" type="text" data-val="true" data-val-length="The field Company name must be a string with a maximum length of 30." data-val-length-max="30" id="Company_Name" maxlength="30" name="Company.Name">
+                <span class="text-danger field-validation-valid" data-valmsg-for="Company.Name" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="Company_BusinessNumber">Business number</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Company BIN" value="" type="text" data-val="true" data-val-length="The field Business number must be a string with a maximum length of 15." data-val-length-max="15" id="Company_BusinessNumber" maxlength="15" name="Company.BusinessNumber">
+                <span class="text-danger field-validation-valid" data-valmsg-for="Company.BusinessNumber" data-valmsg-replace="true"></span>
+            </div>
+          
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="Company_ContactAddress_City">City</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="City" value="" type="text" data-val="true" data-val-length="The field City must be a string with a maximum length of 50." data-val-length-max="50" id="Company_ContactAddress_City" maxlength="50" name="Company.ContactAddress.City">
+                <span class="text-danger field-validation-valid" data-valmsg-for="Company.ContactAddress.City" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="Company_ContactAddress_AddressLocation">Address Location</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Address" value="" type="text" data-val="true" data-val-length="The field Address Location must be a string with a maximum length of 100." data-val-length-max="100" id="Company_ContactAddress_AddressLocation" maxlength="100" name="Company.ContactAddress.AddressLocation">
+                <span class="text-danger field-validation-valid" data-valmsg-for="Company.ContactAddress.AddressLocation" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="Company_ContactAddress_Phone">Phone number</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Phone" value="" type="text" data-val="true" data-val-regex="The Phone number field is not a valid phone." data-val-regex-pattern="^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" id="Company_ContactAddress_Phone" name="Company.ContactAddress.Phone">
+                <span class="text-danger field-validation-valid" data-valmsg-for="Company.ContactAddress.Phone" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="Company_ContactAddress_Email">Business Email</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Business Email" value="" type="text" data-val="true" data-val-regex="The Email field is not a valid e-mail address." data-val-regex-pattern="^[a-zA-Z0-9.!#$%&amp;'*+/=?^_`{|}~-]+@@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" id="Company_ContactAddress_Email" name="Company.ContactAddress.Email">
+                <span class="text-danger field-validation-valid" data-valmsg-for="Company.ContactAddress.Email" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="vxp-section-edit-user-shipping-address px-1"></div>
+        <div class="vxp-section-edit-user-shipping-address w-25 bg-light d-flex flex-column p-1 border rounded">
+            <h6 class="bg-primary text-white p-1 rounded">Shipping address</h6>
+
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="Company_ShippingAddress_City">City</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="City" value="" type="text" data-val="true" data-val-length="The field City must be a string with a maximum length of 50." data-val-length-max="50" id="Company_ShippingAddress_City" maxlength="50" name="Company.ShippingAddress.City">
+                <span class="text-danger field-validation-valid" data-valmsg-for="Company.ShippingAddress.City" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="Company_ShippingAddress_AddressLocation">Address Location</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Address" value="" type="text" data-val="true" data-val-length="The field Address Location must be a string with a maximum length of 100." data-val-length-max="100" id="Company_ShippingAddress_AddressLocation" maxlength="100" name="Company.ShippingAddress.AddressLocation">
+                <span class="text-danger field-validation-valid" data-valmsg-for="Company.ShippingAddress.AddressLocation" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="Company_ShippingAddress_Phone">Phone number</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Phone" value="" type="text" data-val="true" data-val-regex="The Phone number field is not a valid phone." data-val-regex-pattern="^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$" id="Company_ShippingAddress_Phone" name="Company.ShippingAddress.Phone">
+                <span class="text-danger field-validation-valid" data-valmsg-for="Company.ShippingAddress.Phone" data-valmsg-replace="true"></span>
+            </div>
+            <div class="py-1"></div>
+            <div class="w-100">
+                <label class="vxp-form-control-label" for="Company_ShippingAddress_Email">Shipping Contact Email</label>
+                <input class="form-control text-dark font-weight-bold" placeholder="Shipping Contact Email" value="" type="text" data-val="true" data-val-regex="The Email field is not a valid e-mail address." data-val-regex-pattern="^[a-zA-Z0-9.!#$%&amp;'*+/=?^_`{|}~-]+@@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$" id="Company_ShippingAddress_Email" name="Company.ShippingAddress.Email">
+                <span class="text-danger field-validation-valid" data-valmsg-for="Company.ShippingAddress.Email" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex my-3 align-content-start">
+        <div class="w-25 d-flex pr-1" id="component-notifier">
+            <button class="w-50 btn btn-primary rounded" type="submit">Update</button>
+            <div class="px-1"></div>
+            <button class="w-50 btn btn-primary rounded" type="button" data-toggle="modal" data-target="#modalDeleteUser">Delete</button>
+
+        </div>
+    </div>
+</form>
