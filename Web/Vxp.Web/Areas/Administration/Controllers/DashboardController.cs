@@ -64,6 +64,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
             {
                 RoleName = GlobalConstants.Roles.AdministratorRoleName, // Role dropdown selected item by default
                 IsNewUser = true,
+                IsEmailConfirmed = true
             };
 
             await this._usersService.PopulateCommonUserModelProperties(viewModel);

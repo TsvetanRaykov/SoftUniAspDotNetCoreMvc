@@ -202,8 +202,12 @@ namespace Vxp.Services.Data.Users
                 userModel.AvailableCountries = allCountries;
             }
 
-            var user = await this._userManager.FindByIdAsync(userModel.UserId);
-            userModel.IsEmailConfirmed = await this._userManager.IsEmailConfirmedAsync(user);
+            if (!string.IsNullOrEmpty(userModel.UserId)) // new user
+            {
+                var user = await this._userManager.FindByIdAsync(userModel.UserId);
+                userModel.IsEmailConfirmed = await this._userManager.IsEmailConfirmedAsync(user);
+            }
+
         }
 
         private Task<IQueryable<TViewModel>> GetAllUsers<TViewModel>(bool includeDeleted,
