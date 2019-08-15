@@ -1,17 +1,15 @@
-﻿using Vxp.Services.Data.BankAccounts;
-
-namespace Vxp.Web.Areas.Administration.Controllers
+﻿namespace Vxp.Web.Areas.Administration.Controllers
 {
-    using System.Linq;
-    using ViewModels.Users;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Common;
     using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
     using Microsoft.EntityFrameworkCore;
-    using Vxp.Services.Data.Settings;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using ViewModels.Users;
     using Vxp.Services.Data.Users;
-    using Vxp.Web.ViewModels.Administration.Users;
+    using Vxp.Services.Data.BankAccounts;
+    using Vxp.Web.ViewModels.Administration.Dashboard;
 
     public class DashboardController : AdministrationController
     {

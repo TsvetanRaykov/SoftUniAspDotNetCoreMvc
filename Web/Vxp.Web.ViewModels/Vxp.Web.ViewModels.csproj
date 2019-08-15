@@ -17,10 +17,6 @@
     <None Remove="Home\**" />
     <None Remove="Roles\**" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Administration\Users\AddUserInputModel.cs" />
-  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>

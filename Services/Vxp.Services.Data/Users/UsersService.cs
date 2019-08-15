@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
 using Vxp.Common;
-using Vxp.Web.ViewModels.Administration.Users;
 using Vxp.Web.ViewModels.Users;
 
 namespace Vxp.Services.Data.Users
@@ -169,7 +168,7 @@ namespace Vxp.Services.Data.Users
         {
             //TODO: Replace the partial view with a component and put this logic there
 
-            var vendors = await this.GetAllInRoleAsync<AddUserDistributorViewModel>(GlobalConstants.Roles.VendorRoleName);
+            var vendors = await this.GetAllInRoleAsync<UserProfileViewModel>(GlobalConstants.Roles.VendorRoleName);
 
             userModel.AvailableRoles = await this._roleManager.Roles.To<SelectListItem>().ToListAsync();
             userModel.AvailableRoles.ForEach(r => { r.Selected = r.Value == userModel.RoleName; });

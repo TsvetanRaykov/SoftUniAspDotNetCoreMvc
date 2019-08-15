@@ -149,6 +149,11 @@ input::placeholder {
         background: #E2E6EA;
     }
 
+.vxp-table th,
+.vxp-table td {
+    padding: 0.5rem;
+    vertical-align: bottom;
+}
 
 .vxp-table .btn {
     font-size: small;
@@ -350,4 +355,18 @@ input::placeholder {
 
 .w-20 {
     width: 20% !important;
+}
+
+
+button.product-category-btn {
+    min-width: 70px;
+}
+
+#frmProductCategory span[class*="field-validation"] {
+    height: 25px;
+    font-size: medium;
+}
+
+#ProductCategoryWrapper table.vxp-table th {
+    font-weight: bold;
 }

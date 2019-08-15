@@ -1,11 +1,7 @@
-﻿// ReSharper disable VirtualMemberCallInConstructor
-
-using System.ComponentModel.DataAnnotations;
-
-namespace Vxp.Data.Models
+﻿namespace Vxp.Data.Models
 {
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations;
     using Vxp.Data.Common.Models;
 
     public class BankAccount : BaseDeletableModel<int>

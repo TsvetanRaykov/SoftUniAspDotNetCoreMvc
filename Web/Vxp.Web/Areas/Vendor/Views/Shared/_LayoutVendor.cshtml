@@ -1,5 +1,4 @@
 ﻿@{
-    ViewData["Title"] = "_LayoutVendor";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -12,3 +11,6 @@
     </div>
 </section>
 
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

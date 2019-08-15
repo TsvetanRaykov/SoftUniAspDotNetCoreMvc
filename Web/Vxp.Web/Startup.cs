@@ -18,6 +18,7 @@ using Vxp.Data.Models;
 using Vxp.Data.Repositories;
 using Vxp.Data.Seeding;
 using Vxp.Services.Data.BankAccounts;
+using Vxp.Services.Data.Products;
 using Vxp.Services.Data.Settings;
 using Vxp.Services.Data.Users;
 using Vxp.Services.Mapping;
@@ -126,6 +127,8 @@ namespace Vxp.Web
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IRolesService, RolesService>();
             services.AddTransient<IBankAccountsService, BankAccountsService>();
+            services.AddTransient<IProductCategoriesService, ProductCategoriesService>();
+            services.AddTransient<IProductsService, ProductsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

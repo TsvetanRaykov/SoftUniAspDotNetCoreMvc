@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -49,10 +49,6 @@
     <ProjectReference Include="..\..\Vxp.Common\Vxp.Common.csproj" />
     <ProjectReference Include="..\Vxp.Data.Common\Vxp.Data.Common.csproj" />
     <ProjectReference Include="..\Vxp.Data.Models\Vxp.Data.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

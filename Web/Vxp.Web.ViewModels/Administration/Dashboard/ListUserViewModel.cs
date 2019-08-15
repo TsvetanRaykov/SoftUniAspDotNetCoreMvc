@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 
-namespace Vxp.Web.ViewModels.Administration.Users
+namespace Vxp.Web.ViewModels.Administration.Dashboard
 {
     public class ListUserViewModel : IMapFrom<ApplicationUser>, IHaveCustomMappings
     {

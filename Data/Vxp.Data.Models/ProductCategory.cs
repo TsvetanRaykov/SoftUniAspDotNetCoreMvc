@@ -1,8 +1,7 @@
-﻿// ReSharper disable VirtualMemberCallInConstructor
-namespace Vxp.Data.Models
+﻿namespace Vxp.Data.Models
 {
     using System.Collections.Generic;
-
+    using System.ComponentModel.DataAnnotations;
     using Vxp.Data.Common.Models;
 
     public class ProductCategory : BaseDeletableModel<int>
@@ -12,6 +11,7 @@ namespace Vxp.Data.Models
             this.Products = new HashSet<Product>();
         }
 
+        [Required]
         public string Name { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }

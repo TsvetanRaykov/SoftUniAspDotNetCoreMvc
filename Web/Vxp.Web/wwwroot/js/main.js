@@ -166,7 +166,9 @@ AOS.init({
                 navbar = $('.ftco_navbar'),
                 sd = $('.js-scroll-wrap');
 
-            SetUnderlinedNavLinks(navbar, st);
+            if (typeof SetUnderlinedNavLinks === "function") {
+                SetUnderlinedNavLinks(navbar, st);
+            }
 
             if (st > 150) {
                 if (!navbar.hasClass('scrolled')) {
