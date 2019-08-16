@@ -63,5 +63,20 @@
             await this._productCategoriesRepository.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> UpdateCategoryAsync(int categoryId, string newName)
+        {
+            var categoryFromDb = await this._productCategoriesRepository.GetByIdWithDeletedAsync(categoryId);
+            if (categoryFromDb == null)
+            {
+                return false;
+            }
+
+            categoryFromDb.Name = newName;
+
+            this._productCategoriesRepository.Update(categoryFromDb);
+            await this._productCategoriesRepository.SaveChangesAsync();
+            return true;
+        }
     }
 }

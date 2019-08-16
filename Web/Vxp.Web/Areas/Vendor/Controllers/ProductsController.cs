@@ -58,6 +58,19 @@ namespace Vxp.Web.Areas.Vendor.Controllers
             return this.RedirectToAction(nameof(this.Categories));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateCategory(ProductCategoryInputModel inputModel)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this._productCategoriesService.UpdateCategoryAsync(inputModel.Id, inputModel.Name);
+            }
+            
+            return this.RedirectToAction(nameof(this.Categories));
+        }
+
+
 
 
         public IActionResult Details()

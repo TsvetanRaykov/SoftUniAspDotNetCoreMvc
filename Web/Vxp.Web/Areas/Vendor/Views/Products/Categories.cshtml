@@ -23,28 +23,29 @@
     </form>
     <table class="vxp-table table table-striped w-33">
         <thead>
-        <tr>
-            <th class="">Category</th>
-            <th class="text-right">Products</th>
-            <th class="text-right w-33"></th>
-        </tr>
+            <tr>
+                <th class="">Category</th>
+                <th class="text-right">Products</th>
+                <th class="text-right w-33"></th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var category in Model.ExistingCategories)
-        {
-            var disableDelete = category.ProductsCount > 0 ? "disabled='disabled'" : null;
-            <tr>
-                <td>@category.Name</td>
-                <td class="text-right">@category.ProductsCount</td>
-                <td class="text-left">
-                    <button type="button" class="btn btn-primary rounded product-category-btn">Edit</button>
-                    <form class="d-inline" method="post" asp-action="DeleteCategory" data-name="@category.Name" onsubmit="deleteProductCategory(event)">
-                        <input type="hidden" value="@category.Id" name="CategoryId"/>
-                        <button type="submit" class="btn btn-danger rounded product-category-btn" @disableDelete>Delete</button>
-                    </form>
-                </td>
-            </tr>
-        }
+            @foreach (var category in Model.ExistingCategories)
+            {
+                var disableDelete = category.ProductsCount > 0 ? "disabled='disabled'" : null;
+                <tr>
+                    <td>@category.Name</td>
+                    <td class="text-right">@category.ProductsCount</td>
+                    <td class="text-left">
+                        <button class="btn btn-primary rounded product-category-btn" type="button" data-toggle="modal" data-target="#modalEditProductCategory@(category.Id)">Edit</button>
+                        <partial name="CategoryEdit" model="category" />
+                        <form class="d-inline" method="post" asp-action="DeleteCategory" data-name="@category.Name" onsubmit="deleteProductCategory(event)">
+                            <input type="hidden" value="@category.Id" name="CategoryId" />
+                            <button type="submit" class="btn btn-danger rounded product-category-btn" @disableDelete>Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
@@ -52,7 +53,7 @@
 @section Scripts {
     <script>
         function deleteProductCategory(e) {
-            
+
             e.preventDefault();
             let form = e.currentTarget;
             let categoryName = e.currentTarget.dataset['name'];
@@ -72,7 +73,7 @@
                 },
                 swapButtonOrder: true,
                 centerVertical: false,
-                callback: function(result) {
+                callback: function (result) {
                     if (result) {
                         form.submit();
                     }

@@ -9,5 +9,6 @@ namespace Vxp.Services.Data.Products
         Task<TViewModel> CreateCategoryAsync<TViewModel>(TViewModel productCategory);
         IQueryable<TViewModel> GetAllCategories<TViewModel>();
         Task<bool> DeleteCategoryAsync(int categoryId);
+        Task<bool> UpdateCategoryAsync(int categoryId, string newName);
     }
 }
