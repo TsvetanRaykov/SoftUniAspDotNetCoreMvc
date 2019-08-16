@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
+using CloudinaryDotNet;
 using Vxp.Common;
 using Vxp.Data;
 using Vxp.Data.Common;
@@ -17,6 +18,7 @@ using Vxp.Data.Common.Repositories;
 using Vxp.Data.Models;
 using Vxp.Data.Repositories;
 using Vxp.Data.Seeding;
+using Vxp.Services;
 using Vxp.Services.Data.BankAccounts;
 using Vxp.Services.Data.Products;
 using Vxp.Services.Data.Settings;
@@ -124,12 +126,23 @@ namespace Vxp.Web
                     GlobalConstants.SystemEmail.SendFromName);
             });
 
+            Account cloudinaryAccount = new Account(
+                this._configuration["Cloudinary:CloudName"],
+                this._configuration["Cloudinary:ApiKey"],
+                this._configuration["Cloudinary:ApiSecret"]
+                );
+
+            Cloudinary cloudinaryUtility = new Cloudinary(cloudinaryAccount);
+
+            services.AddSingleton(cloudinaryUtility);
+
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IRolesService, RolesService>();
             services.AddTransient<IBankAccountsService, BankAccountsService>();
             services.AddTransient<IProductCategoriesService, ProductCategoriesService>();
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IProductDetailsService, ProductDetailsService>();
+            services.AddTransient<ICoudinaryService, CloudinaryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

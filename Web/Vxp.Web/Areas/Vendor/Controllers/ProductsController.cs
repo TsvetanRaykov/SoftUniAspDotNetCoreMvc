@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Vxp.Services;
 using Vxp.Services.Data.Products;
 using Vxp.Web.ViewModels.Products;
 
@@ -13,14 +15,16 @@ namespace Vxp.Web.Areas.Vendor.Controllers
         private readonly IProductsService _productsService;
         private readonly IProductCategoriesService _productCategoriesService;
         private readonly IProductDetailsService _productDetailsService;
+        private readonly ICoudinaryService _cloudinaryService;
 
         public ProductsController(IProductsService productsService,
             IProductCategoriesService productCategoriesService,
-            IProductDetailsService productDetailsService)
+            IProductDetailsService productDetailsService, ICoudinaryService cloudinaryService)
         {
             this._productsService = productsService;
             this._productCategoriesService = productCategoriesService;
             this._productDetailsService = productDetailsService;
+            this._cloudinaryService = cloudinaryService;
         }
 
         public IActionResult Index()
@@ -39,6 +43,26 @@ namespace Vxp.Web.Areas.Vendor.Controllers
 
             return this.View(viewModel);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ProductInputModel inputModel)
+        {
+
+            if (this.ModelState.IsValid)
+            {
+                string imageUrl = await this._cloudinaryService.UploadImage(inputModel.Picture, inputModel.Name);
+                inputModel.Image = new ProductImageInputModel
+                {
+                    Alt = inputModel.Name,
+                    Title = inputModel.Name,
+                    Url = HttpUtility.UrlEncode(imageUrl)
+                };
+            }
+
+            return this.View(inputModel);
+        }
+
         public IActionResult Categories()
         {
             var viewModel = new ProductCategoryInputModel

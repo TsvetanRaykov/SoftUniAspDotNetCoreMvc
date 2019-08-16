@@ -5,12 +5,12 @@
 
 <h4>@ViewData["Title"]</h4>
 <div class="border rounded h-100 py-1 px-2" id="CommonProductDetailsWrapper">
-    <form class="w-100" id="frmCommonProductProperties" method="post" asp-area="Vendor" asp-controller="Products" asp-action="Create">
+    <form enctype="multipart/form-data" class="w-100" id="frmCommonProductProperties" method="post" asp-area="Vendor" asp-controller="Products" asp-action="Create">
         <table class="vxp-table table table-borderless w-75">
             <tr>
                 <td>
                     <label asp-for="@Model.Category.Name" class="vxp-form-control-label">Category</label>
-                    <select title="Role"
+                    <select title="Category"
                             class="form-control text-dark font-weight-bold" asp-for="@Model.Category.Name" asp-items="@Model.AvailableCategories" id="edit-user-form-role-selector"></select>
                     <span asp-validation-for="@Model.Category.Name" class="text-danger d-block vxp-validation-errors-placeholder"></span>
                 </td>
@@ -27,9 +27,21 @@
                     <span asp-validation-for="@Model.Description" class="text-danger d-block vxp-validation-errors-placeholder"></span>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <label class="vxp-form-control-label" asp-for="@Model.Picture"></label>
+                    <input type="file" asp-for="@Model.Picture" class="form-control font-weight-bold">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button class="btn btn-primary rounded" type="submit">Create</button>
+                </td>
+            </tr>
         </table>
     </form>
-   
+
 </div>
 
 @section Scripts {

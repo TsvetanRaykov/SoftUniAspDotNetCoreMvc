@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Vxp.Web.ViewModels.Products
 {
@@ -22,6 +23,8 @@ namespace Vxp.Web.ViewModels.Products
         public string Description { get; set; }
 
         public ProductCategoryInputModel Category { get; set; }
+
+        public IFormFile Picture { get; set; }
 
         public ProductImageInputModel Image { get; set; }
 
