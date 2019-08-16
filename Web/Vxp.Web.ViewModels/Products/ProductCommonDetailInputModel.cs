@@ -4,8 +4,8 @@
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
-    using Vxp.Data.Models;
-    using Vxp.Services.Mapping;
+    using Data.Models;
+    using Services.Mapping;
 
     public class ProductCommonDetailInputModel : IMapTo<CommonProductDetail>, IMapFrom<CommonProductDetail>, IHaveCustomMappings
     {

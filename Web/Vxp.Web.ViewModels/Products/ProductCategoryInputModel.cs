@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Vxp.Common;
-using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-
-namespace Vxp.Web.ViewModels.Products
+﻿namespace Vxp.Web.ViewModels.Products
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using AutoMapper;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Common;
+    using Data.Models;
+    using Services.Mapping;
+
     public class ProductCategoryInputModel : IMapFrom<ProductCategory>, IMapTo<ProductCategory>, IHaveCustomMappings
     {
         public ProductCategoryInputModel()
@@ -33,6 +34,10 @@ namespace Vxp.Web.ViewModels.Products
             configuration.CreateMap<ProductCategory, ProductCategoryInputModel>()
                 .ForMember(dest => dest.ProductsCount, opt => opt
                     .MapFrom(src => src.Products.Count));
+
+            configuration.CreateMap<ProductCategory, SelectListItem>()
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

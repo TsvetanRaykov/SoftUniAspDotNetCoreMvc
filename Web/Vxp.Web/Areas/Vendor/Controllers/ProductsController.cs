@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Vxp.Services.Data.Products;
 using Vxp.Web.ViewModels.Products;
 
@@ -26,9 +28,16 @@ namespace Vxp.Web.Areas.Vendor.Controllers
             return View();
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return this.View();
+            var viewModel = new ProductInputModel
+            {
+                AvailableCategories = await this._productCategoriesService.GetAllCategories<SelectListItem>().ToListAsync()
+            };
+
+            viewModel.AvailableCategories.Add(new SelectListItem("- Select Category -", null, true, true));
+
+            return this.View(viewModel);
         }
         public IActionResult Categories()
         {
@@ -137,6 +146,16 @@ namespace Vxp.Web.Areas.Vendor.Controllers
             if (this._productCategoriesService.IsCategoryExist(name))
             {
                 return this.Json("This product category already exist.");
+            }
+            return this.Json(true);
+        }
+
+        [AcceptVerbs("Post")]
+        public IActionResult ValidateProductName([FromForm] string name, [FromForm(Name = "Category.Name")] string categoryName)
+        {
+            if (this._productsService.IsProductExist(name, categoryName))
+            {
+                return this.Json("The product already exist in that category.");
             }
             return this.Json(true);
         }
