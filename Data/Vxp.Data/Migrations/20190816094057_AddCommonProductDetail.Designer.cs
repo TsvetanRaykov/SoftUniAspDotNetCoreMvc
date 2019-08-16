@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vxp.Data;
 
 namespace Vxp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190816094057_AddCommonProductDetail")]
+    partial class AddCommonProductDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -696,6 +698,10 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<bool>("IsDeleted");
+
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<int>("ProductId");
@@ -705,6 +711,8 @@ namespace Vxp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CommonDetailId");
+
+                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProductId");
 

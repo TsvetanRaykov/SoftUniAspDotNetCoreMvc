@@ -7,21 +7,21 @@
 <h4>@ViewData["Title"]</h4>
 <div class="border rounded h-100 py-1 px-2" id="ProductCategoryWrapper">
     <form class="w-100" id="frmProductCategory" method="post" asp-area="Vendor" asp-controller="Products" asp-action="CreateCategory">
-        <table class="vxp-table table table-borderless w-33">
+        <table class="vxp-table table table-borderless w-50">
             <tr>
                 <td>
                     <label class="vxp-form-control-label" asp-for="Name">New category</label>
                     <input class="form-control font-weight-bold" asp-for="Name" placeholder="Category name" />
-                    <span asp-validation-for="Name" class="text-danger d-block"></span>
+                    <span asp-validation-for="Name" class="text-danger d-block vxp-validation-errors-placeholder"></span>
                 </td>
                 <td class="text-left w-33">
                     <button type="submit" class="btn btn-success rounded product-category-btn">Add</button>
-                    <span class="field-validation-valid d-block"></span>
+                    <span class="d-block vxp-validation-errors-placeholder"></span>
                 </td>
             </tr>
         </table>
     </form>
-    <table class="vxp-table table table-striped w-33">
+    <table class="vxp-table table table-striped w-50 ml-2">
         <thead>
             <tr>
                 <th class="">Category</th>
@@ -39,7 +39,7 @@
                     <td class="text-left">
                         <button class="btn btn-primary rounded product-category-btn" type="button" data-toggle="modal" data-target="#modalEditProductCategory@(category.Id)">Edit</button>
                         <partial name="CategoryEdit" model="category" />
-                        <form class="d-inline" method="post" asp-action="DeleteCategory" data-name="@category.Name" onsubmit="deleteProductCategory(event)">
+                        <form class="d-inline" method="post" asp-action="DeleteCategory" data-name="@category.Name" onsubmit="deleteCommonProductDetail(event)">
                             <input type="hidden" value="@category.Id" name="CategoryId" />
                             <button type="submit" class="btn btn-danger rounded product-category-btn" @disableDelete>Delete</button>
                         </form>

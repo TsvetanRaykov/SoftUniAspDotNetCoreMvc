@@ -51,6 +51,8 @@
 
         public DbSet<ProductCategory> ProductCategories { get; set; }
 
+        public DbSet<CommonProductDetail> CommonProductDetails { get; set; }
+
         public DbSet<ProductDetail> ProductDetails { get; set; }
 
         public DbSet<ProductImage> ProductImages { get; set; }
@@ -133,6 +135,8 @@
 
             ConfigureProductDetail(builder);
 
+            ConfigureCommonProductDetail(builder);
+
             ConfigureProject(builder);
 
             ConfigureDocument(builder);
@@ -142,6 +146,11 @@
             ConfigureOrderProduct(builder);
 
             ConfigurePriceModifier(builder);
+
+        }
+
+        private static void ConfigureCommonProductDetail(ModelBuilder builder)
+        {
 
         }
 
@@ -232,6 +241,11 @@
             {
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Details)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.CommonDetail)
+                    .WithMany(d => d.ProductDetails)
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Cascade);
             });

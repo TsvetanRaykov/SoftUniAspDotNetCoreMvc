@@ -10,11 +10,15 @@ namespace Vxp.Web.Areas.Vendor.Controllers
     {
         private readonly IProductsService _productsService;
         private readonly IProductCategoriesService _productCategoriesService;
+        private readonly IProductDetailsService _productDetailsService;
 
-        public ProductsController(IProductsService productsService, IProductCategoriesService productCategoriesService)
+        public ProductsController(IProductsService productsService,
+            IProductCategoriesService productCategoriesService,
+            IProductDetailsService productDetailsService)
         {
             this._productsService = productsService;
             this._productCategoriesService = productCategoriesService;
+            this._productDetailsService = productDetailsService;
         }
 
         public IActionResult Index()
@@ -66,19 +70,66 @@ namespace Vxp.Web.Areas.Vendor.Controllers
             {
                 await this._productCategoriesService.UpdateCategoryAsync(inputModel.Id, inputModel.Name);
             }
-            
+
             return this.RedirectToAction(nameof(this.Categories));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateCommonProductDetail(ProductCommonDetailInputModel inputModel)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this._productDetailsService.CreateCommonProductDetailAsync(inputModel);
+            }
+
+            return this.RedirectToAction(nameof(this.Details));
+        }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateCommonProductDetails(ProductCommonDetailInputModel inputModel)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this._productDetailsService.UpdateCommonProductDetailAsync(inputModel);
+            }
+
+            return this.RedirectToAction(nameof(this.Details));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteCommonProductDetail([FromForm] int detailId)
+        {
+            await this._productDetailsService.DeleteCommonProductDetailAsync(detailId);
+            return this.RedirectToAction(nameof(this.Details));
+        }
 
         public IActionResult Details()
         {
-            return this.View();
+            var viewModel = new ProductCommonDetailInputModel
+            {
+                AllCommonProductDetails = this._productDetailsService
+                     .GetAllCommonProductDetails<ProductCommonDetailInputModel>()
+                     .ToList()
+            };
+
+            return this.View(viewModel);
         }
 
         #region Remote validation
+
+        [AcceptVerbs("Post")]
+        public IActionResult ValidateCommonProductDetail([FromForm] string name, [FromForm] string measure)
+        {
+            if (this._productDetailsService.IsCommonProductDetailExist(name, measure))
+            {
+                return this.Json("This property with same measure already exist.");
+            }
+            return this.Json(true);
+        }
 
         [AcceptVerbs("Post")]
         public IActionResult ValidateNewProductCategory([FromForm] string name)

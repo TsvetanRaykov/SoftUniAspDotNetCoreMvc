@@ -1,0 +1,38 @@
+﻿@model Vxp.Web.ViewModels.Products.ProductCommonDetailInputModel
+<!-- Modal Edit Common Product Detail -->
+<div class="modal fade" id="modalEditProductCommonDetail@(Model.Id)" tabindex="-1" role="dialog" aria-labelledby="modalEditProductCommonDetailLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit common product property</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="Vendor" asp-controller="Products" asp-action="UpdateCommonProductDetails" method="post">
+                    @Html.HiddenFor(m => m.Id)
+                    <div>
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control font-weight-bold" />
+                        <span asp-validation-for="Name" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Measure"></label>
+                        <input asp-for="Measure" class="form-control font-weight-bold" />
+                        <span asp-validation-for="Measure" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                    </div>
+                    <div class="pt-3 d-flex">
+                        <div class="w-50 d-flex flex-nowrap align-content-end">
+                            <input type="submit" value="Submit" class="btn btn-success" />
+                            <input type="button" value="Cancel" class="btn btn-secondary ml-1" data-dismiss="modal" aria-label="Close" />
+                        </div>
+                        <div class="w-50">
+                            <div class="text-danger vxp-validation-errors-placeholder"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

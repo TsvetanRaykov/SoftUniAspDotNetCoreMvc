@@ -230,6 +230,7 @@ input::placeholder {
 
 .vxp-validation-errors-placeholder {
     font-size: small;
+    height: 25px;
 }
 
 .vxp-table-distributor {
@@ -362,11 +363,4 @@ button.product-category-btn {
     min-width: 70px;
 }
 
-#frmProductCategory span[class*="field-validation"] {
-    height: 25px;
-    font-size: medium;
-}
 
-#ProductCategoryWrapper table.vxp-table th {
-    font-weight: bold;
-}

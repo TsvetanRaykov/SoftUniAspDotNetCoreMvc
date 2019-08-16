@@ -1,1 +1,91 @@
-﻿<h4>Manage Common Product Details</h4>
+﻿@model Vxp.Web.ViewModels.Products.ProductCommonDetailInputModel
+@{
+    ViewData["Title"] = "Manage Common Product Details";
+}
+
+<h4>@ViewData["Title"]</h4>
+<div class="border rounded h-100 py-1 px-2" id="CommonProductDetailsWrapper">
+    <form class="w-100" id="frmCommonProductProperties" method="post" asp-area="Vendor" asp-controller="Products" asp-action="CreateCommonProductDetail">
+        <table class="vxp-table table table-borderless w-75">
+            <tr>
+                <td>
+                    <label class="vxp-form-control-label" asp-for="Name">New Property name</label>
+                    <input class="form-control font-weight-bold" asp-for="Name" placeholder="Name" />
+                    <span asp-validation-for="Name" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                </td>
+                <td>
+                    <label class="vxp-form-control-label" asp-for="Measure">Property measure</label>
+                    <input class="form-control font-weight-bold" asp-for="Measure" placeholder="Measure" />
+                    <span asp-validation-for="Measure" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                </td>
+                <td class="text-left w-33">
+                    <button type="submit" class="btn btn-success rounded product-category-btn">Add</button>
+                    <span class="d-block vxp-validation-errors-placeholder"></span>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table class="vxp-table table table-striped w-75 ml-2">
+        <thead>
+            <tr>
+                <th class="">Property</th>
+                <th class="text-right">Measure</th>
+                <th class="text-right">Used</th>
+                <th class="text-right w-33"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model.AllCommonProductDetails)
+            {
+                var disableDelete = detail.UsedCount > 0 ? "disabled='disabled'" : null;
+                <tr>
+                    <td>@detail.Name</td>
+                    <td class="text-right">@detail.Measure</td>
+                    <td class="text-right">@detail.UsedCount</td>
+                    <td class="text-left">
+                        <button class="btn btn-primary rounded product-category-btn" type="button" data-toggle="modal" data-target="#modalEditProductCommonDetail@(detail.Id)">Edit</button>
+                        <partial name="ProductCommonDetailEdit" model="detail" />
+                        <form class="d-inline" method="post" asp-action="DeleteCommonProductDetail" data-name="@detail.Name" data-measure="@detail.Measure" onsubmit="deleteCommonProductDetail(event)">
+                            <button type="submit" class="btn btn-danger rounded product-category-btn" @disableDelete>Delete</button>
+                            <input type="hidden" value="@detail.Id" name="DetailId" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        function deleteCommonProductDetail(e) {
+
+            e.preventDefault();
+            let form = e.currentTarget;
+            let detailName = e.currentTarget.dataset['name'];
+            let detailMeasure = e.currentTarget.dataset['measure'];
+            window.bootbox.confirm({
+                title: "Common product property delete confirmation!",
+                message: `Are you sure to delete ${detailName} with measure ${detailMeasure}?`,
+                className: "vxp-delete-confirmation-dialog",
+                buttons: {
+                    confirm: {
+                        label: "Yes",
+                        className: "btn-success"
+                    },
+                    cancel: {
+                        label: "No",
+                        className: "btn-danger"
+                    }
+                },
+                swapButtonOrder: true,
+                centerVertical: false,
+                callback: function(result) {
+                    if (result) {
+                        form.submit();
+                    }
+                }
+            });
+        }
+    </script>
+}
