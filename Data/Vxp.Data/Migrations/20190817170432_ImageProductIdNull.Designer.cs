@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vxp.Data;
 
 namespace Vxp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190817170432_ImageProductIdNull")]
+    partial class ImageProductIdNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -648,7 +650,7 @@ namespace Vxp.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("ProductImageId");
+                    b.Property<int?>("ProductImageId");
 
                     b.HasKey("Id");
 
@@ -975,8 +977,7 @@ namespace Vxp.Data.Migrations
 
                     b.HasOne("Vxp.Data.Models.ProductImage", "Image")
                         .WithMany()
-                        .HasForeignKey("ProductImageId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ProductImageId");
                 });
 
             modelBuilder.Entity("Vxp.Data.Models.ProductDetail", b =>

@@ -1,19 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-using Vxp.Data.Common.Repositories;
-using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-
-namespace Vxp.Services.Data.Products
+﻿namespace Vxp.Services.Data.Products
 {
+    using Microsoft.EntityFrameworkCore;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Vxp.Data.Common.Repositories;
+    using Vxp.Data.Models;
+    using Mapping;
+
     public class ProductsService : IProductsService
     {
         private readonly IDeletableEntityRepository<Product> _productsRepository;
+        private readonly IRepository<ProductImage> _productImagesRepository;
+        private readonly IDeletableEntityRepository<ProductCategory> _categoriesRepository;
 
-        public ProductsService(IDeletableEntityRepository<Product> productsRepository)
+        public ProductsService(IDeletableEntityRepository<Product> productsRepository,
+            IRepository<ProductImage> productImagesRepository,
+            IDeletableEntityRepository<ProductCategory> categoriesRepository)
         {
             this._productsRepository = productsRepository;
+            this._productImagesRepository = productImagesRepository;
+            this._categoriesRepository = categoriesRepository;
         }
 
         public bool IsProductExist(string productName, string categoryName)
@@ -26,20 +32,16 @@ namespace Vxp.Services.Data.Products
         public async Task<TViewModel> CreateProductAsync<TViewModel>(TViewModel product)
         {
             var newProduct = AutoMapper.Mapper.Map<Product>(product);
-            var deletedProduct = this._productsRepository.AllWithDeleted()
-                .FirstOrDefault(x => x.Name == newProduct.Name);
 
-            if (deletedProduct != null)
-            {
-                newProduct = deletedProduct;
-                this._productsRepository.Undelete(deletedProduct);
-            }
-            else
-            {
-                await this._productsRepository.AddAsync(newProduct);
-            }
-
+            newProduct.Category = await this._categoriesRepository.All().FirstOrDefaultAsync(c => c.Name == newProduct.Category.Name);
+            await this._productImagesRepository.AddAsync(newProduct.Image);
+            await this._productImagesRepository.SaveChangesAsync();
+            await this._productsRepository.AddAsync(newProduct);
             await this._productsRepository.SaveChangesAsync();
+            newProduct.Image.ProductId = newProduct.Id;
+            this._productImagesRepository.Update(newProduct.Image);
+            await this._productImagesRepository.SaveChangesAsync();
+
             product = AutoMapper.Mapper.Map<TViewModel>(newProduct);
             return product;
         }

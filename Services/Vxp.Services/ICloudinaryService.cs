@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Vxp.Services
 {
-    public interface ICoudinaryService
+    public interface ICloudinaryService
     {
         Task<string> UploadImage(IFormFile file, string fileName);
     }

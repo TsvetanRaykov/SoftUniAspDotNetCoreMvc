@@ -1,4 +1,6 @@
-﻿namespace Vxp.Web.ViewModels.Products
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace Vxp.Web.ViewModels.Products
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -33,6 +35,10 @@
             configuration.CreateMap<CommonProductDetail, ProductCommonDetailInputModel>()
                 .ForMember(dest => dest.UsedCount, opt => opt
                 .MapFrom(src => src.ProductDetails.Count));
+
+            configuration.CreateMap<CommonProductDetail, SelectListItem>()
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => $"{src.Name}:{src.Measure}"))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

@@ -4,10 +4,13 @@
 
     public class ProductDetail : BaseModel<int>
     {
+
         public string Value { get; set; }
 
+        public int ProductId { get; set; }
         public virtual Product Product { get; set; }
 
+        public int CommonDetailId { get; set; }
         public virtual CommonProductDetail CommonDetail { get; set; }
     }
 }

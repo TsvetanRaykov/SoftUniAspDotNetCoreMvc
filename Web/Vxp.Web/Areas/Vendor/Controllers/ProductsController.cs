@@ -15,11 +15,11 @@ namespace Vxp.Web.Areas.Vendor.Controllers
         private readonly IProductsService _productsService;
         private readonly IProductCategoriesService _productCategoriesService;
         private readonly IProductDetailsService _productDetailsService;
-        private readonly ICoudinaryService _cloudinaryService;
+        private readonly ICloudinaryService _cloudinaryService;
 
         public ProductsController(IProductsService productsService,
             IProductCategoriesService productCategoriesService,
-            IProductDetailsService productDetailsService, ICoudinaryService cloudinaryService)
+            IProductDetailsService productDetailsService, ICloudinaryService cloudinaryService)
         {
             this._productsService = productsService;
             this._productCategoriesService = productCategoriesService;
@@ -36,10 +36,12 @@ namespace Vxp.Web.Areas.Vendor.Controllers
         {
             var viewModel = new ProductInputModel
             {
-                AvailableCategories = await this._productCategoriesService.GetAllCategories<SelectListItem>().ToListAsync()
+                AvailableCategories = await this._productCategoriesService.GetAllCategories<SelectListItem>().ToListAsync(),
+                AvailableDetails = await this._productDetailsService.GetAllCommonProductDetails<SelectListItem>().ToListAsync()
             };
 
             viewModel.AvailableCategories.Add(new SelectListItem("- Select Category -", null, true, true));
+            viewModel.AvailableDetails.Add(new SelectListItem("- Select Property -", null, true, true));
 
             return this.View(viewModel);
         }
@@ -51,13 +53,31 @@ namespace Vxp.Web.Areas.Vendor.Controllers
 
             if (this.ModelState.IsValid)
             {
-                string imageUrl = await this._cloudinaryService.UploadImage(inputModel.Picture, inputModel.Name);
+                string imageUrl = await this._cloudinaryService.UploadImage(inputModel.UploadImage, inputModel.Name);
                 inputModel.Image = new ProductImageInputModel
                 {
                     Alt = inputModel.Name,
                     Title = inputModel.Name,
                     Url = HttpUtility.UrlEncode(imageUrl)
                 };
+
+                if (inputModel.UploadImages != null)
+                {
+                    for (var index = 0; index < inputModel.UploadImages.Count; index++)
+                    {
+                        var formFile = inputModel.UploadImages[index];
+                        var imageName = $"{inputModel.Name}_view_{index:D2}";
+                        imageUrl = await this._cloudinaryService.UploadImage(formFile, imageName);
+                        inputModel.Images.Add(new ProductImageInputModel
+                        {
+                            Alt = imageName,
+                            Title = imageName,
+                            Url = HttpUtility.UrlEncode(imageUrl)
+                        });
+                    }
+                }
+
+                await this._productsService.CreateProductAsync(inputModel);
             }
 
             return this.View(inputModel);

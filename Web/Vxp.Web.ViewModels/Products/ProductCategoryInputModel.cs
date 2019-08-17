@@ -19,6 +19,7 @@
 
         public int Id { get; set; }
 
+        [Display(Name = "Category")]
         [Required(AllowEmptyStrings = false, ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         [StringLength(30)]
         [Remote(action: "ValidateNewProductCategory", controller: "Products", HttpMethod = "Post")]

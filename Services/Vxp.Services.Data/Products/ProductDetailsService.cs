@@ -21,7 +21,7 @@
             var newCommonProductProperty = AutoMapper.Mapper.Map<CommonProductDetail>(commonProductDetail);
 
             var deletedCommonProperty = this._commonProductDetailsRepository.AllWithDeleted()
-                .FirstOrDefault(x => x.Name == newCommonProductProperty.Name);
+                .FirstOrDefault(d => d.Name == newCommonProductProperty.Name && d.Measure == newCommonProductProperty.Measure);
 
             if (deletedCommonProperty != null)
             {

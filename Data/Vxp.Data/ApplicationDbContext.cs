@@ -261,11 +261,9 @@
                     .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasMany(p => p.Images)
-                    .WithOne()
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(p => p.Image);
+                    .WithOne(i => i.Product)
+                    .HasForeignKey(i => i.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
             });
         }

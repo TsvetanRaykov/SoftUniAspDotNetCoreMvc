@@ -151,8 +151,8 @@ input::placeholder {
 
 .vxp-table th,
 .vxp-table td {
-    padding: 0.5rem;
-    vertical-align: bottom;
+    padding: 0.5rem !important;
+    vertical-align: bottom !important;
 }
 
 .vxp-table .btn {
@@ -363,4 +363,37 @@ button.product-category-btn {
     min-width: 70px;
 }
 
+.vxp-file-upload::-webkit-file-upload-button {
+    background: #6e5773;
+    color: white;
+    font-size: medium;
+    border-radius: 0.25rem !important;
+    cursor: pointer;
+    font-size: small;
+    height: 33px;
+}
 
+.vxp-product-table td {
+    padding: 0 0.5rem;
+}
+
+.vxp-input-invalid {
+    border: 1px solid red !important;
+}
+
+#frmCommonProductProperties button[type="submit"] {
+    position: absolute;
+    bottom: 10px;
+    left: 8px;
+    right: 0;
+}
+
+#frmCommonProductProperties button {
+    font-size: small;
+    min-width: 85px;
+}
+
+#frmCommonProductProperties #IsAvailable {
+    height: 33px;
+    width: 33px;
+}

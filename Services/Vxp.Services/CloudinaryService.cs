@@ -1,4 +1,6 @@
-﻿namespace Vxp.Services
+﻿using System;
+
+namespace Vxp.Services
 {
     using System.IO;
     using System.Threading.Tasks;
@@ -6,7 +8,7 @@
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
 
-    public class CloudinaryService : ICoudinaryService
+    public class CloudinaryService : ICloudinaryService
     {
         private readonly Cloudinary _cloudinaryUtility;
 
@@ -17,6 +19,7 @@
 
         public async Task<string> UploadImage(IFormFile file, string fileName)
         {
+            return "FakePublicUrl" + new Random(1).Next(100);
             byte[] destinationData;
             using (var ms = new MemoryStream())
             {
@@ -31,6 +34,8 @@
                 var imageUploadParams = new ImageUploadParams
                 {
                     Folder = "product_images",
+                    PublicId = fileName,
+                    Overwrite = true,
                     File = new FileDescription(fileName, ms)
                 };
 
