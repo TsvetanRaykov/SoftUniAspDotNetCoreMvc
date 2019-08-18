@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 
 namespace Vxp.Services
 {
@@ -19,7 +20,7 @@ namespace Vxp.Services
 
         public async Task<string> UploadImage(IFormFile file, string fileName)
         {
-            return "FakePublicUrl" + new Random(1).Next(100);
+            return "https://res.cloudinary.com/vxp-cloud/image/upload/v1566110504/product_images/Mystical.jpg" + new Random().Next(100);
             byte[] destinationData;
             using (var ms = new MemoryStream())
             {

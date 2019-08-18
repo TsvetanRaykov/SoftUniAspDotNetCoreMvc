@@ -19,7 +19,7 @@ namespace Vxp.Web.ViewModels.Products
 
         [Required(AllowEmptyStrings = false)]
         [StringLength(30)]
-        [Remote(action: "ValidateCommonProductDetail", controller: "Products", AdditionalFields = nameof(Measure), HttpMethod = "Post")]
+        [Remote(action: "ValidateCommonProductDetail", controller: "Products", AdditionalFields = nameof(Measure) + ",__RequestVerificationToken", HttpMethod = "Post")]
         public string Name { get; set; }
 
         [Required(AllowEmptyStrings = false)]

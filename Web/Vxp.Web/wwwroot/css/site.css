@@ -381,14 +381,19 @@ button.product-category-btn {
     border: 1px solid red !important;
 }
 
-#frmCommonProductProperties button[type="submit"] {
+.vxp-btn-absolute {
     position: absolute;
     bottom: 10px;
     left: 8px;
     right: 0;
 }
 
-#frmCommonProductProperties button {
+#btnVendorProductDelete {
+    left: 108px;
+}
+
+#frmCommonProductProperties button,
+.btn-md {
     font-size: small;
     min-width: 85px;
 }
@@ -396,4 +401,32 @@ button.product-category-btn {
 #frmCommonProductProperties #IsAvailable {
     height: 33px;
     width: 33px;
+}
+
+/*Zoom picture*/
+.zoom {
+    /*margin: 2%;*/
+    overflow: hidden;
+}
+
+    .zoom img {
+        max-width: 100%;
+        height: auto;
+        -moz-transition: all 0.3s;
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s;
+    }
+
+    .zoom:hover img {
+        -moz-transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+        transform: scale(1.5);
+    }
+
+.vxp-card-close {
+    position: absolute;
+    z-index: 1000;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 2px;
 }

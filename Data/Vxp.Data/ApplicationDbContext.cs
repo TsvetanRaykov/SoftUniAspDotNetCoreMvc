@@ -259,12 +259,6 @@
                     .WithMany(c => c.Products)
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasMany(p => p.Images)
-                    .WithOne(i => i.Product)
-                    .HasForeignKey(i => i.ProductId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
             });
         }
 

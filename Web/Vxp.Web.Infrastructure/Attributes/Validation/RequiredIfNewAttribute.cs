@@ -4,11 +4,11 @@ using Vxp.Common;
 
 namespace Vxp.Web.Infrastructure.Attributes.Validation
 {
-    public class RequiredWhenNewUserAttribute : ValidationAttribute
+    public class RequiredIfNewAttribute : ValidationAttribute
     {
         private readonly string _booleanProperty;
 
-        public RequiredWhenNewUserAttribute(string booleanProperty)
+        public RequiredIfNewAttribute(string booleanProperty)
         {
             this._booleanProperty = booleanProperty;
         }

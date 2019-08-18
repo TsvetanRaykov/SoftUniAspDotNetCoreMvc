@@ -1,6 +1,4 @@
-﻿using Vxp.Web.ViewModels.ModelBinders;
-
-namespace Vxp.Web.ViewModels.Products
+﻿namespace Vxp.Web.ViewModels.Products
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -9,6 +7,7 @@ namespace Vxp.Web.ViewModels.Products
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using ModelBinders;
 
     public class ProductInputModel : IMapTo<Product>, IMapFrom<Product>
     {
@@ -18,29 +17,34 @@ namespace Vxp.Web.ViewModels.Products
             this.AvailableDetails = new List<SelectListItem>();
             this.IsAvailable = true;
             this.Images = new List<ProductImageInputModel>();
+            this.Details = new List<ProductDetailInputModel>();
         }
+
+        public int? Id { get; set; }
 
         [Display(Name = "Product name")]
         [Required(AllowEmptyStrings = false)]
-        [Remote(action: "ValidateProductName", controller: "Products", AdditionalFields = "Category.Name", HttpMethod = "Post")]
+        [Remote(action: "ValidateProductName", controller: "Products", AdditionalFields = "CategoryId,Id,__RequestVerificationToken", HttpMethod = "Post")]
         public string Name { get; set; }
 
         public string Description { get; set; }
 
+        public int CategoryId { get; set; }
         public ProductCategoryInputModel Category { get; set; }
 
         [Display(Name = "Primary image")]
-        [Required]
         public IFormFile UploadImage { get; set; }
 
         [Display(Name = "Gallery images")]
         public List<IFormFile> UploadImages { get; set; }
 
+        [ModelBinder(typeof(FromJsonModelBinder<ProductImageInputModel>))]
         public ProductImageInputModel Image { get; set; }
 
+        [ModelBinder(typeof(FromJsonModelBinder<List<ProductImageInputModel>>))]
         public List<ProductImageInputModel> Images { get; set; }
 
-        [ModelBinder(typeof(ProductDetailsFromJsonModelBinder))]
+        [ModelBinder(typeof(FromJsonModelBinder<List<ProductDetailInputModel>>))]
         public List<ProductDetailInputModel> Details { get; set; }
 
         [Display(Name = "Available")] public bool IsAvailable { get; set; }

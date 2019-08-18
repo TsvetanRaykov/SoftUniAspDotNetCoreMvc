@@ -23,6 +23,8 @@
     <Compile Remove="Migrations\20190802122636_ChangeDistributorUserBankAccountFK.Designer.cs" />
     <Compile Remove="Migrations\20190817162830_ImageProductFkCascade.cs" />
     <Compile Remove="Migrations\20190817162830_ImageProductFkCascade.Designer.cs" />
+    <Compile Remove="Migrations\20190818150126_ProductImageRemoveProductId.cs" />
+    <Compile Remove="Migrations\20190818150126_ProductImageRemoveProductId.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

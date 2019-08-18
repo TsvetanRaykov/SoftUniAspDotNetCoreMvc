@@ -1,1 +1,31 @@
-﻿<h4>Products</h4>
+﻿@using System.Net
+@using System.Web
+@model IEnumerable<Vxp.Web.ViewModels.Products.ProductListVewModel>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h4>@ViewData["Title"]</h4>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-3">
+            <div class="card h-100">
+                <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id">
+                    <div class="card-img-top zoom">
+                        <img src="@HttpUtility.UrlDecode(product.Image.Url)" alt="@product.Image.Alt" title="@product.Image.Title">
+                    </div>
+                </a>
+                <div class="card-body text-center h-25 pb-0 pt-0 pl-0 pr-0">
+                    <div class="pb-1 mt-1">
+                        <span class="mx-auto pb-1 text-dark font-weight-bold">@product.Name</span>
+                    </div>
+                    <div>
+                        @product.Description
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

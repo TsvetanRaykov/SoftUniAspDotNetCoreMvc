@@ -57,7 +57,7 @@
             ErrorMessage = "{0} must be at least {2} symbols", MinimumLength = 3)]
         public string LastName { get; set; }
 
-        [RequiredWhenNewUser(nameof(IsNewUser),
+        [RequiredIfNew(nameof(IsNewUser),
             ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         [Display(Name = "Password")]
         [StringLength(100,

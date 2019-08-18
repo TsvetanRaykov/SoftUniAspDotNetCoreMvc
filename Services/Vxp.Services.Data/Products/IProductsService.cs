@@ -5,10 +5,10 @@ namespace Vxp.Services.Data.Products
 {
     public interface IProductsService
     {
-        bool IsProductExist(string productName, string categoryName);
+        Task<bool> IsProductExist<TViewModel>(TViewModel product);
         Task<TViewModel> CreateProductAsync<TViewModel>(TViewModel product);
         IQueryable<TViewModel> GetAllProducts<TViewModel>();
         Task<bool> DeleteProductAsync(int productId);
-        Task<bool> UpdateProductAsync<TViewModel>(TViewModel product);
+        Task<TViewModel> UpdateProductAsync<TViewModel>(TViewModel product);
     }
 }

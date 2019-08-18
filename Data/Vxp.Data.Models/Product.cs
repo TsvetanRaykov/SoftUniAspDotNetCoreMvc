@@ -11,7 +11,7 @@ namespace Vxp.Data.Models
         public Product()
         {
             this.Details = new HashSet<ProductDetail>();
-            this.Images = new HashSet<ProductImage>();
+            this.Images = new List<ProductImage>();
             this.Orders = new HashSet<OrderProduct>();
             this.IsAvailable = true;
         }
@@ -19,6 +19,8 @@ namespace Vxp.Data.Models
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public int CategoryId { get; set; }
 
         public virtual ProductCategory Category { get; set; }
 
@@ -28,7 +30,7 @@ namespace Vxp.Data.Models
 
         public virtual ICollection<ProductDetail> Details { get; set; }
 
-        public virtual ICollection<ProductImage> Images { get; set; }
+        public virtual List<ProductImage> Images { get; set; }
 
         public virtual ICollection<OrderProduct> Orders { get; set; }
 

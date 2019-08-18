@@ -1,15 +1,19 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Vxp.Services;
-using Vxp.Services.Data.Products;
-using Vxp.Web.ViewModels.Products;
+﻿using System;
+using Microsoft.AspNetCore.Http;
 
 namespace Vxp.Web.Areas.Vendor.Controllers
 {
+    using System.Web;
+    using Common;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
+    using Services;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using ViewModels.Products;
+    using Vxp.Services.Data.Products;
+
     public class ProductsController : VendorsController
     {
         private readonly IProductsService _productsService;
@@ -29,20 +33,15 @@ namespace Vxp.Web.Areas.Vendor.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var products = this._productsService.GetAllProducts<ProductListVewModel>();
+            return View(products);
         }
 
         public async Task<IActionResult> Create()
         {
-            var viewModel = new ProductInputModel
-            {
-                AvailableCategories = await this._productCategoriesService.GetAllCategories<SelectListItem>().ToListAsync(),
-                AvailableDetails = await this._productDetailsService.GetAllCommonProductDetails<SelectListItem>().ToListAsync()
-            };
-
+            var viewModel = new ProductInputModel();
+            await PopulateCommonProductViewModelProperties(viewModel);
             viewModel.AvailableCategories.Add(new SelectListItem("- Select Category -", null, true, true));
-            viewModel.AvailableDetails.Add(new SelectListItem("- Select Property -", null, true, true));
-
             return this.View(viewModel);
         }
 
@@ -50,37 +49,45 @@ namespace Vxp.Web.Areas.Vendor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductInputModel inputModel)
         {
-
-            if (this.ModelState.IsValid)
+            if (inputModel.UploadImage == null)
             {
-                string imageUrl = await this._cloudinaryService.UploadImage(inputModel.UploadImage, inputModel.Name);
-                inputModel.Image = new ProductImageInputModel
-                {
-                    Alt = inputModel.Name,
-                    Title = inputModel.Name,
-                    Url = HttpUtility.UrlEncode(imageUrl)
-                };
-
-                if (inputModel.UploadImages != null)
-                {
-                    for (var index = 0; index < inputModel.UploadImages.Count; index++)
-                    {
-                        var formFile = inputModel.UploadImages[index];
-                        var imageName = $"{inputModel.Name}_view_{index:D2}";
-                        imageUrl = await this._cloudinaryService.UploadImage(formFile, imageName);
-                        inputModel.Images.Add(new ProductImageInputModel
-                        {
-                            Alt = imageName,
-                            Title = imageName,
-                            Url = HttpUtility.UrlEncode(imageUrl)
-                        });
-                    }
-                }
-
-                await this._productsService.CreateProductAsync(inputModel);
+                this.ModelState.AddModelError("UploadImage", string.Format(GlobalConstants.ErrorMessages.RequiredField, "Primary image"));
             }
 
-            return this.View(inputModel);
+            await PopulateCommonProductViewModelProperties(inputModel);
+
+            if (!this.ModelState.IsValid) return this.View(inputModel);
+
+            await PopulateProductViewImages(inputModel);
+
+            var newProduct = await this._productsService.CreateProductAsync(inputModel);
+
+            return this.RedirectToAction("Edit", new { id = newProduct.Id });
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var viewModel = this._productsService.GetAllProducts<ProductInputModel>().FirstOrDefault(p => p.Id == id);
+            if (viewModel == null) { return this.NotFound(); }
+            await PopulateCommonProductViewModelProperties(viewModel);
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ProductInputModel inputModel)
+        {
+            await PopulateCommonProductViewModelProperties(inputModel);
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(inputModel);
+            }
+
+            await PopulateProductViewImages(inputModel);
+            await this._productsService.UpdateProductAsync(inputModel);
+
+            return this.RedirectToAction(nameof(Edit), new { id = inputModel.Id });
         }
 
         public IActionResult Categories()
@@ -175,6 +182,7 @@ namespace Vxp.Web.Areas.Vendor.Controllers
         #region Remote validation
 
         [AcceptVerbs("Post")]
+        [ValidateAntiForgeryToken]
         public IActionResult ValidateCommonProductDetail([FromForm] string name, [FromForm] string measure)
         {
             if (this._productDetailsService.IsCommonProductDetailExist(name, measure))
@@ -195,9 +203,10 @@ namespace Vxp.Web.Areas.Vendor.Controllers
         }
 
         [AcceptVerbs("Post")]
-        public IActionResult ValidateProductName([FromForm] string name, [FromForm(Name = "Category.Name")] string categoryName)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ValidateProductName(ProductInputModel viewModel)
         {
-            if (this._productsService.IsProductExist(name, categoryName))
+            if (await this._productsService.IsProductExist(viewModel))
             {
                 return this.Json("The product already exist in that category.");
             }
@@ -205,5 +214,45 @@ namespace Vxp.Web.Areas.Vendor.Controllers
         }
 
         #endregion
+
+        private async Task PopulateCommonProductViewModelProperties(ProductInputModel viewModel)
+        {
+            viewModel.AvailableCategories = await this._productCategoriesService.GetAllCategories<SelectListItem>().ToListAsync();
+            viewModel.AvailableCategories.ForEach(c => c.Selected = c.Value == viewModel.Category?.Id.ToString());
+            viewModel.AvailableDetails = await this._productDetailsService.GetAllCommonProductDetails<SelectListItem>().ToListAsync();
+            viewModel.AvailableDetails.Add(new SelectListItem("- Select Property -", null, true, true));
+
+            var primaryImage = viewModel.Images.FirstOrDefault(i => i.Id == viewModel.Image.Id);
+            if (primaryImage != null) { viewModel.Images.Remove(primaryImage); }
+        }
+
+        private async Task PopulateProductViewImages(ProductInputModel viewModel)
+        {
+            if (viewModel.UploadImage != null)
+            {
+                var imageUrl = await this._cloudinaryService.UploadImage(viewModel.UploadImage, viewModel.Name);
+                viewModel.Image = new ProductImageInputModel
+                {
+                    Alt = viewModel.Name,
+                    Title = viewModel.Name,
+                    Url = HttpUtility.UrlEncode(imageUrl)
+                };
+            }
+
+            if (viewModel.UploadImages != null)
+            {
+                foreach (var formFile in viewModel.UploadImages)
+                {
+                    var imageName = $"{viewModel.Name}_view_{new Random().Next(100):D3}";
+                    var imageUrl = await this._cloudinaryService.UploadImage(formFile, imageName);
+                    viewModel.Images.Add(new ProductImageInputModel
+                    {
+                        Alt = imageName,
+                        Title = viewModel.Name,
+                        Url = HttpUtility.UrlEncode(imageUrl)
+                    });
+                }
+            }
+        }
     }
 }

@@ -1,11 +1,12 @@
-﻿@model Vxp.Web.ViewModels.Products.ProductInputModel
+﻿@using System.Web
+@model Vxp.Web.ViewModels.Products.ProductInputModel
 @{
-    ViewData["Title"] = "Create Product";
+    ViewData["Title"] = "Edit Product";
 }
-
 <h4>@ViewData["Title"]</h4>
 <div class="border rounded h-100 py-1 px-2" id="CommonProductDetailsWrapper">
-    <form enctype="multipart/form-data" class="w-100 h-100" id="frmCommonProductProperties" method="post" asp-area="Vendor" asp-controller="Products" asp-action="Create">
+    <form enctype="multipart/form-data" class="w-100 h-100" id="frmCommonProductProperties" method="post" asp-area="Vendor" asp-controller="Products" asp-action="Edit">
+        @Html.HiddenFor(m => m.Id)
         <table class="vxp-product-table table table-borderless w-75 h-100">
             <tr>
                 <td class="w-50">
@@ -28,14 +29,41 @@
             </tr>
             <tr>
                 <td>
+
                     <label class="vxp-form-control-label" asp-for="@Model.UploadImage"></label><br />
+                    <div class="mb-2">
+                        <div class="card h-100">
+                            <a href="@HttpUtility.UrlDecode(Model.Image.Url)" class="image-popup">
+                                <div class="card-img-top zoom">
+                                    <img src="@HttpUtility.UrlDecode(Model.Image.Url)" alt="@Model.Image.Alt" title="@Model.Image.Title">
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                     <input asp-for="@Model.UploadImage" class="vxp-file-upload w-100">
                     <span asp-validation-for="@Model.UploadImage" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                    <input type="hidden" name="image" id="product-image" value="@($@"{Json.Serialize(@Model.Image)}")" />
                 </td>
                 <td>
                     <label class="vxp-form-control-label" asp-for="@Model.UploadImages"></label><br />
-                    <input asp-for="@Model.UploadImages" class="vxp-file-upload w-100">
+                    <div class="row align-items-start">
+                        @foreach (var image in Model.Images)
+                        {
+                            <div class="col-6 mb-2 mx-0 pl-0">
+                                <div class="card">
+                                    <span class="vxp-card-close icon icon-window-close" title="Remove" data-id="@image.Id" onclick="RemoveGalleryImage(event)"></span>
+                                    <a href="@HttpUtility.UrlDecode(image.Url)" class="image-popup">
+                                        <div class="card-img-top zoom">
+                                            <img src="@HttpUtility.UrlDecode(image.Url)" alt="@image.Alt" title="@image.Title" />
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <input asp-for="@Model.UploadImages" class="vxp-file-upload w-100 mt-1">
                     <span asp-validation-for="@Model.UploadImages" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                    <input type="hidden" name="images" id="product-images" value="@($@"{Json.Serialize(@Model.Images)}")" />
                 </td>
             </tr>
             <tr>
@@ -50,6 +78,18 @@
                                 <button type="button" class="btn btn-danger rounded float-right" onclick="removeProductDetailsFromForm(this)">Remove</button>
                             </td>
                         </tr>
+                        @foreach (var prop in Model.Details)
+                        {
+                            <tr>
+                                <td class="w-50">
+                                    <div class="w-100 border rounded px-2 bg-light">@prop.CommonDetail.Name:@prop.CommonDetail.Measure</div>
+                                </td>
+                                <td class="p-0 d-flex">
+                                    <div class="border rounded w-100 px-2 mr-3 bg-light">@prop.Value</div>
+                                    <button type="button" class="btn btn-danger rounded float-right" data-id="@prop.CommonDetailId" data-value="@prop.Value" onclick="removeProductDetailsFromForm(this)">Remove</button>
+                                </td>
+                            </tr>
+                        }
                     </table>
                     <input type="hidden" name="details" id="product-details" value="@($@"{Json.Serialize(@Model.Details)}")" />
                 </td>
@@ -80,7 +120,8 @@
             </tr>
             <tr>
                 <td class="position-relative">
-                    <button class="btn btn-primary rounded vxp-btn-absolute" type="submit">Create</button>
+                    <button class="btn btn-primary rounded vxp-btn-absolute" type="submit">Update</button>
+                    <button class="btn btn-danger rounded vxp-btn-absolute" id="btnVendorProductDelete" type="button">Delete</button>
                 </td>
                 <td>
                     <label class="vxp-form-control-label" asp-for="@Model.IsAvailable"></label><br />
