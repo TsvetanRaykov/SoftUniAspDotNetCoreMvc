@@ -186,8 +186,7 @@
                 entity.HasOne(o => o.Product)
                     .WithMany(o => o.Orders)
                     .HasForeignKey(o => o.ProductId)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
 

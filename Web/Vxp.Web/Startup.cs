@@ -142,7 +142,7 @@ namespace Vxp.Web
             services.AddTransient<IProductCategoriesService, ProductCategoriesService>();
             services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IProductDetailsService, ProductDetailsService>();
-            services.AddTransient<ICloudinaryService, CloudinaryService>();
+            services.AddTransient<IImageUploadService, CloudinaryImageUploadService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

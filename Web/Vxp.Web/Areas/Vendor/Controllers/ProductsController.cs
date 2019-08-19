@@ -1,9 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Http;
-
-namespace Vxp.Web.Areas.Vendor.Controllers
+﻿namespace Vxp.Web.Areas.Vendor.Controllers
 {
-    using System.Web;
     using Common;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,24 +7,25 @@ namespace Vxp.Web.Areas.Vendor.Controllers
     using Services;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Web;
     using ViewModels.Products;
     using Vxp.Services.Data.Products;
-
+    using System;
     public class ProductsController : VendorsController
     {
         private readonly IProductsService _productsService;
         private readonly IProductCategoriesService _productCategoriesService;
         private readonly IProductDetailsService _productDetailsService;
-        private readonly ICloudinaryService _cloudinaryService;
+        private readonly IImageUploadService _imageUploadService;
 
         public ProductsController(IProductsService productsService,
             IProductCategoriesService productCategoriesService,
-            IProductDetailsService productDetailsService, ICloudinaryService cloudinaryService)
+            IProductDetailsService productDetailsService, IImageUploadService imageUploadService)
         {
             this._productsService = productsService;
             this._productCategoriesService = productCategoriesService;
             this._productDetailsService = productDetailsService;
-            this._cloudinaryService = cloudinaryService;
+            this._imageUploadService = imageUploadService;
         }
 
         public IActionResult Index()
@@ -41,7 +38,7 @@ namespace Vxp.Web.Areas.Vendor.Controllers
         {
             var viewModel = new ProductInputModel();
             await PopulateCommonProductViewModelProperties(viewModel);
-            viewModel.AvailableCategories.Add(new SelectListItem("- Select Category -", null, true, true));
+            viewModel.AvailableCategories.Add(new SelectListItem("- Select Category -", "0", true, true));
             return this.View(viewModel);
         }
 
@@ -88,6 +85,40 @@ namespace Vxp.Web.Areas.Vendor.Controllers
             await this._productsService.UpdateProductAsync(inputModel);
 
             return this.RedirectToAction(nameof(Edit), new { id = inputModel.Id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete([FromForm]int id)
+        {
+            if (await this._productsService.DeleteProductAsync(id))
+            {
+                return this.Ok();
+            }
+
+            return this.BadRequest();
+        }
+
+        public async Task<IActionResult> Deleted()
+        {
+            var viewModel = await this._productsService.GetDeletedProducts<ProductInputModel>();
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteHard(int id)
+        {
+            await this._productsService.DeletePermanentlyAsync(id);
+            return this.RedirectToAction(nameof(this.Deleted));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RestoreProduct(int id)
+        {
+            await this._productsService.RestoreAsync(id);
+            return this.RedirectToAction(nameof(this.Deleted));
         }
 
         public IActionResult Categories()
@@ -145,7 +176,6 @@ namespace Vxp.Web.Areas.Vendor.Controllers
 
             return this.RedirectToAction(nameof(this.Details));
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -230,7 +260,7 @@ namespace Vxp.Web.Areas.Vendor.Controllers
         {
             if (viewModel.UploadImage != null)
             {
-                var imageUrl = await this._cloudinaryService.UploadImage(viewModel.UploadImage, viewModel.Name);
+                var imageUrl = await this._imageUploadService.UploadImage(viewModel.UploadImage, viewModel.Name);
                 viewModel.Image = new ProductImageInputModel
                 {
                     Alt = viewModel.Name,
@@ -244,7 +274,7 @@ namespace Vxp.Web.Areas.Vendor.Controllers
                 foreach (var formFile in viewModel.UploadImages)
                 {
                     var imageName = $"{viewModel.Name}_view_{new Random().Next(100):D3}";
-                    var imageUrl = await this._cloudinaryService.UploadImage(formFile, imageName);
+                    var imageUrl = await this._imageUploadService.UploadImage(formFile, imageName);
                     viewModel.Images.Add(new ProductImageInputModel
                     {
                         Alt = imageName,

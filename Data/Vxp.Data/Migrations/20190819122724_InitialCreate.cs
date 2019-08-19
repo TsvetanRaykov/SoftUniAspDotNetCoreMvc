@@ -48,6 +48,24 @@ namespace Vxp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CommonProductDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    Measure = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommonProductDetails", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductCategories",
                 columns: table => new
                 {
@@ -57,7 +75,7 @@ namespace Vxp.Data.Migrations
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -556,6 +574,29 @@ namespace Vxp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    Value = table.Column<string>(nullable: true),
+                    ProductId = table.Column<int>(nullable: false),
+                    CommonDetailId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductDetails_CommonProductDetails_CommonDetailId",
+                        column: x => x.CommonDetailId,
+                        principalTable: "CommonProductDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderProducts",
                 columns: table => new
                 {
@@ -567,7 +608,8 @@ namespace Vxp.Data.Migrations
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Quantity = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: false),
-                    ProductId = table.Column<int>(nullable: false)
+                    ProductId = table.Column<int>(nullable: true),
+                    ProductData = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -608,32 +650,6 @@ namespace Vxp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductDetails",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    Type = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true),
-                    ProductId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductDetails_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProductImages",
                 columns: table => new
                 {
@@ -641,12 +657,10 @@ namespace Vxp.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
                     Url = table.Column<string>(nullable: true),
                     Alt = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
-                    ProductId = table.Column<int>(nullable: false)
+                    ProductId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -732,6 +746,11 @@ namespace Vxp.Data.Migrations
                 name: "IX_BankAccounts_OwnerId",
                 table: "BankAccounts",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CommonProductDetails_IsDeleted",
+                table: "CommonProductDetails",
+                column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Companies_ContactAddressId",
@@ -865,19 +884,14 @@ namespace Vxp.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductDetails_IsDeleted",
+                name: "IX_ProductDetails_CommonDetailId",
                 table: "ProductDetails",
-                column: "IsDeleted");
+                column: "CommonDetailId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductDetails_ProductId",
                 table: "ProductDetails",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductImages_IsDeleted",
-                table: "ProductImages",
-                column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductImages_ProductId",
@@ -897,8 +911,7 @@ namespace Vxp.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Products_ProductImageId",
                 table: "Products",
-                column: "ProductImageId",
-                unique: true);
+                column: "ProductImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_IsDeleted",
@@ -914,6 +927,14 @@ namespace Vxp.Data.Migrations
                 name: "IX_Settings_IsDeleted",
                 table: "Settings",
                 column: "IsDeleted");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ProductDetails_Products_ProductId",
+                table: "ProductDetails",
+                column: "ProductId",
+                principalTable: "Products",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_OrderProducts_Products_ProductId",
@@ -988,6 +1009,9 @@ namespace Vxp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "CommonProductDetails");
 
             migrationBuilder.DropTable(
                 name: "BankAccounts");

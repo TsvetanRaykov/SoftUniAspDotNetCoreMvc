@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Vxp.Services.Data.Products
@@ -10,5 +11,8 @@ namespace Vxp.Services.Data.Products
         IQueryable<TViewModel> GetAllProducts<TViewModel>();
         Task<bool> DeleteProductAsync(int productId);
         Task<TViewModel> UpdateProductAsync<TViewModel>(TViewModel product);
+        Task<List<TViewModel>> GetDeletedProducts<TViewModel>();
+        Task<bool> DeletePermanentlyAsync(int id);
+        Task<bool> RestoreAsync(int id);
     }
 }

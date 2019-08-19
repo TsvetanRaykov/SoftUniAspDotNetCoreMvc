@@ -5,6 +5,7 @@ let rowTemplate = $("#table-add-product-details-row-template");
 
 
 selectPropertyItem.change(() => {
+    selectValueItem.val("");
     addProductDetailValidate();
 });
 
@@ -115,6 +116,54 @@ function RemoveGalleryImage(e) {
                     }
                 }
                 $("#product-images").val(JSON.stringify(productImages));
+            }
+        }
+    });
+}
+
+function DeleteProduct(e) {
+    let productId = $(e).data("id");
+    let productName = $(e).data("name");
+    let token = $('input[name="__RequestVerificationToken"]').val();
+
+    window.bootbox.confirm({
+        title: "Delete action confirmation!",
+        message: `Are you sure to delete ${productName} from products?`,
+        className: "vxp-delete-confirmation-dialog",
+        buttons: {
+            confirm: {
+                label: "Yes",
+                className: "btn-success"
+            },
+            cancel: {
+                label: "No",
+                className: "btn-danger"
+            }
+        },
+        swapButtonOrder: true,
+        centerVertical: false,
+        callback: function (result) {
+            if (result) {
+
+                $.ajax({
+                    url: "/Vendor/Products/Delete",
+                    type: "POST",
+                    headers: {
+                        'RequestVerificationToken': token
+                    },
+                    data: {
+                        "id": productId
+                    },
+                    success: () => {
+                        window.location = "/Vendor/Products";
+                    },
+                    error: (data) => {
+                        console.error(data);
+                    },
+                    complete: () => {
+                        // ignore
+                    }
+                });
             }
         }
     });

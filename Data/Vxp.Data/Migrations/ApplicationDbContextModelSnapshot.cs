@@ -569,7 +569,9 @@ namespace Vxp.Data.Migrations
 
                     b.Property<int>("OrderId");
 
-                    b.Property<int>("ProductId");
+                    b.Property<string>("ProductData");
+
+                    b.Property<int?>("ProductId");
 
                     b.Property<int>("Quantity");
 
@@ -994,10 +996,9 @@ namespace Vxp.Data.Migrations
 
             modelBuilder.Entity("Vxp.Data.Models.ProductImage", b =>
                 {
-                    b.HasOne("Vxp.Data.Models.Product", "Product")
+                    b.HasOne("Vxp.Data.Models.Product")
                         .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Vxp.Data.Models.Project", b =>

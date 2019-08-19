@@ -10,9 +10,9 @@ namespace Vxp.Data.Models
     {
         public Product()
         {
-            this.Details = new HashSet<ProductDetail>();
+            this.Details = new List<ProductDetail>();
             this.Images = new List<ProductImage>();
-            this.Orders = new HashSet<OrderProduct>();
+            this.Orders = new List<OrderProduct>();
             this.IsAvailable = true;
         }
 
@@ -28,11 +28,11 @@ namespace Vxp.Data.Models
 
         public virtual ProductImage Image { get; set; }
 
-        public virtual ICollection<ProductDetail> Details { get; set; }
+        public virtual List<ProductDetail> Details { get; set; }
 
         public virtual List<ProductImage> Images { get; set; }
 
-        public virtual ICollection<OrderProduct> Orders { get; set; }
+        public virtual List<OrderProduct> Orders { get; set; }
 
         public bool IsAvailable { get; set; }
     }

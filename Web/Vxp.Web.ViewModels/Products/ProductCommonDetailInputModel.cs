@@ -22,7 +22,6 @@ namespace Vxp.Web.ViewModels.Products
         [Remote(action: "ValidateCommonProductDetail", controller: "Products", AdditionalFields = nameof(Measure) + ",__RequestVerificationToken", HttpMethod = "Post")]
         public string Name { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
         [StringLength(15)]
         public string Measure { get; set; }
 
@@ -37,8 +36,11 @@ namespace Vxp.Web.ViewModels.Products
                 .MapFrom(src => src.ProductDetails.Count));
 
             configuration.CreateMap<CommonProductDetail, SelectListItem>()
-                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => $"{src.Name}:{src.Measure}"))
-                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id));
+                .ForMember(dest => dest.Text, opt => opt
+                    .MapFrom(src => src.Name + (!string.IsNullOrEmpty(src.Measure) ? $":{src.Measure}" : null)))
+
+                .ForMember(dest => dest.Value, opt => opt
+                    .MapFrom(src => src.Id));
         }
     }
 }

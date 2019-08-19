@@ -1,0 +1,61 @@
+﻿@using System.Web
+@model IEnumerable<Vxp.Web.ViewModels.Products.ProductInputModel>
+@{
+    ViewData["Title"] = "Deleted products";
+}
+
+<h4>@ViewData["Title"]</h4>
+<table id="table-deleted-products" class="vxp-table table rounded display hover cell-border" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Picture</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td class="bg-white">
+                    <a href="@HttpUtility.UrlDecode(product.Image.Url)" class="image-popup">
+                        <div class="card-img-top">
+                            <img height="50" src="@HttpUtility.UrlDecode(product.Image.Url)" alt="@product.Image.Alt" title="@product.Image.Title" />
+                        </div>
+                    </a>
+                </td>
+                <td class="bg-white">@product.Name</td>
+                <td>@product.Description</td>
+                <td>@product.Category.Name</td>
+                <td class="d-flex justify-content-end">
+                    <form method="post" asp-area="Vendor" asp-controller="Products" asp-action="RestoreProduct">
+                        <input type="hidden" name="id" asp-for="@product.Id" />
+                        <button class="btn btn-link btn-outline-success w-100" type="submit">Restore in products</button>
+                    </form>
+                    <div class="p-1"></div>
+                    <form method="post" asp-area="Vendor" asp-controller="Products" asp-action="DeleteHard">
+                        <input type="hidden" name="id" asp-for="@product.Id" />
+                        <button class="btn btn-link btn-outline-danger w-100" type="submit" data-name="@product.Name" onclick="confirmProductDeletion(event)">Delete permanently</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+
+
+@section Scripts
+{
+    <script src="/js/vendor-products-deleted.js"></script>
+}

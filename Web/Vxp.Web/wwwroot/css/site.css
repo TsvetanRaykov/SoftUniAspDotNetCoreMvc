@@ -307,6 +307,11 @@ input::placeholder {
         transition: all 0.3s ease-in-out 0s;
     }
 
+.nav-link.vxp-underline-primary.active {
+    background: #fae5ff;
+    opacity: 1;
+}
+
 .vxp-underline-primary:hover span:before {
     visibility: visible;
     -webkit-transform: scaleX(1);
@@ -429,4 +434,12 @@ button.product-category-btn {
     color: #dc3545;
     cursor: pointer;
     padding: 2px;
+}
+
+#table-deleted-products th:last-child {
+    width: 230px !important;
+}
+
+.vxp-table td {
+    vertical-align: middle !important;
 }

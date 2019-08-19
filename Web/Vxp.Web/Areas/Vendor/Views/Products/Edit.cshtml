@@ -1,7 +1,7 @@
 ﻿@using System.Web
 @model Vxp.Web.ViewModels.Products.ProductInputModel
 @{
-    ViewData["Title"] = "Edit Product";
+    ViewData["Title"] = @Model.Name;
 }
 <h4>@ViewData["Title"]</h4>
 <div class="border rounded h-100 py-1 px-2" id="CommonProductDetailsWrapper">
@@ -75,7 +75,7 @@
                             </td>
                             <td class="p-0 d-flex">
                                 <div class="border rounded w-100 px-2 mr-3 bg-light"></div>
-                                <button type="button" class="btn btn-danger rounded float-right" onclick="removeProductDetailsFromForm(this)">Remove</button>
+                                <button type="button" class="btn btn-outline-danger rounded float-right" onclick="removeProductDetailsFromForm(this)">Remove</button>
                             </td>
                         </tr>
                         @foreach (var prop in Model.Details)
@@ -86,7 +86,7 @@
                                 </td>
                                 <td class="p-0 d-flex">
                                     <div class="border rounded w-100 px-2 mr-3 bg-light">@prop.Value</div>
-                                    <button type="button" class="btn btn-danger rounded float-right" data-id="@prop.CommonDetailId" data-value="@prop.Value" onclick="removeProductDetailsFromForm(this)">Remove</button>
+                                    <button type="button" class="btn btn-outline-danger rounded float-right" data-id="@prop.CommonDetailId" data-value="@prop.Value" onclick="removeProductDetailsFromForm(this)">Remove</button>
                                 </td>
                             </tr>
                         }
@@ -121,7 +121,7 @@
             <tr>
                 <td class="position-relative">
                     <button class="btn btn-primary rounded vxp-btn-absolute" type="submit">Update</button>
-                    <button class="btn btn-danger rounded vxp-btn-absolute" id="btnVendorProductDelete" type="button">Delete</button>
+                    <button class="btn btn-danger rounded vxp-btn-absolute" id="btnVendorProductDelete" type="button" data-id="@Model.Id" data-name="@Model.Name" onclick="DeleteProduct(this)">Delete</button>
                 </td>
                 <td>
                     <label class="vxp-form-control-label" asp-for="@Model.IsAvailable"></label><br />

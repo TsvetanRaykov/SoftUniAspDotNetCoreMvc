@@ -10,8 +10,8 @@ using Vxp.Data;
 namespace Vxp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190816094057_AddCommonProductDetail")]
-    partial class AddCommonProductDetail
+    [Migration("20190819122724_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -571,7 +571,9 @@ namespace Vxp.Data.Migrations
 
                     b.Property<int>("OrderId");
 
-                    b.Property<int>("ProductId");
+                    b.Property<string>("ProductData");
+
+                    b.Property<int?>("ProductId");
 
                     b.Property<int>("Quantity");
 
@@ -658,8 +660,7 @@ namespace Vxp.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("ProductImageId")
-                        .IsUnique();
+                    b.HasIndex("ProductImageId");
 
                     b.ToTable("Products");
                 });
@@ -698,10 +699,6 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<bool>("IsDeleted");
-
                     b.Property<DateTime?>("ModifiedOn");
 
                     b.Property<int>("ProductId");
@@ -711,8 +708,6 @@ namespace Vxp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CommonDetailId");
-
-                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProductId");
 
@@ -729,21 +724,15 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn");
 
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<bool>("IsDeleted");
-
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<int>("ProductId");
+                    b.Property<int?>("ProductId");
 
                     b.Property<string>("Title");
 
                     b.Property<string>("Url");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProductId");
 
@@ -989,8 +978,8 @@ namespace Vxp.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Vxp.Data.Models.ProductImage", "Image")
-                        .WithOne("Product")
-                        .HasForeignKey("Vxp.Data.Models.Product", "ProductImageId")
+                        .WithMany()
+                        .HasForeignKey("ProductImageId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
@@ -1011,8 +1000,7 @@ namespace Vxp.Data.Migrations
                 {
                     b.HasOne("Vxp.Data.Models.Product")
                         .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Vxp.Data.Models.Project", b =>

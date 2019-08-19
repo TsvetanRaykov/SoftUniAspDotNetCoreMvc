@@ -9,18 +9,18 @@ namespace Vxp.Services
     using CloudinaryDotNet.Actions;
     using Microsoft.AspNetCore.Http;
 
-    public class CloudinaryService : ICloudinaryService
+    public class CloudinaryImageUploadService : IImageUploadService
     {
         private readonly Cloudinary _cloudinaryUtility;
 
-        public CloudinaryService(Cloudinary cloudinaryUtility)
+        public CloudinaryImageUploadService(Cloudinary cloudinaryUtility)
         {
             this._cloudinaryUtility = cloudinaryUtility;
         }
 
         public async Task<string> UploadImage(IFormFile file, string fileName)
         {
-            return "https://res.cloudinary.com/vxp-cloud/image/upload/v1566110504/product_images/Mystical.jpg" + new Random().Next(100);
+           // return "https://res.cloudinary.com/vxp-cloud/image/upload/v1566110504/product_images/Mystical.jpg" + new Random().Next(100);
             byte[] destinationData;
             using (var ms = new MemoryStream())
             {
