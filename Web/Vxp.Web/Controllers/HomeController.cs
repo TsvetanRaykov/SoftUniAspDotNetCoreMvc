@@ -1,10 +1,9 @@
-﻿using System.Diagnostics;
-using Vxp.Common;
-using Vxp.Web.ViewModels;
-
-namespace Vxp.Web.Controllers
+﻿namespace Vxp.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using System.Diagnostics;
+    using Common;
+    using ViewModels;
 
     public class HomeController : BaseController
     {
@@ -26,7 +25,11 @@ namespace Vxp.Web.Controllers
                 return this.RedirectToAction("Index", "Products", new { area = "Vendor" });
             }
 
-            // TODO: Add redirection for customer, partner and vendor roles
+            if (this.User.IsInRole(GlobalConstants.Roles.DistributorRoleName))
+            {
+                return this.RedirectToAction("Index", "Products", new { area = "Distributor" });
+            }
+
 
             return this.View();
 

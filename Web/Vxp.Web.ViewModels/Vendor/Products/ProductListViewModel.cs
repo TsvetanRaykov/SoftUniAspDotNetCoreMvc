@@ -1,9 +1,9 @@
 ﻿using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 
-namespace Vxp.Web.ViewModels.Products
+namespace Vxp.Web.ViewModels.Vendor.Products
 {
-    public class ProductListVewModel : IMapFrom<Product>
+    public class ProductListViewModel : IMapFrom<Product>
     {
         public ProductImageInputModel Image { get; set; }
         public string Description { get; set; }

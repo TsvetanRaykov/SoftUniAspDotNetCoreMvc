@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Vxp.Web.ViewModels.Distributors
+namespace Vxp.Web.ViewModels.Distributor
 {
     public class DistributorConnectInputModel
     {

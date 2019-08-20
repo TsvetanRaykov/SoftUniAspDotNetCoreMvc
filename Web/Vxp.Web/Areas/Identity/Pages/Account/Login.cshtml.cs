@@ -53,11 +53,6 @@
 
             if (this.User.Identity.IsAuthenticated)
             {
-                if (this.User.IsInRole(GlobalConstants.Roles.AdministratorRoleName))
-                {
-                    return this.RedirectToAction("Index", "Dashboard", new { area = "Administration" });
-                }
-
                 return this.LocalRedirect(returnUrl);
             }
 

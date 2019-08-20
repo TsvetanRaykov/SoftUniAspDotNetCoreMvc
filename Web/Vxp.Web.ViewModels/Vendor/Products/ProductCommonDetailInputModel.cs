@@ -1,13 +1,13 @@
-﻿namespace Vxp.Web.ViewModels.Products
-{
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using AutoMapper;
-    using Microsoft.AspNetCore.Mvc;
-    using Data.Models;
-    using Services.Mapping;
-    using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Vxp.Data.Models;
+using Vxp.Services.Mapping;
 
+namespace Vxp.Web.ViewModels.Vendor.Products
+{
     public class ProductCommonDetailInputModel : IMapTo<CommonProductDetail>, IMapFrom<CommonProductDetail>, IHaveCustomMappings
     {
         public ProductCommonDetailInputModel()

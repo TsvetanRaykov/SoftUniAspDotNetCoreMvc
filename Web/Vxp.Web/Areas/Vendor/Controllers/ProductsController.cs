@@ -8,9 +8,9 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web;
-    using ViewModels.Products;
     using Vxp.Services.Data.Products;
     using System;
+    using Vxp.Web.ViewModels.Vendor.Products;
     public class ProductsController : VendorsController
     {
         private readonly IProductsService _productsService;
@@ -30,7 +30,7 @@
 
         public IActionResult Index()
         {
-            var products = this._productsService.GetAllProducts<ProductListVewModel>();
+            var products = this._productsService.GetAllProducts<ProductListViewModel>();
             return View(products);
         }
 

@@ -1,4 +1,6 @@
-﻿namespace Vxp.Web.Controllers
+﻿using Vxp.Web.ViewModels.Distributor;
+
+namespace Vxp.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using System.Linq;
@@ -6,7 +8,6 @@
     using Microsoft.EntityFrameworkCore;
     using Common;
     using Vxp.Services.Data.Users;
-    using ViewModels.Distributors;
     using ViewModels.Users;
 
     public class DistributorsController : ApiController

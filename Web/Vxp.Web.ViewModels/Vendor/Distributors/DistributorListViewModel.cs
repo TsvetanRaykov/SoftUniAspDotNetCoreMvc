@@ -2,7 +2,7 @@
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 
-namespace Vxp.Web.ViewModels.Distributors
+namespace Vxp.Web.ViewModels.Vendor.Distributors
 {
     public class DistributorListViewModel : IHaveCustomMappings
     {

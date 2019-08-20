@@ -2,7 +2,7 @@
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 
-namespace Vxp.Web.ViewModels.Products
+namespace Vxp.Web.ViewModels.Vendor.Products
 {
     public class ProductDetailInputModel : IMapTo<ProductDetail>, IMapFrom<ProductDetail>
     {

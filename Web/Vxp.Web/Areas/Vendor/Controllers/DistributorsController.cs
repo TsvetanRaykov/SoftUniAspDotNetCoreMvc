@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Vxp.Common;
 using Vxp.Services.Data.Users;
-using Vxp.Web.ViewModels.Distributors;
 using Vxp.Web.ViewModels.Users;
+using Vxp.Web.ViewModels.Vendor.Distributors;
 
 namespace Vxp.Web.Areas.Vendor.Controllers
 {

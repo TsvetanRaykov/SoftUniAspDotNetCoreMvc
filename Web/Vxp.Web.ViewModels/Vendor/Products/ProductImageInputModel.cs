@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 
-namespace Vxp.Web.ViewModels.Products
+namespace Vxp.Web.ViewModels.Vendor.Products
 {
     public class ProductImageInputModel : IMapTo<ProductImage>, IMapFrom<ProductImage>
     {

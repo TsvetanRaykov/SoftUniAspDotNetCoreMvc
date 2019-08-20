@@ -1,14 +1,14 @@
-﻿namespace Vxp.Web.ViewModels.Products
-{
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using Data.Models;
-    using Services.Mapping;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using ModelBinders;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Vxp.Data.Models;
+using Vxp.Services.Mapping;
+using Vxp.Web.ViewModels.ModelBinders;
 
+namespace Vxp.Web.ViewModels.Vendor.Products
+{
     public class ProductInputModel : IMapTo<Product>, IMapFrom<Product>
     {
         public ProductInputModel()

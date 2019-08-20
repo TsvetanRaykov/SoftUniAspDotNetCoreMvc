@@ -84,7 +84,7 @@
             oldProduct.CategoryId = newProduct.CategoryId;
             oldProduct.Description = newProduct.Description;
             oldProduct.Name = newProduct.Name;
-
+            oldProduct.IsAvailable = newProduct.IsAvailable;
 
             if (newProduct.Image != null)
             {
