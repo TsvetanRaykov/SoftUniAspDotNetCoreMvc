@@ -1,9 +1,4 @@
-﻿using System.IO;
-using System.Reflection;
-using Vxp.Common;
-using Vxp.Web.ViewModels.Users;
-
-namespace Vxp.Services.Data.Users
+﻿namespace Vxp.Services.Data.Users
 {
     using Mapping;
     using Microsoft.AspNetCore.Identity;
@@ -16,6 +11,10 @@ namespace Vxp.Services.Data.Users
     using Vxp.Data.Models;
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc.Rendering;
+    using System.IO;
+    using System.Reflection;
+    using Common;
+    using Vxp.Web.ViewModels.Users;
 
     public class UsersService : IUsersService
     {
@@ -45,13 +44,13 @@ namespace Vxp.Services.Data.Users
 
         public Task<IQueryable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName)
         {
-            var applicationUsersInRole = this._usersRepository.AllAsNoTracking()
+            var applicationUsersInRole = this._usersRepository.AllAsNoTrackingWithDeleted()
                 .Where(u => u.Roles.Any(r => r.Role.Name == roleName));
 
             return Task.Run(() => applicationUsersInRole.To<TViewModel>());
         }
 
-        public async Task<string> CreateUser<TViewModel>(TViewModel userModel, string password, string role)
+        public async Task<string> CreateUserAsync<TViewModel>(TViewModel userModel, string password, string role)
         {
             var applicationUser = AutoMapper.Mapper.Map<ApplicationUser>(userModel);
 
@@ -82,7 +81,7 @@ namespace Vxp.Services.Data.Users
 
         }
 
-        public async Task<bool> UpdateUser<TViewModel>(TViewModel userModel, IEnumerable<string> roleNames)
+        public async Task<bool> UpdateUserAsync<TViewModel>(TViewModel userModel, IEnumerable<string> roleNames)
         {
             var applicationUser = AutoMapper.Mapper.Map<ApplicationUser>(userModel);
 
@@ -140,7 +139,7 @@ namespace Vxp.Services.Data.Users
             return true;
         }
 
-        public async Task<bool> DeleteUser(string userId)
+        public async Task<bool> DeleteUserAsync(string userId)
         {
             var userFromDb = await this._usersRepository.GetByIdWithDeletedAsync(userId);
             if (userFromDb == null) { return false; }
@@ -149,7 +148,7 @@ namespace Vxp.Services.Data.Users
             return true;
         }
 
-        public async Task<bool> RestoreUser(string userId)
+        public async Task<bool> RestoreUserAsync(string userId)
         {
             var userFromDb = await this._usersRepository.GetByIdWithDeletedAsync(userId);
             if (userFromDb == null) { return false; }
@@ -164,18 +163,18 @@ namespace Vxp.Services.Data.Users
             return Task.Run(() => userExists != null);
         }
 
-        public async Task PopulateCommonUserModelProperties(UserProfileViewModel userModel)
+        public async Task PopulateCommonUserModelPropertiesAsync(UserProfileInputModel userModel)
         {
             //TODO: Replace the partial view with a component and put this logic there
 
-            var vendors = await this.GetAllInRoleAsync<UserProfileViewModel>(GlobalConstants.Roles.VendorRoleName);
+            var vendors = await this.GetAllInRoleAsync<UserProfileInputModel>(GlobalConstants.Roles.VendorRoleName);
 
             userModel.AvailableRoles = await this._roleManager.Roles.To<SelectListItem>().ToListAsync();
             userModel.AvailableRoles.ForEach(r => { r.Selected = r.Value == userModel.RoleName; });
-            userModel.Company = userModel.Company ?? new UserProfileCompanyViewModel();
-            userModel.Company.ContactAddress = userModel.Company.ContactAddress ?? new UserProfileAddressViewModel();
-            userModel.Company.ShippingAddress = userModel.Company.ShippingAddress ?? new UserProfileAddressViewModel();
-            userModel.ContactAddress = userModel.ContactAddress ?? new UserProfileAddressViewModel();
+            userModel.Company = userModel.Company ?? new UserProfileCompanyInputModel();
+            userModel.Company.ContactAddress = userModel.Company.ContactAddress ?? new UserProfileAddressInputModel();
+            userModel.Company.ShippingAddress = userModel.Company.ShippingAddress ?? new UserProfileAddressInputModel();
+            userModel.ContactAddress = userModel.ContactAddress ?? new UserProfileAddressInputModel();
 
             if (vendors.Any())
             {
@@ -197,7 +196,7 @@ namespace Vxp.Services.Data.Users
                     }
                 }
 
-                allCountries.Add(new SelectListItem("- Select Country -", string.Empty, true, true));
+                allCountries.Add(new SelectListItem("- Select Country -", string.Empty, true, false));
                 userModel.AvailableCountries = allCountries;
             }
 

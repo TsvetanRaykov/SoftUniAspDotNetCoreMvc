@@ -3,7 +3,7 @@
     using System.ComponentModel.DataAnnotations;
     using Infrastructure.Attributes.Validation;
 
-    public class UserProfileViewComponentResetPasswordModel
+    public class UserProfileResetPasswordInputModel
     {
         [Required(AllowEmptyStrings = false)]
         [StringLength(36)]

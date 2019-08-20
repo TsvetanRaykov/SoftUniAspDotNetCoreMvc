@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace Vxp.Web.ViewModels.Products
+﻿namespace Vxp.Web.ViewModels.Products
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -8,6 +6,7 @@ namespace Vxp.Web.ViewModels.Products
     using Microsoft.AspNetCore.Mvc;
     using Data.Models;
     using Services.Mapping;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     public class ProductCommonDetailInputModel : IMapTo<CommonProductDetail>, IMapFrom<CommonProductDetail>, IHaveCustomMappings
     {

@@ -10,7 +10,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-controller="Dashboard" asp-action="DeleteUser" asp-route-area="Administration" method="post">
+                <form asp-action="DeleteUser" method="post">
                     <input asp-for="@Model" type="hidden" name="UserId" />
                     <div>
                         Are you sure to mark this user as deleted?

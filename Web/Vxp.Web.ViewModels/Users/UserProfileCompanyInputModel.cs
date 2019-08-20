@@ -9,22 +9,22 @@ namespace Vxp.Web.ViewModels.Users
     using Services.Mapping;
     using Infrastructure.Attributes.Validation;
 
-    public class UserProfileCompanyViewModel : IMapFrom<Company>, IMapTo<Company>
+    public class UserProfileCompanyInputModel : IMapFrom<Company>, IMapTo<Company>
     {
+
+        public UserProfileCompanyInputModel()
+        {
+            this.ContactAddress = new UserProfileAddressInputModel();
+            this.ShippingAddress = new UserProfileAddressInputModel();
+        }
+
         [ModelBinder(typeof(TransparentPropertyModelBinder))]
         public string RoleName { get; set; }
-
-        public UserProfileCompanyViewModel()
-        {
-            this.ContactAddress = new UserProfileAddressViewModel();
-            this.ShippingAddress = new UserProfileAddressViewModel();
-        }
 
         [Display(Name = "Company name")]
         [StringLength(30)]
         [RequiredInSpecificRoles(compareRoleProperty: nameof(RoleName), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName,
             ErrorMessage = "The Company name is required.")]
-        // [Remote(action: "ValidateCompanyName", controller: "Users", AdditionalFields = nameof(BusinessNumber), HttpMethod = "Post")]
         [RequiredAsAGroup("Grp02", ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         public string Name { get; set; }
 
@@ -32,13 +32,12 @@ namespace Vxp.Web.ViewModels.Users
         [StringLength(15)]
         [RequiredInSpecificRoles(compareRoleProperty: nameof(RoleName), GlobalConstants.Roles.VendorRoleName, GlobalConstants.Roles.DistributorRoleName,
             ErrorMessage = "The Company BIN is required.")]
-        //[Remote(action: "ValidateBusinessNumber", controller: "Users", AdditionalFields = nameof(Name), HttpMethod = "Post")]
         [RequiredAsAGroup("Grp02", ErrorMessage = GlobalConstants.ErrorMessages.RequiredField)]
         public string BusinessNumber { get; set; }
 
-        public UserProfileAddressViewModel ContactAddress { get; set; }
+        public UserProfileAddressInputModel ContactAddress { get; set; }
 
-        public UserProfileAddressViewModel ShippingAddress { get; set; }
+        public UserProfileAddressInputModel ShippingAddress { get; set; }
 
     }
 }

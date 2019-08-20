@@ -14,12 +14,12 @@ namespace Vxp.Services.Data.Users
         Task<IQueryable<TViewModel>> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null);
         Task<IQueryable<TViewModel>> GetAllWithDeleted<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null);
         Task<IQueryable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName);
-        Task<string> CreateUser<TViewModel>(TViewModel userModel, string password, string role);
-        Task<bool> UpdateUser<TViewModel>(TViewModel userModel, IEnumerable<string> roleNames);
+        Task<string> CreateUserAsync<TViewModel>(TViewModel userModel, string password, string role);
+        Task<bool> UpdateUserAsync<TViewModel>(TViewModel userModel, IEnumerable<string> roleNames);
         Task<bool> UpdateUserPasswordAsync(string userId, string password);
-        Task<bool> DeleteUser(string userId);
-        Task<bool> RestoreUser(string userId);
+        Task<bool> DeleteUserAsync(string userId);
+        Task<bool> RestoreUserAsync(string userId);
         Task<bool> IsRegistered(string userName);
-        Task PopulateCommonUserModelProperties(UserProfileViewModel userProfile);
+        Task PopulateCommonUserModelPropertiesAsync(UserProfileInputModel userProfile);
     }
 }

@@ -1,5 +1,4 @@
 ﻿
-
 let guestImage = $(".hero-wrap.js-full-height");
 
 if (guestImage.length === 0) {

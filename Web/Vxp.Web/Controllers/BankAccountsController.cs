@@ -20,7 +20,7 @@
         public ActionResult<string> Get(int id)
         {
             var bankAccount = this._bankAccountsService
-                .GetAllBankAccounts<UserProfileBankAccountViewModel>()
+                .GetAllBankAccounts<UserProfileBankAccountInputModel>()
                 .FirstOrDefault(x => x.Id == id);
             if (bankAccount == null)
             {
@@ -32,7 +32,7 @@
 
         [HttpPut]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Update(UserProfileBankAccountViewModel bankAccountModel)
+        public async Task<ActionResult> Update(UserProfileBankAccountInputModel bankAccountModel)
         {
             if (!this.ModelState.IsValid)
             {
@@ -45,7 +45,7 @@
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(UserProfileBankAccountViewModel bankAccountModel)
+        public async Task<ActionResult> Create(UserProfileBankAccountInputModel bankAccountModel)
         {
             if (!this.ModelState.IsValid)
             {

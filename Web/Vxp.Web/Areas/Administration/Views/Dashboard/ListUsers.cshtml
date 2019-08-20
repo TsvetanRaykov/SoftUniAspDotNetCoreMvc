@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Vxp.Web.ViewModels.Administration.Dashboard.ListUserViewModel>
+﻿@using Vxp.Web.ViewModels.Administration.Dashboard
+@model IEnumerable<ListUserViewModel>
 
 @{
     this.ViewData["Title"] = "List Users";
@@ -69,7 +70,7 @@
 
 @section Scripts
 {
-    
+
     <script>
         $(document).ready(function () {
             $('.vxp-table').DataTable({

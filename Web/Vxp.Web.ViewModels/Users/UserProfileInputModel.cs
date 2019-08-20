@@ -12,8 +12,7 @@
     using ModelBinders;
     using Common;
 
-
-    public class UserProfileViewModel : IMapFrom<ApplicationUser>, IMapTo<ApplicationUser>, IHaveCustomMappings
+    public class UserProfileInputModel : IMapFrom<ApplicationUser>, IMapTo<ApplicationUser>, IHaveCustomMappings
     {
         public bool IsNewUser { get; set; }
 
@@ -21,14 +20,14 @@
 
         public bool IsEmailConfirmed { get; set; }
 
-        public UserProfileViewModel()
+        public UserProfileInputModel()
         {
             this.BankAccounts = new HashSet<SelectListItem>();
             this.AvailableCountries = new List<SelectListItem>();
             this.AvailableDistributors = new List<SelectListItem>();
             this.AvailableRoles = new List<SelectListItem>();
-            this.ContactAddress = new UserProfileAddressViewModel();
-            this.Company = new UserProfileCompanyViewModel();
+            // this.ContactAddress = new UserProfileAddressInputModel();
+            this.Company = new UserProfileCompanyInputModel();
         }
 
         [StringLength(36)]
@@ -42,7 +41,7 @@
         [Required]
         [Display(Name = "Login email")]
         [EmailAddress]
-        [Remote(action: "ValidateNewUsername", controller: "Users", AdditionalFields = nameof(IsNewUser), HttpMethod = "Post")]
+        [Remote(action: "ValidateNewUsername", controller: "Users", AdditionalFields = nameof(IsNewUser) + ",__RequestVerificationToken", HttpMethod = "Post")]
         public string UserName { get; set; }
 
         [Required(AllowEmptyStrings = false)]
@@ -72,10 +71,10 @@
         public string ConfirmPassword { get; set; }
 
         //Company
-        public UserProfileCompanyViewModel Company { get; set; }
+        public UserProfileCompanyInputModel Company { get; set; }
 
         //Address
-        public UserProfileAddressViewModel ContactAddress { get; set; }
+        public UserProfileAddressInputModel ContactAddress { get; set; }
 
         [ModelBinder(typeof(KvpStringListToSelectListModelBinder))]
         public IEnumerable<SelectListItem> BankAccounts { get; set; }
@@ -105,7 +104,7 @@
                 .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => $"{src.BankName} [{src.AccountNumber}]"));
 
-            configuration.CreateMap<ApplicationUser, UserProfileViewModel>()
+            configuration.CreateMap<ApplicationUser, UserProfileInputModel>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(src => src.Roles.First().Role.Name))
                 .ForMember(dest => dest.AvailableDistributors,
@@ -115,7 +114,7 @@
                         Text = $"{d.DistributorKey.BankAccount.Owner.Company.Name}"
                     })));
 
-            configuration.CreateMap<UserProfileViewModel, ApplicationUser>()
+            configuration.CreateMap<UserProfileInputModel, ApplicationUser>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.BankAccounts, opt => opt.Ignore())
                 .ForMember(dest => dest.Distributors, opt => opt.Ignore());

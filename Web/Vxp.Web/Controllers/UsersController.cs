@@ -30,7 +30,7 @@ namespace Vxp.Web.Areas.Users.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(UserProfileViewModel inputModel)
+        public async Task<IActionResult> ResetPassword(UserProfileInputModel inputModel)
         {
             var validationPropertyNames = new[] { nameof(inputModel.UserId), nameof(inputModel.Password), nameof(inputModel.ConfirmPassword) };
 
@@ -44,10 +44,10 @@ namespace Vxp.Web.Areas.Users.Controllers
             }
 
             var userModels = await this._usersService
-                .GetAll<UserProfileViewModel>(u => u.Id == inputModel.UserId);
+                .GetAll<UserProfileInputModel>(u => u.Id == inputModel.UserId);
 
             var userModel = userModels.Single();
-            await this._usersService.PopulateCommonUserModelProperties(userModel);
+            await this._usersService.PopulateCommonUserModelPropertiesAsync(userModel);
 
             if (this.ModelState.IsValid)
             {
@@ -114,7 +114,8 @@ namespace Vxp.Web.Areas.Users.Controllers
         }
 
         [AcceptVerbs("Post")]
-        public async Task<IActionResult> ValidateNewUsername([FromForm] string userName, [FromForm] bool isNewUser)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ValidateNewUsername(string userName, bool isNewUser)
         {
             if (isNewUser && await this._usersService.IsRegistered(userName))
             {

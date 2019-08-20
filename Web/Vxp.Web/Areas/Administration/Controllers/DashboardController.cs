@@ -1,4 +1,6 @@
-﻿namespace Vxp.Web.Areas.Administration.Controllers
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace Vxp.Web.Areas.Administration.Controllers
 {
     using Common;
     using Microsoft.AspNetCore.Mvc;
@@ -36,16 +38,16 @@
         public async Task<IActionResult> EditUser(UserIdInputModel inputModel)
         {
             var userModels = await this._usersService
-                .GetAll<UserProfileViewModel>(u => u.Id == inputModel.Id);
+                .GetAll<UserProfileInputModel>(u => u.Id == inputModel.Id);
 
             var userModel = userModels.FirstOrDefault();
 
-            userModel = userModel ?? new UserProfileViewModel
+            userModel = userModel ?? new UserProfileInputModel
             {
                 IsNewUser = true
             };
 
-            await this._usersService.PopulateCommonUserModelProperties(userModel);
+            await this._usersService.PopulateCommonUserModelPropertiesAsync(userModel);
 
             if (this.TempData.ContainsKey("UserProfileViewMessage"))
             {
@@ -58,21 +60,21 @@
         public async Task<IActionResult> CreateUser()
         {
 
-            var viewModel = new UserProfileViewModel
+            var viewModel = new UserProfileInputModel
             {
                 RoleName = GlobalConstants.Roles.AdministratorRoleName, // Role dropdown selected item by default
                 IsNewUser = true,
                 IsEmailConfirmed = true
             };
 
-            await this._usersService.PopulateCommonUserModelProperties(viewModel);
+            await this._usersService.PopulateCommonUserModelPropertiesAsync(viewModel);
 
             return this.View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateUser(UserProfileViewModel inputModel)
+        public async Task<IActionResult> CreateUser(UserProfileInputModel inputModel)
         {
 
             if (string.IsNullOrEmpty(inputModel.ContactAddress?.CountryName))
@@ -82,18 +84,16 @@
 
             if (!this.ModelState.IsValid)
             {
-                await this._usersService.PopulateCommonUserModelProperties(inputModel);
-
-
                 if (this.ModelState[nameof(inputModel.Password)].ValidationState == ModelValidationState.Invalid)
                 {
                     this.TempData["ErrorMessage"] = this.ModelState[nameof(inputModel.Password)].Errors.FirstOrDefault()?.ErrorMessage;
                 }
 
+                await this._usersService.PopulateCommonUserModelPropertiesAsync(inputModel);
                 return this.View("CreateUser", inputModel);
             }
 
-            var newUserId = await this._usersService.CreateUser(inputModel, inputModel.Password, inputModel.RoleName);
+            var newUserId = await this._usersService.CreateUserAsync(inputModel, inputModel.Password, inputModel.RoleName);
 
             if (!string.IsNullOrEmpty(newUserId))
             {
@@ -101,16 +101,16 @@
             }
             else
             {
-                this.TempData["ErrorMessage"] = $"{inputModel.UserName} cannot be created.";
+                this.TempData["ErrorMessage"] = $"{inputModel.UserName} cannot be created. Please, contact support.";
             }
             return this.RedirectToAction(nameof(this.EditUser), new { id = newUserId });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUser(UserProfileViewModel inputModel)
+        public async Task<IActionResult> EditUser(UserProfileInputModel inputModel)
         {
-            await this._usersService.PopulateCommonUserModelProperties(inputModel);
+            await this._usersService.PopulateCommonUserModelPropertiesAsync(inputModel);
 
             if (string.IsNullOrEmpty(inputModel.ContactAddress?.CountryName))
             {
@@ -119,7 +119,7 @@
 
             if (inputModel.RoleName == GlobalConstants.Roles.DistributorRoleName || inputModel.RoleName == GlobalConstants.Roles.VendorRoleName)
             {
-                var availableBankAccount = this._bankAccountsService.GetAllBankAccounts<UserProfileBankAccountViewModel>()
+                var availableBankAccount = this._bankAccountsService.GetAllBankAccounts<UserProfileBankAccountInputModel>()
                     .FirstOrDefault(b => b.OwnerId == inputModel.UserId);
                 if (availableBankAccount == null)
                 {
@@ -129,7 +129,7 @@
                 }
             }
 
-            if (this.ModelState.IsValid && await this._usersService.UpdateUser(inputModel, new[] { inputModel.RoleName }))
+            if (this.ModelState.IsValid && await this._usersService.UpdateUserAsync(inputModel, new[] { inputModel.RoleName }))
             {
                 this.TempData["UserProfileViewMessage"] = $"{inputModel.UserName} data has been updated.";
             }
@@ -146,7 +146,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteUser([FromForm] string userId)
         {
-            await this._usersService.DeleteUser(userId);
+            await this._usersService.DeleteUserAsync(userId);
             return this.RedirectToAction("ListUsers", "Dashboard", new { area = "Administration" });
         }
 
@@ -155,7 +155,7 @@
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RestoreUser([FromForm]string userId)
         {
-            await this._usersService.RestoreUser(userId);
+            await this._usersService.RestoreUserAsync(userId);
             return this.Ok();
         }
 

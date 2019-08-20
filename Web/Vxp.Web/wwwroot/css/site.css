@@ -262,7 +262,7 @@ input::placeholder {
 
 .vxp-deleted-row,
 .vxp-deleted-row td {
-    text-decoration: line-through solid red;
+    text-decoration: line-through solid red !important;
 }
 
 .nav-pills .nav-link.active,

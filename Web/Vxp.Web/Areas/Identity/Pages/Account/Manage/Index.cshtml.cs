@@ -39,7 +39,7 @@
         public string StatusMessage { get; set; }
 
         [BindProperty]
-        public UserProfileViewModel Input { get; set; }
+        public UserProfileInputModel Input { get; set; }
 
 
         public async Task<IActionResult> OnGetAsync()
@@ -48,13 +48,13 @@
             this.Username = user.UserName;
 
             this.Input = this._usersService
-                .GetAll<UserProfileViewModel>(u => u.UserName == this.Username).GetAwaiter().GetResult().FirstOrDefault();
+                .GetAll<UserProfileInputModel>(u => u.UserName == this.Username).GetAwaiter().GetResult().FirstOrDefault();
 
             if (this.Input == null)
             {
                 return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
-            await this._usersService.PopulateCommonUserModelProperties(this.Input);
+            await this._usersService.PopulateCommonUserModelPropertiesAsync(this.Input);
 
             if (this.TempData.ContainsKey("UserProfileViewMessage"))
             {
@@ -81,7 +81,7 @@
                 return this.NotFound($"Unable to load user with ID '{this.userManager.GetUserId(this.User)}'.");
             }
 
-            await this._usersService.PopulateCommonUserModelProperties(this.Input);
+            await this._usersService.PopulateCommonUserModelPropertiesAsync(this.Input);
 
             if (string.IsNullOrEmpty(this.Input.ContactAddress?.CountryName))
             {
@@ -98,7 +98,7 @@
                 }
             }
 
-            if (this.ModelState.IsValid && await this._usersService.UpdateUser(this.Input, new[] { this.Input.RoleName }))
+            if (this.ModelState.IsValid && await this._usersService.UpdateUserAsync(this.Input, new[] { this.Input.RoleName }))
             {
                 this.TempData["UserProfileViewMessage"] = $"{this.Input.UserName} data has been updated.";
             }

@@ -1,7 +1,6 @@
-﻿@using System.Security.Claims
-@using Vxp.Common
+﻿@using Vxp.Common
 @using Vxp.Web.ViewModels.Users
-@model UserProfileViewModel
+@model UserProfileInputModel
 
 @{
     var isAdmin = this.User.IsInRole(GlobalConstants.Roles.AdministratorRoleName);
@@ -84,7 +83,7 @@
 
             <div class="w-100">
                 <label asp-for="@Model.UserName" class="vxp-form-control-label"></label>
-                @if (isAdmin)
+                @if (isAdmin || Model.IsNewUser)
                 {
                     <input asp-for="@Model.UserName" class="form-control font-weight-bold" placeholder="Email" value="@Model.UserName" />
                 }

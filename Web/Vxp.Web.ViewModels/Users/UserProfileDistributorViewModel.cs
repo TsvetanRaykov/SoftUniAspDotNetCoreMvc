@@ -10,9 +10,9 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string UserName { get; set; }
-        public UserProfileAddressViewModel ContactAddress { get; set; }
-        public UserProfileCompanyViewModel Company { get; set; }
-        public UserProfileBankAccountViewModel BankAccount { get; set; }
+        public UserProfileAddressInputModel ContactAddress { get; set; }
+        public UserProfileCompanyInputModel Company { get; set; }
+        public UserProfileBankAccountInputModel BankAccount { get; set; }
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<ApplicationUser, UserProfileDistributorViewModel>()

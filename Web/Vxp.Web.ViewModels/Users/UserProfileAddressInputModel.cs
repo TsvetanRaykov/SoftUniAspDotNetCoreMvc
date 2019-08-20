@@ -1,16 +1,14 @@
-﻿using System;
-
-namespace Vxp.Web.ViewModels.Users
+﻿namespace Vxp.Web.ViewModels.Users
 {
-    using System.ComponentModel.DataAnnotations;
     using Common;
     using Data.Models;
-    using Services.Mapping;
     using Infrastructure.Attributes.Validation;
     using Microsoft.AspNetCore.Mvc;
     using ModelBinders;
+    using Services.Mapping;
+    using System.ComponentModel.DataAnnotations;
 
-    public class UserProfileAddressViewModel : IMapFrom<Address>, IMapTo<Address>
+    public class UserProfileAddressInputModel : IMapFrom<Address>, IMapTo<Address>
     {
         private const string RequiredGroupId = "Grp01";
 

@@ -5,7 +5,7 @@
     using Data.Models;
     using Services.Mapping;
 
-    public class UserProfileBankAccountViewModel : IMapFrom<BankAccount>, IMapTo<BankAccount>, IHaveCustomMappings
+    public class UserProfileBankAccountInputModel : IMapFrom<BankAccount>, IMapTo<BankAccount>, IHaveCustomMappings
     {
         public int? Id { get; set; }
 
@@ -34,7 +34,7 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<UserProfileBankAccountViewModel, BankAccount>()
+            configuration.CreateMap<UserProfileBankAccountInputModel, BankAccount>()
                 .ForMember(dest => dest.Owner, opt => opt.Ignore())
                 .ForMember(dest => dest.DistributorKeys, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())

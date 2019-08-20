@@ -1,5 +1,61 @@
-﻿@{
+﻿@using Vxp.Web.ViewModels.Distributors
+@model IEnumerable<DistributorListViewModel>
+@{
     ViewData["Title"] = "Distributors";
     ViewData["ActivePage"] = "DistributorsList";
 }
 <h4>@ViewData["Title"]</h4>
+<table class="vxp-table table rounded display hover cell-border" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Company</th>
+            <th>Contact Email</th>
+            <th>Shipping Address</th>
+            <th>Discount</th>
+            <th>Active projects</th>
+            <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var distributor in Model)
+        {
+            string className = distributor.IsDeleted ? "vxp-deleted-row" : string.Empty;
+            <tr class="@className">
+                <td>@distributor.Company</td>
+                <td><a href="mailto:@distributor.ContactEmail" target="_top">@distributor.ContactEmail</a></td>
+                <td>@distributor.ShippingAddress</td>
+                <td>@distributor.DiscountFormatted</td>
+                <td>@distributor.ActiveProjects</td>
+                <td class="text-right">
+
+                    @if (distributor.IsDeleted)
+                    {
+                        <form method="post" asp-area="Vendor" asp-controller="Distributors" asp-action="Restore">
+                            <input type="hidden" name="id" asp-for="@distributor.Id" />
+                            <button class="btn btn-link btn-outline-success w-100" type="submit">Restore</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="btn btn-link btn-outline-success w-100" asp-area="Vendor" asp-controller="Distributors" asp-action="Edit" asp-route-id="@distributor.Id">Edit</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="text-right"></th>
+        </tr>
+    </tfoot>
+</table>
+@section Scripts{
+    <script>
+        $(document).ready(() => { $(".vxp-table").DataTable({ "lengthChange": false }); })
+    </script>
+}
