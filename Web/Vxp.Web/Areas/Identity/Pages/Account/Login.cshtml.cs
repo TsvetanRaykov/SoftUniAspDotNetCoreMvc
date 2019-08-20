@@ -1,6 +1,4 @@
-﻿using Vxp.Common;
-
-namespace Vxp.Web.Areas.Identity.Pages.Account
+﻿namespace Vxp.Web.Areas.Identity.Pages.Account
 {
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authorization;
@@ -13,7 +11,8 @@ namespace Vxp.Web.Areas.Identity.Pages.Account
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
-    using Vxp.Data.Models;
+    using Data.Models;
+    using Common;
 
     [AllowAnonymous]
 #pragma warning disable SA1649 // File name should match first type name
@@ -23,12 +22,14 @@ namespace Vxp.Web.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, IEmailSender emailSender)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, IEmailSender emailSender, UserManager<ApplicationUser> userManager)
         {
             this._signInManager = signInManager;
             this._logger = logger;
             this._emailSender = emailSender;
+            this._userManager = userManager;
         }
 
         [BindProperty]
@@ -57,10 +58,8 @@ namespace Vxp.Web.Areas.Identity.Pages.Account
                     return this.RedirectToAction("Index", "Dashboard", new { area = "Administration" });
                 }
 
-
                 return this.LocalRedirect(returnUrl);
             }
-
 
             // Clear the existing external cookie to ensure a clean login process
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -83,9 +82,11 @@ namespace Vxp.Web.Areas.Identity.Pages.Account
                 var result = await this._signInManager.PasswordSignInAsync(this.Input.Email, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
+
                     this._logger.LogInformation("User logged in.");
 
-                    return this.LocalRedirect(returnUrl);
+                    //return this.LocalRedirect(returnUrl);
+                    return this.RedirectToPage("./Login");
                 }
 
                 if (result.RequiresTwoFactor)

@@ -2,8 +2,6 @@
 @using Vxp.Data.Models
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
-
 
 <ul class="navbar-nav nav flex-grow-1">
     <li class="nav-item">
@@ -29,10 +27,9 @@
 <ul class="navbar-nav">
     @if (this.SignInManager.IsSignedIn(this.User))
     {
-        var user = await UserManager.FindByNameAsync(this.User.Identity.Name);
 
         <li class="nav-item">
-            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span>@($"{user.FirstName} {user.LastName}")</span></a>
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><span>@this.User.FindFirst("FullName").Value</span></a>
         </li>
         if (this.User.IsInRole(GlobalConstants.Roles.AdministratorRoleName))
         {

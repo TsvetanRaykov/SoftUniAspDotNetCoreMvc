@@ -203,7 +203,7 @@ namespace Vxp.Services.Data.Users
 
             if (!string.IsNullOrEmpty(userModel.UserId)) // new user
             {
-                var user = await this._userManager.FindByIdAsync(userModel.UserId);
+                var user = await this._usersRepository.GetByIdWithDeletedAsync(userModel.UserId);
                 userModel.IsEmailConfirmed = await this._userManager.IsEmailConfirmedAsync(user);
             }
 

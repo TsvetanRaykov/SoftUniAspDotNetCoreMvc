@@ -25,6 +25,7 @@ using Vxp.Services.Data.Settings;
 using Vxp.Services.Data.Users;
 using Vxp.Services.Mapping;
 using Vxp.Services.Messaging;
+using Vxp.Web.Infrastructure.Extensions;
 using Vxp.Web.ViewModels;
 using Vxp.Web.ViewModels.Administration.Dashboard;
 
@@ -111,7 +112,7 @@ namespace Vxp.Web
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            // services.AddTransient<IEmailSender, NullMessageSender>();
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, VxpUserClaimsPrincipalFactory>();
             services.AddTransient<ISmsSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IDistributorsService, DistributorsService>();
