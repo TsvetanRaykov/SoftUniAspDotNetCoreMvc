@@ -65,5 +65,7 @@ namespace Vxp.Data.Models
         public virtual ICollection<PriceModifier> PriceModifiersReceive { get; set; }
 
         public virtual ICollection<PriceModifier> PriceModifiersGive { get; set; }
+
+        public virtual ICollection<CustomerInvitation> CustomerInvitations { get; set; }
     }
 }

@@ -3,7 +3,6 @@
 namespace Vxp.Data.Models
 {
     using System.Collections.Generic;
-
     using Vxp.Data.Common.Models;
 
     public class Product : BaseDeletableModel<int>
@@ -35,5 +34,7 @@ namespace Vxp.Data.Models
         public virtual List<OrderProduct> Orders { get; set; }
 
         public bool IsAvailable { get; set; }
+
+        public decimal BasePrice { get; set; }
     }
 }

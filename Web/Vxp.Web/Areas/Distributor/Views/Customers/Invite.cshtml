@@ -1,5 +1,147 @@
-﻿@{
+﻿@using System.Globalization
+@using System.Text.Encodings.Web
+@inject JavaScriptEncoder encoder
+@using Vxp.Common
+@model Vxp.Web.ViewModels.Distributor.Customers.CustomersInvitationInputModel
+@{
     ViewData["Title"] = "Invite Customer";
 }
 
-<h4>Create Invitation</h4>
+<h4>Send Invitation</h4>
+<div class="d-flex">
+    @if (string.IsNullOrEmpty(Model.DistributorKey))
+    {
+        <div class="form-control text-danger w-50">
+            @GlobalConstants.ErrorMessages.BankAccountRequired
+        </div>
+    }
+    else
+    {
+        <form id="distributor-invitation-form" class="h-100 w-50" asp-area="Distributor" asp-controller="Customers" asp-action="Invite" method="post">
+            <div class="d-flex">
+                <div class="w-50">
+                    <label class="vxp-form-control-label" asp-for="EmailTo"></label>
+                    <input class="form-control text-dark font-weight-bold" asp-for="EmailTo" placeholder="name@example.com" />
+                    <span class="text-danger d-block vxp-validation-errors-placeholder" asp-validation-for="EmailTo"></span>
+                </div>
+                <div class="p-1"></div>
+                <div class="w-50">
+                    <label class="vxp-form-control-label" asp-for="Subject"></label>
+                    <input class="form-control text-dark font-weight-bold" asp-for="Subject" placeholder="subject" />
+                    <span class="text-danger d-block vxp-validation-errors-placeholder" asp-validation-for="Subject"></span>
+                </div>
+            </div>
+            <div>
+                <label class="vxp-form-control-label" asp-for="MessageBody"></label>
+                <textarea class="form-control text-dark font-weight-bold" asp-for="MessageBody"></textarea>
+                <span class="text-danger d-block vxp-validation-errors-placeholder" asp-validation-for="MessageBody"></span>
+            </div>
+            <div>
+                <label class="vxp-form-control-label" asp-for="DistributorKey"></label>
+                <input class="form-control text-dark font-weight-bold" asp-for="DistributorKey" readonly="readonly" />
+                <span class="text-danger d-block vxp-validation-errors-placeholder" asp-validation-for="DistributorKey"></span>
+                <div class="d-flex">
+                    <button class="btn btn-primary rounded" type="submit">Send</button>
+                    <div class="p-1" id="status-message"></div>
+                </div>
+            </div>
+        </form>
+
+    }
+    <div class="p-2"></div>
+    <div class="w-50">
+        <table class="vxp-table table rounded display hover cell-border w-100" id="table-customer-invitations">
+            <thead>
+                <tr>
+                    <th>Sent to</th>
+                    <th>Subject</th>
+                    <th>Sent on</th>
+                    <th>Accepted</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var invitation in Model.SentInvitations)
+                {
+                    <tr title="preview" data-toggle="modal" data-target="#modal-customer-invitation-details" data-set="@($@"{Json.Serialize(@invitation)}")">
+                        <td>@invitation.EmailTo</td>
+                        <td>@invitation.Subject</td>
+                        <td>@invitation.CreatedOn.ToLocalTime()</td>
+                        <td>@invitation.Accepted?.ToLocalTime()</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-customer-invitation-details" tabindex="-1" role="dialog" aria-labelledby="modalInvitationEmailTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalInvitationEmailTitle">Message to <strong><span class="text-primary" id="modal-invitation-recipient-field"></span></strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column">
+                    <div class="vxp-form-control-label border rounded w-100 p-1">Subject</div>
+                    <div class="text-dark border rounded w-100 p-1 mb-2" id="modal-invitation-subject-field"></div>
+                    <div class="vxp-form-control-label border rounded w-100 p-1">Message</div>
+                    <div class="text-dark border rounded w-100 p-1 mb-2" id="modal-invitation-message-field"></div>
+                    <div class="vxp-form-control-label border rounded w-100 p-1">Sent at</div>
+                    <div class="text-dark border rounded w-100 p-1 mb-2" id="modal-invitation-sent-field"></div>
+                    <div class="vxp-form-control-label border rounded w-100 p-1">Accepted at</div>
+                    <div class="text-dark border rounded w-100 p-1 mb-2" id="modal-invitation-accepted-field"></div>
+                    <div class="vxp-form-control-label border rounded w-100 p-1">Your key</div>
+                    <div class="text-dark border rounded w-100 p-1 mb-2" id="modal-invitation-key-field"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('#table-customer-invitations').DataTable({
+            "lengthChange": false
+        });
+
+        $(document).ready(() => {
+            if (`@TempData["SuccessMessage"]`) {
+                $("#status-message").notify(`@TempData["SuccessMessage"]`,
+                    {
+                        "position": "right",
+                        "className": "success"
+                    });
+            }
+
+            if (`@TempData["ErrorMessage"]`) {
+                $("#status-message").notify(`@TempData["ErrorMessage"]`,
+                    {
+                        "position": "right",
+                        "className": "error"
+                    });
+            }
+        });
+
+        $('#modal-customer-invitation-details').on('show.bs.modal',
+            function(event) {
+                let source = $(event.relatedTarget);
+                let data = source.data('set');
+                let modal = $(this);
+
+                modal.find('.modal-title #modal-invitation-recipient-field').text(data.emailTo);
+                modal.find('.modal-body #modal-invitation-subject-field').text(data.subject);
+                let message = `${data.messageBody}`;
+                modal.find('.modal-body #modal-invitation-message-field').html(message);
+                modal.find('.modal-body #modal-invitation-sent-field').text(data.createdOnString);
+                modal.find('.modal-body #modal-invitation-accepted-field').text(data.acceptedOnString);
+                modal.find('.modal-body #modal-invitation-key-field').text(data.distributorKey);
+
+                console.log(data);
+        });
+
+    </script>
+}

@@ -39,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vxp.Web.Tests", "Tests\Vxp.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vxp.Web.ViewModels", "Web\Vxp.Web.ViewModels\Vxp.Web.ViewModels.csproj", "{13B7AACB-9C85-4409-8D4B-95A67D0DFFF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vxp.Services.Models", "Services\Vxp.Services.Models\Vxp.Services.Models.csproj", "{737DDC94-6E46-4F11-8B18-66A1EF7302C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vxp.Services.Models", "Services\Vxp.Services.Models\Vxp.Services.Models.csproj", "{737DDC94-6E46-4F11-8B18-66A1EF7302C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

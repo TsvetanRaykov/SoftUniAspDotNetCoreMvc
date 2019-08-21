@@ -110,5 +110,6 @@ namespace Vxp.Web.Areas.Vendor.Controllers
             await this._usersService.DeleteUserAsync(userId);
             return this.RedirectToAction(nameof(this.Index));
         }
+
     }
 }

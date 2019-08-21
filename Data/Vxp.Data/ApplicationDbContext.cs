@@ -62,8 +62,10 @@
         public DbSet<OrderHistory> OrderHistories { get; set; }
 
         public DbSet<OrderProduct> OrderProducts { get; set; }
+
         public DbSet<ApplicationUserRole<string>> ApplicationUserRoles { get; set; }
 
+        public DbSet<CustomerInvitation> CustomerInvitations { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -147,6 +149,20 @@
 
             ConfigurePriceModifier(builder);
 
+            ConfigureCustomerInvitation(builder);
+
+        }
+
+        private static void ConfigureCustomerInvitation(ModelBuilder builder)
+        {
+            builder.Entity<CustomerInvitation>(entity =>
+            {
+                entity.HasOne(e => e.Sender)
+                    .WithMany(s => s.CustomerInvitations)
+                    .HasForeignKey(e => e.SenderId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
         }
 
         private static void ConfigureCommonProductDetail(ModelBuilder builder)
@@ -258,6 +274,10 @@
                     .WithMany(c => c.Products)
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property(e => e.BasePrice)
+                    .HasColumnType("Money")
+                    .IsRequired();
             });
         }
 

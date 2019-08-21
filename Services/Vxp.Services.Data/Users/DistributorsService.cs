@@ -1,32 +1,41 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Vxp.Common;
 using Vxp.Data.Common.Repositories;
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
+using Vxp.Services.Models;
 
 namespace Vxp.Services.Data.Users
 {
     public class DistributorsService : IDistributorsService
     {
-        private UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IDeletableEntityRepository<ApplicationUser> _usersRepository;
         private readonly IRepository<DistributorUser> _distributorUsersRepository;
         private readonly IRepository<DistributorKey> _distributorKeysRepository;
+        private readonly IDeletableEntityRepository<CustomerInvitation> _customerInvitationsRepository;
+        private readonly IEmailSender _emailSender;
 
         public DistributorsService(
             IDeletableEntityRepository<ApplicationUser> usersRepository,
             IRepository<DistributorUser> distributorUsersRepository,
             IRepository<DistributorKey> distributorKeysRepository,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IEmailSender emailSender,
+            IDeletableEntityRepository<CustomerInvitation> customerInvitationsRepository)
         {
             this._usersRepository = usersRepository;
             this._distributorUsersRepository = distributorUsersRepository;
             this._distributorKeysRepository = distributorKeysRepository;
             this._userManager = userManager;
+            this._emailSender = emailSender;
+            this._customerInvitationsRepository = customerInvitationsRepository;
         }
 
         public async Task<string> GenerateNewDistributorKeyAsync(string distributorName)
@@ -39,13 +48,17 @@ namespace Vxp.Services.Data.Users
             var newDistributorKey = new DistributorKey
             {
                 KeyCode = Guid.NewGuid(),
-                BankAccount = distributor?.BankAccounts.First()
+                BankAccount = distributor?.BankAccounts.FirstOrDefault()
             };
 
-            distributor?.BankAccounts.FirstOrDefault()?.DistributorKeys.Add(newDistributorKey);
-            await this._usersRepository.SaveChangesAsync();
+            if (newDistributorKey.BankAccount != null)
+            {
+                distributor?.BankAccounts.FirstOrDefault()?.DistributorKeys.Add(newDistributorKey);
+                await this._usersRepository.SaveChangesAsync();
+                return newDistributorKey.KeyCode.ToString();
+            }
 
-            return newDistributorKey.KeyCode.ToString();
+            return null;
         }
 
         public async Task<bool> AddCustomerToDistributorAsync(string customerName, string distributorKey)
@@ -86,12 +99,18 @@ namespace Vxp.Services.Data.Users
             return true;
         }
 
-        public Task<IQueryable<TViewModel>> GetCustomers<TViewModel>(string distributorName)
+        public Task<IQueryable<TViewModel>> GetCustomersAsync<TViewModel>(string distributorName)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<IQueryable<TViewModel>> GetDistributorsForUser<TViewModel>(string customerName)
+        public Task<List<TViewModel>> GetCustomerInvitationsAsync<TViewModel>(string senderId)
+        {
+            var invitations = this._customerInvitationsRepository.AllAsNoTracking().Where(i => i.SenderId == senderId);
+            return invitations.To<TViewModel>().ToListAsync();
+        }
+
+        public Task<IQueryable<TViewModel>> GetDistributorsForUserAsync<TViewModel>(string customerName)
         {
 
             var distributors = this._usersRepository.AllAsNoTracking()
@@ -104,6 +123,30 @@ namespace Vxp.Services.Data.Users
                             dk.Customers.Any(du => du.ApplicationUser.UserName == customerName))));
 
             return Task.Run(() => distributors.To<TViewModel>());
+        }
+
+        public async Task<bool> SendInvitationToCustomerAsync(EmailDto email, string senderId)
+        {
+            try
+            {
+                await this._emailSender.SendEmailAsync(
+                    email.EmailTo,
+                    email.Subject,
+                    email.MessageBody);
+            }
+            catch
+            {
+                return false;
+            }
+
+            var customerInvitation = AutoMapper.Mapper.Map<CustomerInvitation>(email);
+            customerInvitation.SenderId = senderId;
+
+            await this._customerInvitationsRepository.AddAsync(customerInvitation);
+            await this._customerInvitationsRepository.SaveChangesAsync();
+
+            return true;
+
         }
 
         public async Task<bool> RemoveCustomerFromDistributorAsync(string customerName, string distributorName)

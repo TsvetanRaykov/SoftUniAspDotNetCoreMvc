@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vxp.Data.Models;
 using Vxp.Data.Repositories;
 using Vxp.Services.Data.Users;
+using Vxp.Services.Messaging;
 using Xunit;
 
 namespace Vxp.Services.Data.Tests
@@ -31,11 +32,12 @@ namespace Vxp.Services.Data.Tests
 
             fakeUserManager.Setup(x => x.Users).Returns(userStore.AsQueryable);
 
-            var distUserDistributor = new EfRepository<DistributorUser>(_fixture.DbContext);
-            var distKeysRepository = new EfDeletableEntityRepository<DistributorKey>(_fixture.DbContext);
-            var appUserRepository = new EfDeletableEntityRepository<ApplicationUser>(_fixture.DbContext);
+            var distUserDistributor = new EfRepository<DistributorUser>(this._fixture.DbContext);
+            var distKeysRepository = new EfDeletableEntityRepository<DistributorKey>(this._fixture.DbContext);
+            var appUserRepository = new EfDeletableEntityRepository<ApplicationUser>(this._fixture.DbContext);
+            var customerInvitationsRepository = new EfDeletableEntityRepository<CustomerInvitation>(this._fixture.DbContext);
 
-            var distributorService = new DistributorsService(appUserRepository, distUserDistributor, distKeysRepository, fakeUserManager.Object);
+            var distributorService = new DistributorsService(appUserRepository, distUserDistributor, distKeysRepository, fakeUserManager.Object, new NullMessageSender(), customerInvitationsRepository);
             var aUser = await appUserRepository.All().FirstAsync();
 
             //Act

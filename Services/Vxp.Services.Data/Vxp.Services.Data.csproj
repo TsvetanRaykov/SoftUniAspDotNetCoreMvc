@@ -11,6 +11,9 @@
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="2.2.5" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Vxp.Data.Common\Vxp.Data.Common.csproj" />

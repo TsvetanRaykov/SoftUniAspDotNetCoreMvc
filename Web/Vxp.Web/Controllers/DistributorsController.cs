@@ -27,7 +27,7 @@ namespace Vxp.Web.Controllers
         {
 
             var usrDistributors = this._distributorsService
-                .GetDistributorsForUser<UserProfileDistributorViewModel>(customerName).GetAwaiter().GetResult().Select(u => u.UserName).ToHashSet();
+                .GetDistributorsForUserAsync<UserProfileDistributorViewModel>(customerName).GetAwaiter().GetResult().Select(u => u.UserName).ToHashSet();
 
             var allDistributors = await this._usersService
                 .GetAllInRoleAsync<UserProfileDistributorViewModel>(GlobalConstants.Roles

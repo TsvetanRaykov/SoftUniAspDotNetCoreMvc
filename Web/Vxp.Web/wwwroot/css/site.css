@@ -443,3 +443,33 @@ button.product-category-btn {
 .vxp-table td {
     vertical-align: middle !important;
 }
+
+#distributor-invitation-form textarea {
+    resize: both;
+}
+
+#btn-get-new-distributor-key {
+    font-size: x-large;
+    cursor: pointer;
+}
+
+    #btn-get-new-distributor-key:hover {
+        color: #c82333 !important;
+    }
+
+#table-customer-invitations tr:hover {
+    cursor: pointer;
+    text-decoration-line: underline;
+}
+
+#modal-customer-invitation-details .modal-content {
+    font-size: small;
+}
+
+    #modal-customer-invitation-details .modal-content div.vxp-form-control-label {
+        background: #6e5773;
+        color: #ffffff !important;
+    }
+    #modal-invitation-accepted-field {
+        min-height: 30px;
+    }

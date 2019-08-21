@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Vxp.Services.Models;
 
 namespace Vxp.Services.Data.Users
 {
@@ -11,8 +13,13 @@ namespace Vxp.Services.Data.Users
 
         Task<bool> RemoveCustomerFromDistributorAsync(string customerName, string distributorName);
 
-        Task<IQueryable<TViewModel>> GetCustomers<TViewModel>(string distributorName);
+        Task<IQueryable<TViewModel>> GetCustomersAsync<TViewModel>(string distributorName);
 
-        Task<IQueryable<TViewModel>> GetDistributorsForUser<TViewModel>(string customerName);
+        Task<List<TViewModel>> GetCustomerInvitationsAsync<TViewModel>(string senderId);
+
+        Task<IQueryable<TViewModel>> GetDistributorsForUserAsync<TViewModel>(string customerName);
+
+        Task<bool> SendInvitationToCustomerAsync(EmailDto email, string sederId);
+
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using CloudinaryDotNet;
+using Ganss.XSS;
 using Vxp.Common;
 using Vxp.Data;
 using Vxp.Data.Common;
@@ -25,6 +26,7 @@ using Vxp.Services.Data.Settings;
 using Vxp.Services.Data.Users;
 using Vxp.Services.Mapping;
 using Vxp.Services.Messaging;
+using Vxp.Services.Models;
 using Vxp.Web.Infrastructure.Extensions;
 using Vxp.Web.ViewModels;
 using Vxp.Web.ViewModels.Administration.Dashboard;
@@ -136,6 +138,7 @@ namespace Vxp.Web
             Cloudinary cloudinaryUtility = new Cloudinary(cloudinaryAccount);
 
             services.AddSingleton(cloudinaryUtility);
+            services.AddSingleton<IHtmlSanitizer, HtmlSanitizer>();
 
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IRolesService, RolesService>();
@@ -151,7 +154,7 @@ namespace Vxp.Web
         {
             AutoMapperConfig.RegisterMappings(
                 typeof(ErrorViewModel).GetTypeInfo().Assembly,
-                typeof(IndexViewModel).GetTypeInfo().Assembly);
+                typeof(EmailDto).GetTypeInfo().Assembly);
 
 
             // Seed data on application startup
