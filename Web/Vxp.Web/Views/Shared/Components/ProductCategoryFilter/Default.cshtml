@@ -1,0 +1,5 @@
+﻿@model IEnumerable<SelectListItem>
+<form class="w-100">
+    @*<label class="vxp-form-control-label" for="product-category-filter-ddl">Select Category</label>*@
+    <select onchange="javascript:this.form.submit();" title="Category" id="product-category-filter-ddl" class="form-control text-dark font-weight-bold" name="CategoryId" asp-items="@Model"></select>
+</form>

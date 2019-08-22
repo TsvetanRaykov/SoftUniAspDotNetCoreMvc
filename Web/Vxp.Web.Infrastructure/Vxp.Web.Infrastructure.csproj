@@ -8,12 +8,6 @@
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="ViewComponents\**" />
-    <EmbeddedResource Remove="ViewComponents\**" />
-    <None Remove="ViewComponents\**" />
-  </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />
   </ItemGroup>
@@ -22,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Vxp.Data.Models\Vxp.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Services\Vxp.Services.Mapping\Vxp.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Vxp.Common\Vxp.Common.csproj" />
   </ItemGroup>
   <ItemGroup>

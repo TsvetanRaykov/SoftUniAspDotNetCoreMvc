@@ -1,15 +1,17 @@
 ﻿@using System.Web
 @using Vxp.Web.ViewModels.Distributor.Products
 
-@model IEnumerable<ProductListViewModel>
+@model ProductsListViewModel
 @{
     ViewData["Title"] = "Products";
 }
 
-<h4>@ViewData["Title"]</h4>
 
+<div class="w-33 mb-3 d-flex justify-content-between">
+    <h4>@ViewData["Title"]</h4> <div class="px-4"></div>   <vc:product-category-filter category-id="@Model.CategoryFilterId"></vc:product-category-filter>
+</div>
 <div class="row">
-    @foreach (var product in Model)
+    @foreach (var product in Model.Products)
     {
         <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-3">
             <div class="card h-100">
