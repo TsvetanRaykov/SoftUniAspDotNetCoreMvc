@@ -119,8 +119,9 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
             if (inputModel.RoleName == GlobalConstants.Roles.DistributorRoleName || inputModel.RoleName == GlobalConstants.Roles.VendorRoleName)
             {
-                var availableBankAccount = this._bankAccountsService.GetAllBankAccounts<UserProfileBankAccountInputModel>()
-                    .FirstOrDefault(b => b.OwnerId == inputModel.UserId);
+                var availableBankAccount = this._bankAccountsService
+                    .GetBankAccountsForUser<UserProfileBankAccountInputModel>(inputModel.UserName)
+                    .FirstOrDefault();
                 if (availableBankAccount == null)
                 {
                     var errorMessage = string.Format(GlobalConstants.ErrorMessages.RequiredField, "Bank account");

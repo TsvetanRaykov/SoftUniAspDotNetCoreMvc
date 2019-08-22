@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Vxp.Services.Models;
@@ -7,7 +8,7 @@ namespace Vxp.Services.Data.Users
 {
     public interface IDistributorsService
     {
-        Task<string> GenerateNewDistributorKeyAsync(string distributorName);
+        //Task<string> GenerateNewDistributorKeyAsync(string distributorName);
 
         Task<bool> AddCustomerToDistributorAsync(string customerName, string distributorKey);
 
@@ -20,6 +21,8 @@ namespace Vxp.Services.Data.Users
         Task<IQueryable<TViewModel>> GetDistributorsForUserAsync<TViewModel>(string customerName);
 
         Task<bool> SendInvitationToCustomerAsync(EmailDto email, string sederId);
+
+        string GenerateNewKeyForDistributor(string distributorName);
 
     }
 }

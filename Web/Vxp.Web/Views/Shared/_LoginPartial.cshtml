@@ -35,19 +35,25 @@
         if (this.User.IsInRole(GlobalConstants.Roles.AdministratorRoleName))
         {
             <li class="nav-item">
-                <a class="nav-link" asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="Admin Dashboard"><span>Admin</span></a>
+                <a class="nav-link" asp-area="Administration" asp-controller="Dashboard" asp-action="Index" title="@GlobalConstants.Roles.AdministratorRoleName Dashboard"><span>@GlobalConstants.Roles.AdministratorRoleName</span></a>
             </li>
         }
         else if (this.User.IsInRole(GlobalConstants.Roles.VendorRoleName))
         {
             <li class="nav-item">
-                <a class="nav-link" asp-area="Vendor" asp-controller="Products" asp-action="Index" title="Vendor Dashboard"><span>Vendor</span></a>
+                <a class="nav-link" asp-area="Vendor" asp-controller="Products" asp-action="Index" title="@GlobalConstants.Roles.VendorRoleName Dashboard"><span>@GlobalConstants.Roles.VendorRoleName</span></a>
             </li>
         }
         else if (this.User.IsInRole(GlobalConstants.Roles.DistributorRoleName))
         {
             <li class="nav-item">
-                <a class="nav-link" asp-area="Distributor" asp-controller="Products" asp-action="Index" title="Distributor Dashboard"><span>Distributor</span></a>
+                <a class="nav-link" asp-area="Distributor" asp-controller="Products" asp-action="Index" title="@GlobalConstants.Roles.DistributorRoleName Dashboard"><span>@GlobalConstants.Roles.DistributorRoleName</span></a>
+            </li>
+        }
+        else if (this.User.IsInRole(GlobalConstants.Roles.CustomerRoleName))
+        {
+            <li class="nav-item">
+                <a class="nav-link" asp-area="Customer" asp-controller="Products" asp-action="Index" title="@GlobalConstants.Roles.CustomerRoleName Dashboard"><span>@GlobalConstants.Roles.CustomerRoleName</span></a>
             </li>
         }
         <li class="nav-item">

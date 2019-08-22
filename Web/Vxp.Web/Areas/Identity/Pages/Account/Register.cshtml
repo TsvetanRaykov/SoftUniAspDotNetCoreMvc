@@ -4,30 +4,45 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="w-100 d-flex">
+    <input asp-for="IsNewUser" type="hidden" />
+    <div class="w-50 ftco-animate pr-5" data-scrollax=" properties: { translateY: '70%' }">
+        <div class="py-5"></div>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4>Create a new account.</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.ConfirmPassword"></label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
+        <div class="form-group">
+            <label class="vxp-form-control-label text-white" asp-for="UserName"></label>
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="vxp-validation-errors-placeholder text-danger d-block p-1"></span>
+        </div>
+        <div class="form-group">
+            <label class="vxp-form-control-label text-white" asp-for="InputPasswords.Password"></label>
+            <input asp-for="InputPasswords.Password" class="form-control" />
+            <span asp-validation-for="InputPasswords.Password" class="vxp-validation-errors-placeholder text-danger d-block p-1"></span>
+        </div>
+        <div class="form-group">
+            <label class="vxp-form-control-label text-white" asp-for="InputPasswords.ConfirmPassword"></label>
+            <input asp-for="InputPasswords.ConfirmPassword" class="form-control" />
+            <span asp-validation-for="InputPasswords.ConfirmPassword" class="vxp-validation-errors-placeholder text-danger d-block"></span>
+        </div>
+        <button type="submit" class="w-33 btn btn-primary py-3 text-nowrap">Register</button>
     </div>
-</div>
+    <div class="w-50 ftco-animate pr-5" data-scrollax=" properties: { translateY: '70%' }">
+        <div class="py-5"></div>
+        <div class="form-group">
+            <label class="vxp-form-control-label text-white" asp-for="FirstName"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="vxp-validation-errors-placeholder text-danger d-block p-1"></span>
+        </div>
+        <div class="form-group">
+            <label class="vxp-form-control-label text-white" asp-for="LastName"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="vxp-validation-errors-placeholder text-danger d-block p-1"></span>
+        </div>
+        <div class="form-group">
+            <label class="vxp-form-control-label text-white" asp-for="DistributorKey"></label>
+            <input asp-for="DistributorKey" class="form-control" />
+            <span asp-validation-for="DistributorKey" class="vxp-validation-errors-placeholder text-danger d-block"></span>
+        </div>
+
+    </div>
+</form>

@@ -70,7 +70,8 @@
                 }
             }
 
-            applicationUser.Email = applicationUser.ContactAddress.Email;
+            applicationUser.Email = applicationUser.UserName;
+
             var user = await this._userManager.CreateAsync(applicationUser, password);
 
             if (!user.Succeeded) { return null; }

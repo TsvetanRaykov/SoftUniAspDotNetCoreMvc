@@ -20,8 +20,8 @@
         public ActionResult<string> Get(int id)
         {
             var bankAccount = this._bankAccountsService
-                .GetAllBankAccounts<UserProfileBankAccountInputModel>()
-                .FirstOrDefault(x => x.Id == id);
+                .GetBankAccountById<UserProfileBankAccountInputModel>(id);
+
             if (bankAccount == null)
             {
                 return this.NoContent();
@@ -38,7 +38,7 @@
             {
                 return this.BadRequest();
             }
-            await this._bankAccountsService.UpdateBankAccount(bankAccountModel);
+            await this._bankAccountsService.UpdateBankAccountAsync(bankAccountModel);
 
             return this.Ok();
         }
@@ -52,7 +52,7 @@
                 return this.BadRequest();
             }
 
-            var newBankAccount = await this._bankAccountsService.CreateBankAccount(bankAccountModel);
+            var newBankAccount = await this._bankAccountsService.CreateBankAccountAsync(bankAccountModel);
 
             if (newBankAccount.Id > 0)
             {

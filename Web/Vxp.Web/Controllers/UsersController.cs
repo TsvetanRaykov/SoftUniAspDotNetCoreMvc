@@ -115,6 +115,7 @@ namespace Vxp.Web.Areas.Users.Controllers
 
         [AcceptVerbs("Post")]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> ValidateNewUsername(string userName, bool isNewUser)
         {
             if (isNewUser && await this._usersService.IsRegistered(userName))

@@ -1,0 +1,41 @@
+﻿@using Vxp.Web.Areas.Customer
+<ul class="nav flex-column flex-nowrap nav-pills">
+
+    <li class="nav-item">
+        <a class="btn btn-primary w-100 text-left" data-toggle="collapse" href="#vendor-manage-categories">Products</a>
+        <div id="vendor-manage-categories" class="collapse show">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link vxp-underline-primary @CustomerNavPages.IndexNavClass(ViewContext)" asp-area="Customer" asp-controller="Products" asp-action="Index"><span>List</span></a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-primary w-100 text-left" data-toggle="collapse" href="#vendor-manage-distributors">Customers</a>
+        <div id="vendor-manage-distributors" class="collapse show">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link vxp-underline-primary" asp-area="Customer" asp-controller="Customers" asp-action="Index"><span>List</span></a></li>
+                <li class="nav-item"><a class="nav-link vxp-underline-primary" asp-area="Customer" asp-controller="Customers" asp-action="Pending"><span>Pending Requests</span></a></li>
+                <li class="nav-item"><a class="nav-link vxp-underline-primary" asp-area="Customer" asp-controller="Customers" asp-action="Invite"><span>Invite</span></a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-primary w-100 text-left" data-toggle="collapse" href="#vendor-manage-projects">Projects</a>
+        <div id="vendor-manage-projects" class="collapse show">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link vxp-underline-primary" href="#"><span>Link 1</span></a></li>
+                <li class="nav-item"><a class="nav-link vxp-underline-primary" href="#"><span>Link 2</span></a></li>
+            </ul>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="btn btn-primary w-100 text-left" data-toggle="collapse" href="#vendor-manage-messages">Messages</a>
+        <div id="vendor-manage-messages" class="collapse show">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link vxp-underline-primary" href="#"><span>Link 1</span></a></li>
+                <li class="nav-item"><a class="nav-link vxp-underline-primary" href="#"><span>Link 2</span></a></li>
+            </ul>
+        </div>
+    </li>
+
+</ul>

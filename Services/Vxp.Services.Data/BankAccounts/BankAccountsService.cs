@@ -1,4 +1,7 @@
-﻿namespace Vxp.Services.Data.BankAccounts
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+
+namespace Vxp.Services.Data.BankAccounts
 {
     using System.Linq;
     using System.Threading.Tasks;
@@ -15,7 +18,7 @@
             this._bankAccountsRepository = bankAccountsRepository;
         }
 
-        public async Task<TViewModel> CreateBankAccount<TViewModel>(TViewModel bankAccount)
+        public async Task<TViewModel> CreateBankAccountAsync<TViewModel>(TViewModel bankAccount)
         {
             var appBankAccount = AutoMapper.Mapper.Map<BankAccount>(bankAccount);
 
@@ -26,9 +29,25 @@
             return bankAccount;
         }
 
-        public IQueryable<TViewModel> GetAllBankAccounts<TViewModel>()
+        public TViewModel GetBankAccountById<TViewModel>(int bankAccountId)
         {
-            return this._bankAccountsRepository.AllAsNoTracking().To<TViewModel>();
+            var bankAccount = this._bankAccountsRepository.AllAsNoTracking()
+                .FirstOrDefault(b => b.Id == bankAccountId);
+
+            if (bankAccount == null)
+            {
+                return default;
+            }
+
+            return AutoMapper.Mapper.Map<TViewModel>(bankAccount);
+        }
+
+        public IQueryable<TViewModel> GetBankAccountsForUser<TViewModel>(string userName)
+        {
+            var bankAccounts = this._bankAccountsRepository.AllAsNoTracking()
+                .Where(b => b.Owner.UserName == userName)
+                .To<TViewModel>();
+            return bankAccounts;
         }
 
         public async Task<bool> RemoveBankAccountAsync(int bankAccountId)
@@ -45,7 +64,25 @@
             return true;
         }
 
-        public async Task UpdateBankAccount<TViewModel>(TViewModel bankAccount)
+        public async Task<bool> AssignDistributorKeyToBankAccountAsync(int bankAccountId, string distributorKey)
+        {
+            var bankAccountFromDb = await this._bankAccountsRepository.GetByIdWithDeletedAsync(bankAccountId);
+
+            if (bankAccountFromDb == null)
+            {
+                return false;
+            }
+
+            bankAccountFromDb.DistributorKeys.Add(new DistributorKey
+            {
+                KeyCode = new Guid(distributorKey)
+            });
+
+            await this._bankAccountsRepository.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task UpdateBankAccountAsync<TViewModel>(TViewModel bankAccount)
         {
             var appBankAccount = AutoMapper.Mapper.Map<BankAccount>(bankAccount);
             this._bankAccountsRepository.Update(appBankAccount);

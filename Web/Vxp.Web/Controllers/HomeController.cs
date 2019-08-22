@@ -30,6 +30,10 @@
                 return this.RedirectToAction("Index", "Products", new { area = "Distributor" });
             }
 
+            if (this.User.IsInRole(GlobalConstants.Roles.CustomerRoleName))
+            {
+                return this.RedirectToAction("Index", "Products", new { area = "Customer" });
+            }
 
             return this.View();
 

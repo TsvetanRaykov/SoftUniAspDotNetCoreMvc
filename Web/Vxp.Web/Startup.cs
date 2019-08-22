@@ -27,6 +27,7 @@ using Vxp.Services.Data.Users;
 using Vxp.Services.Mapping;
 using Vxp.Services.Messaging;
 using Vxp.Services.Models;
+using Vxp.Web.Areas.Identity.Pages.Account;
 using Vxp.Web.Infrastructure.Extensions;
 using Vxp.Web.ViewModels;
 using Vxp.Web.ViewModels.Administration.Dashboard;
@@ -152,9 +153,9 @@ namespace Vxp.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            AutoMapperConfig.RegisterMappings(
-                typeof(ErrorViewModel).GetTypeInfo().Assembly,
-                typeof(EmailDto).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly,
+                typeof(EmailDto).GetTypeInfo().Assembly,
+                typeof(RegisterModel).GetTypeInfo().Assembly);
 
 
             // Seed data on application startup

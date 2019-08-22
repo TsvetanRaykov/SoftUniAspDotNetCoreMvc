@@ -1,13 +1,15 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-
-namespace Vxp.Services.Data.BankAccounts
+﻿namespace Vxp.Services.Data.BankAccounts
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
     public interface IBankAccountsService
     {
-        Task<TViewModel> CreateBankAccount<TViewModel>(TViewModel bankAccount);
-        IQueryable<TViewModel> GetAllBankAccounts<TViewModel>();
+        Task<TViewModel> CreateBankAccountAsync<TViewModel>(TViewModel bankAccount);
+        TViewModel GetBankAccountById<TViewModel>(int bankAccountId);
+        IQueryable<TViewModel> GetBankAccountsForUser<TViewModel>(string userName);
         Task<bool> RemoveBankAccountAsync(int bankAccountId);
-        Task UpdateBankAccount<TViewModel>(TViewModel bankAccount);
+        Task UpdateBankAccountAsync<TViewModel>(TViewModel bankAccount);
+        Task<bool> AssignDistributorKeyToBankAccountAsync(int bankAccountId, string distributorKey);
     }
 }

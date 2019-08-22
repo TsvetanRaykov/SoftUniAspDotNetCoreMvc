@@ -1,4 +1,6 @@
-﻿using Vxp.Web.ViewModels.Distributor;
+﻿using Vxp.Services.Data.BankAccounts;
+using Vxp.Services.Models;
+using Vxp.Web.ViewModels.Distributor;
 
 namespace Vxp.Web.Controllers
 {
@@ -14,11 +16,16 @@ namespace Vxp.Web.Controllers
     {
         private readonly IUsersService _usersService;
         private readonly IDistributorsService _distributorsService;
+        private readonly IBankAccountsService _bankAccountsService;
 
-        public DistributorsController(IUsersService usersService, IDistributorsService distributorsService)
+        public DistributorsController(
+            IUsersService usersService, 
+            IDistributorsService distributorsService, 
+            IBankAccountsService bankAccountsService)
         {
             this._usersService = usersService;
             this._distributorsService = distributorsService;
+            this._bankAccountsService = bankAccountsService;
         }
 
         [HttpGet("[action]/{customerName}")]
@@ -62,7 +69,15 @@ namespace Vxp.Web.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var distributorKey = await this._distributorsService.GenerateNewDistributorKeyAsync(inputModel.DistributorEmail);
+                var distributorKey = this._distributorsService.GenerateNewKeyForDistributor(inputModel.DistributorEmail);
+                var bankAccount = this._bankAccountsService
+                    .GetBankAccountsForUser<BankAccountDto>(inputModel.DistributorEmail).FirstOrDefault();
+                if (bankAccount == null)
+                {
+                    return this.BadRequest();
+                }
+
+                await this._bankAccountsService.AssignDistributorKeyToBankAccountAsync(bankAccount.Id, distributorKey);
 
                 if (await this._distributorsService.AddCustomerToDistributorAsync(inputModel.CustomerEmail, distributorKey))
                 {

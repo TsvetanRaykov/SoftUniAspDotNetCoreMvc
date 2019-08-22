@@ -5,6 +5,7 @@
     using Services.Mapping;
     using Services.Models;
     using System.ComponentModel.DataAnnotations;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Collections.Generic;
@@ -35,6 +36,13 @@
         [Display(Name = "Distributor Key")]
         [Required(AllowEmptyStrings = false)]
         public string DistributorKey { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue)]
+        public int BankAccountId { get; set; }
+
+        [Display(Name = "Bank Account")]
+        public ICollection<SelectListItem> AvailableBankAccounts { get; set; }
 
         public DateTime CreatedOn { get; set; }
         public DateTime? Accepted { get; set; }

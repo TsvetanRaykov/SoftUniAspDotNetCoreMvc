@@ -1,7 +1,4 @@
-﻿@using System.Globalization
-@using System.Text.Encodings.Web
-@inject JavaScriptEncoder encoder
-@using Vxp.Common
+﻿@using Vxp.Common
 @model Vxp.Web.ViewModels.Distributor.Customers.CustomersInvitationInputModel
 @{
     ViewData["Title"] = "Invite Customer";
@@ -35,6 +32,12 @@
                 <label class="vxp-form-control-label" asp-for="MessageBody"></label>
                 <textarea class="form-control text-dark font-weight-bold" asp-for="MessageBody"></textarea>
                 <span class="text-danger d-block vxp-validation-errors-placeholder" asp-validation-for="MessageBody"></span>
+            </div>
+            <div>
+                <label class="vxp-form-control-label" asp-for="AvailableBankAccounts"></label>
+                <select title="Role"
+                        class="form-control text-dark font-weight-bold" asp-for="BankAccountId" asp-items="@Model.AvailableBankAccounts"></select>
+                <span class="text-danger d-block vxp-validation-errors-placeholder" asp-validation-for="BankAccountId"></span>
             </div>
             <div>
                 <label class="vxp-form-control-label" asp-for="DistributorKey"></label>

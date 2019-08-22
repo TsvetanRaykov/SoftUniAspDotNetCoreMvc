@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Vxp.Common;
 using Vxp.Data.Common.Repositories;
 using Vxp.Data.Models;
@@ -38,33 +38,47 @@ namespace Vxp.Services.Data.Users
             this._customerInvitationsRepository = customerInvitationsRepository;
         }
 
-        public async Task<string> GenerateNewDistributorKeyAsync(string distributorName)
+        //public async Task<string> GenerateNewDistributorKeyAsync(string distributorName)
+        //{
+        //    var distributor = this._usersRepository.All()
+        //        .Include(u => u.BankAccounts)
+        //        .ThenInclude(ba => ba.DistributorKeys)
+        //        .FirstOrDefault(u => u.UserName == distributorName);
+
+        //    var newDistributorKey = new DistributorKey
+        //    {
+        //        KeyCode = Guid.NewGuid(),
+        //        BankAccount = distributor?.BankAccounts.FirstOrDefault()
+        //    };
+
+        //    if (newDistributorKey.BankAccount != null)
+        //    {
+        //        distributor?.BankAccounts.FirstOrDefault()?.DistributorKeys.Add(newDistributorKey);
+        //        await this._usersRepository.SaveChangesAsync();
+        //        return newDistributorKey.KeyCode.ToString();
+        //    }
+
+        //    return null;
+        //}
+
+        public string GenerateNewKeyForDistributor(string distributorName)
         {
             var distributor = this._usersRepository.All()
                 .Include(u => u.BankAccounts)
-                .ThenInclude(ba => ba.DistributorKeys)
                 .FirstOrDefault(u => u.UserName == distributorName);
 
-            var newDistributorKey = new DistributorKey
+            if (distributor?.BankAccounts.FirstOrDefault() == null)
             {
-                KeyCode = Guid.NewGuid(),
-                BankAccount = distributor?.BankAccounts.FirstOrDefault()
-            };
-
-            if (newDistributorKey.BankAccount != null)
-            {
-                distributor?.BankAccounts.FirstOrDefault()?.DistributorKeys.Add(newDistributorKey);
-                await this._usersRepository.SaveChangesAsync();
-                return newDistributorKey.KeyCode.ToString();
+                return null;
             }
 
-            return null;
+            // TODO: Make the key more fancy
+            return Guid.NewGuid().ToString();
         }
 
         public async Task<bool> AddCustomerToDistributorAsync(string customerName, string distributorKey)
         {
-            var customerFromDb = await this._usersRepository
-                .All()
+            var customerFromDb = await this._usersRepository.All()
                 .Include(u => u.Roles).ThenInclude(r => r.Role)
                 .FirstOrDefaultAsync(u => u.UserName == customerName);
 
