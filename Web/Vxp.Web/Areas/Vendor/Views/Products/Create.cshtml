@@ -12,7 +12,7 @@
                     <label asp-for="@Model.Category.Name" class="vxp-form-control-label"></label>
                     <select title="Category"
                             class="form-control text-dark font-weight-bold" asp-for="@Model.CategoryId" asp-items="@Model.AvailableCategories"></select>
-                    <span asp-validation-for="@Model.Category.Name" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                    <span asp-validation-for="@Model.CategoryId" class="text-danger d-block vxp-validation-errors-placeholder"></span>
                 </td>
                 <td>
                     <label class="vxp-form-control-label" asp-for="@Model.Name">Name</label>
@@ -79,12 +79,21 @@
                 </td>
             </tr>
             <tr>
-                <td class="position-relative">
-                    <button class="btn btn-primary rounded vxp-btn-absolute" type="submit">Create</button>
-                </td>
                 <td>
-                    <label class="vxp-form-control-label" asp-for="@Model.IsAvailable"></label><br />
-                    <input asp-for="@Model.IsAvailable" class="form-control">
+                    <label class="vxp-form-control-label d-block">&nbsp;</label>
+                    <button class="w-25 mt-2 btn btn-primary rounded" type="submit">Create</button>
+                    <span class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                </td>
+                <td class="d-flex justify-content-between">
+                    <div>
+                        <label class="vxp-form-control-label" asp-for="@Model.BasePrice"></label>
+                        <input class="form-control" asp-for="@Model.BasePrice" />
+                        <span asp-validation-for="@Model.BasePrice" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                    </div>
+                    <div class="">
+                        <label class="vxp-form-control-label" asp-for="@Model.IsAvailable"></label><br />
+                        <input asp-for="@Model.IsAvailable" class="form-control float-right">
+                    </div>
                 </td>
             </tr>
         </table>

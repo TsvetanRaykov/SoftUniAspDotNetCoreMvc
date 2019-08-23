@@ -33,9 +33,13 @@ namespace Vxp.Web.Areas.Customer.Controllers
             return View(viewModel);
         }
 
-        public IActionResult View(int productId)
+        public IActionResult View(int id)
         {
-            return this.View();
+            var product = this._productsService.GetAllProducts<ProductViewModel>().FirstOrDefault(p => p.Id == id);
+
+            product?.Images.Add(product.Image);
+
+            return this.View(product);
         }
     }
 }

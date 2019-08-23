@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Vxp.Common;
+using Vxp.Services.Data.Products;
 using Vxp.Services.Data.Users;
+using Vxp.Web.ViewModels.Prices;
 using Vxp.Web.ViewModels.Users;
 using Vxp.Web.ViewModels.Vendor.Distributors;
 
@@ -12,18 +14,33 @@ namespace Vxp.Web.Areas.Vendor.Controllers
     public class DistributorsController : VendorsController
     {
         private readonly IUsersService _usersService;
+        private readonly IProductPricesService _productsPricesService;
 
-        public DistributorsController(IUsersService usersService)
+        public DistributorsController(IUsersService usersService, IProductPricesService productsPricesService)
         {
             this._usersService = usersService;
+            this._productsPricesService = productsPricesService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var viewModel = await this._usersService.GetAllInRoleAsync<DistributorListViewModel>(
+            var viewModel = await this._usersService.GetAllInRoleAsync<DistributorsListViewModel>(
                     GlobalConstants.Roles.DistributorRoleName);
 
             return this.View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePriceModel(PriceModifierInputModel inputModel)
+        {
+
+            if (this.ModelState.IsValid)
+            {
+                await this._productsPricesService.SetProductPriceModifierAsync(inputModel);
+            }
+
+            return this.RedirectToAction(nameof(this.Index));
         }
 
         public async Task<IActionResult> Register()

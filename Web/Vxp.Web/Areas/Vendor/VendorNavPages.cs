@@ -13,6 +13,7 @@ namespace Vxp.Web.Areas.Vendor
 
         public static string DistributorsList => "DistributorsList";
         public static string DistributorsRegister => "DistributorsRegister";
+        public static string PriceModifiers => "PriceModifiers";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
         public static string DeletedProductsNavClass(ViewContext viewContext) => PageNavClass(viewContext, DeletedProducts);
@@ -21,6 +22,7 @@ namespace Vxp.Web.Areas.Vendor
         public static string DetailsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ManageDetails);
         public static string DistributorsListNavClass(ViewContext viewContext) => PageNavClass(viewContext, DistributorsList);
         public static string DistributorsRegisterNavClass(ViewContext viewContext) => PageNavClass(viewContext, DistributorsRegister);
+        public static string PriceModifiersNavClass(ViewContext viewContext) => PageNavClass(viewContext, PriceModifiers);
 
         private static string PageNavClass(ViewContext viewContext, string page)
         {

@@ -119,13 +119,21 @@
                 </td>
             </tr>
             <tr>
-                <td class="position-relative">
-                    <button class="btn btn-primary rounded vxp-btn-absolute" type="submit">Update</button>
-                    <button class="btn btn-danger rounded vxp-btn-absolute" id="btnVendorProductDelete" type="button" data-id="@Model.Id" data-name="@Model.Name" onclick="DeleteProduct(this)">Delete</button>
-                </td>
                 <td>
-                    <label class="vxp-form-control-label" asp-for="@Model.IsAvailable"></label><br />
-                    <input asp-for="@Model.IsAvailable" class="form-control">
+                    <label class="vxp-form-control-label d-block mb-2">&nbsp;</label>
+                    <button class="btn btn-primary rounded" type="submit">Update</button>
+                    <button class="btn btn-danger rounded" id="btnVendorProductDelete" type="button" data-id="@Model.Id" data-name="@Model.Name" onclick="DeleteProduct(this)">Delete</button>
+                </td>
+                <td class="d-flex justify-content-between">
+                    <div>
+                        <label class="vxp-form-control-label" asp-for="@Model.BasePrice"></label>
+                        <input class="form-control" asp-for="@Model.BasePrice" />
+                        <span asp-validation-for="@Model.BasePrice" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                    </div>
+                    <div>
+                        <label class="vxp-form-control-label" asp-for="@Model.IsAvailable"></label><br />
+                        <input asp-for="@Model.IsAvailable" class="form-control">
+                    </div>
                 </td>
             </tr>
         </table>

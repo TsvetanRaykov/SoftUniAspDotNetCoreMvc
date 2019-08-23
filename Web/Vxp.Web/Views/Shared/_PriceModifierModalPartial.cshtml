@@ -1,0 +1,105 @@
+﻿@using Vxp.Data.Common.Enums
+@model Vxp.Web.ViewModels.Prices.PriceModifierInputModel
+<!-- Modal Price Modifier -->
+<div class="modal fade" id="modal@(Model.BuyerId)" tabindex="-1" role="dialog" aria-labelledby="modalPriceModifierLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Price Modifier</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="UpdatePriceModel">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="BuyerId" />
+                    <input type="hidden" asp-for="SellerId" />
+                    <div class="pb-1">
+                        <label asp-for="Name" class="vxp-form-control-label"></label>
+                        <input asp-for="Name" class="form-control text-dark font-weight-bold" />
+                        <span asp-validation-for="Name" class="text-danger vxp-validation-errors-placeholder d-block"></span>
+                    </div>
+                    <div class="pb-1">
+                        <label asp-for="Description" class="vxp-form-control-label"></label>
+                        <input asp-for="Description" class="form-control text-dark font-weight-bold" />
+                        <span asp-validation-for="Description" class="text-danger vxp-validation-errors-placeholder d-block"></span>
+                    </div>
+                    <div class="pb-1">
+                        <label asp-for="PriceModifierRange" class="vxp-form-control-label"></label>
+                        <input asp-for="PriceModifierRange" class="form-control text-dark font-weight-bold" readonly="readonly" />
+                        <span asp-validation-for="PriceModifierRange" class="text-danger vxp-validation-errors-placeholder d-block"></span>
+                    </div>
+                    <div class="pb-1">
+                        <label asp-for="PriceModifierType" class="vxp-form-control-label"></label>
+                        <select asp-for="PriceModifierType" asp-items="Html.GetEnumSelectList<PriceModifierType>()" class="form-control text-dark font-weight-bold"></select>
+                        <span asp-validation-for="PriceModifierType" class="text-danger vxp-validation-errors-placeholder d-block"></span>
+                    </div>
+                    <div class="pb-1">
+                        <label asp-for="PercentValue" class="vxp-form-control-label"></label>
+                        <input asp-for="PercentValue" class="form-control text-dark font-weight-bold" />
+                        <span asp-validation-for="PercentValue" class="text-danger vxp-validation-errors-placeholder d-block"></span>
+                    </div>
+                    <div class="pt-3 d-flex">
+                        <div class="w-50 d-flex flex-nowrap align-content-end">
+                            <input type="submit" value="Update" class="btn btn-primary" />
+                        </div>
+                        <div class="w-50">
+                            <div class="text-danger vxp-validation-errors-placeholder"></div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@*<table id="table-deleted-products" class="vxp-table table rounded display hover cell-border w-100">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Buyer</th>
+                <th>Range</th>
+                <th>Type</th>
+                <th>Value</th>
+                <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var modifier in Model.PriceModifiers)
+            {
+                <tr>
+                    <td class="bg-white">@modifier.Name</td>
+                    <td>@modifier.Description</td>
+                    <td>@modifier.Buyer.Name</td>
+                    <td>@modifier.PriceModifierRange</td>
+                    <td>@modifier.PriceModifierType</td>
+                    <td>@modifier.PercentValue</td>
+
+                    <td class="d-flex justify-content-end">
+                        <form method="post" asp-area="Vendor" asp-controller="Products" asp-action="RestoreProduct">
+                            <input type="hidden" name="id" asp-for="@modifier.Id" />
+                            <button class="btn btn-link btn-outline-success w-100" type="submit">Edit</button>
+                        </form>
+                        <div class="p-1"></div>
+                        <form method="post" asp-area="Vendor" asp-controller="Products" asp-action="DeleteHard">
+                            <input type="hidden" name="id" asp-for="@modifier.Id" />
+                            <button class="btn btn-link btn-outline-danger w-100" type="submit" data-name="@modifier.Name">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>*@

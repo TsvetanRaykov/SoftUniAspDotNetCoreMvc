@@ -1,22 +1,23 @@
-﻿using AutoMapper;
-using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-
-namespace Vxp.Web.ViewModels.Vendor.Distributors
+﻿namespace Vxp.Web.ViewModels.Vendor.Distributors
 {
-    public class DistributorListViewModel : IHaveCustomMappings
+    using AutoMapper;
+    using Data.Models;
+    using Prices;
+    using Services.Mapping;
+    using System.Collections.Generic;
+
+    public class DistributorsListViewModel : IHaveCustomMappings
     {
         public string Id { get; set; }
         public bool IsDeleted { get; set; }
         public string Company { get; set; }
         public string ContactEmail { get; set; }
         public string ShippingAddress { get; set; }
-        public decimal Discount { get; set; }
-        public string DiscountFormatted => $"{this.Discount:N2} %";
         public int ActiveProjects { get; set; }
+        public List<PriceModifierInputModel> PriceModifiers { get; set; }
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<ApplicationUser, DistributorListViewModel>()
+            configuration.CreateMap<ApplicationUser, DistributorsListViewModel>()
                 .ForMember(dest => dest.Company, opt => opt
                     .MapFrom(src =>
                         $"{src.Company.Name}, {src.Company.ContactAddress.City}, {src.Company.ContactAddress.CountryName}"))
@@ -24,7 +25,9 @@ namespace Vxp.Web.ViewModels.Vendor.Distributors
                     .MapFrom(src => src.Company.ContactAddress.Email))
                 .ForMember(dest => dest.ShippingAddress, opt => opt
                     .MapFrom(src =>
-                        $"{src.Company.ShippingAddress.AddressLocation}, {src.Company.ShippingAddress.City}, {src.Company.ShippingAddress.CountryName}"));
+                        $"{src.Company.ShippingAddress.AddressLocation}, {src.Company.ShippingAddress.City}, {src.Company.ShippingAddress.CountryName}"))
+                .ForMember(dest => dest.PriceModifiers, opt => opt
+                    .MapFrom(src => src.PriceModifiersReceive));
         }
     }
 }

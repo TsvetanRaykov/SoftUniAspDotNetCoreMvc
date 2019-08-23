@@ -29,6 +29,9 @@ namespace Vxp.Web.ViewModels.Vendor.Products
 
         public string Description { get; set; }
 
+        [Display(Name = "Category")]
+        [Required]
+        [Range(0, int.MaxValue)]
         public int CategoryId { get; set; }
         public ProductCategoryInputModel Category { get; set; }
 
@@ -54,5 +57,10 @@ namespace Vxp.Web.ViewModels.Vendor.Products
 
         [Display(Name = "Add property")]
         public List<SelectListItem> AvailableDetails { get; set; }
+
+        [Display(Name = "Base price €")]
+        [Required]
+        [Range(typeof(decimal), "0.01", "1000000", ErrorMessage = "The minimum base price is € {1}")]
+        public decimal BasePrice { get; set; }
     }
 }

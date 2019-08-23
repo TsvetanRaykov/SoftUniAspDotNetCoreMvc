@@ -85,6 +85,7 @@
             oldProduct.Description = newProduct.Description;
             oldProduct.Name = newProduct.Name;
             oldProduct.IsAvailable = newProduct.IsAvailable;
+            oldProduct.BasePrice = newProduct.BasePrice;
 
             if (newProduct.Image != null)
             {

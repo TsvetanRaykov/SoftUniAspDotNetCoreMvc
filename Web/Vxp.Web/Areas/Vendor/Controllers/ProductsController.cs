@@ -1,4 +1,6 @@
-﻿namespace Vxp.Web.Areas.Vendor.Controllers
+﻿using Vxp.Web.ViewModels.Prices;
+
+namespace Vxp.Web.Areas.Vendor.Controllers
 {
     using Common;
     using Microsoft.AspNetCore.Mvc;
@@ -28,10 +30,21 @@
             this._imageUploadService = imageUploadService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int categoryId)
         {
             var products = this._productsService.GetAllProducts<ProductListViewModel>();
-            return View(products);
+            if (categoryId > 0)
+            {
+                products = products.Where(p => p.CategoryId == categoryId);
+            }
+
+            var viewModel = new ProductsListViewModel
+            {
+                CategoryFilterId = categoryId,
+                Products = await products.ToListAsync()
+            };
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Create()

@@ -6,7 +6,6 @@
     ViewData["Title"] = "Products";
 }
 
-
 <div class="w-33 mb-3 d-flex justify-content-between">
     <h4>@ViewData["Title"]</h4> <div class="px-4"></div>   <vc:product-category-filter category-id="@Model.CategoryFilterId"></vc:product-category-filter>
 </div>
@@ -24,8 +23,12 @@
                     <div class="pb-1 mt-1">
                         <span class="mx-auto pb-1 text-dark font-weight-bold">@product.Name</span>
                     </div>
-                    <div>
-                        @product.Description
+                    @*<div>
+                            @product.Description
+                        </div>*@
+                    <div class="d-flex font-small justify-content-around">
+                        <div>base: € <span class="text-dark">@($"{product.BasePrice:N2}")</span></div>
+                        <div>buy: € <span class="text-success font-weight-bold">@($"{product.DistributorPrice:N2}")</span></div>
                     </div>
                 </div>
             </div>

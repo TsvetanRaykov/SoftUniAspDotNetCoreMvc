@@ -1,12 +1,14 @@
 ﻿namespace Vxp.Data.Models
 {
-    using Vxp.Data.Common.Enums;
+    using Common.Enums;
     using Vxp.Data.Common.Models;
 
     public class PriceModifier : BaseDeletableModel<int>
     {
+        public string SellerId { get; set; }
         public virtual ApplicationUser Seller { get; set; }
 
+        public string BuyerId { get; set; }
         public virtual ApplicationUser Buyer { get; set; }
 
         public PriceModifierRange PriceModifierRange { get; set; }

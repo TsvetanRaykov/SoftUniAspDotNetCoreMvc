@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Vxp.Web.ViewModels.Vendor.Distributors.DistributorListViewModel>
+﻿@using System.Security.Claims
+@using Vxp.Web.ViewModels.Prices
+@model IEnumerable<Vxp.Web.ViewModels.Vendor.Distributors.DistributorsListViewModel>
 @{
     ViewData["Title"] = "Distributors";
     ViewData["ActivePage"] = "DistributorsList";
@@ -10,7 +12,7 @@
             <th>Company</th>
             <th>Contact Email</th>
             <th>Shipping Address</th>
-            <th>Discount</th>
+            <th>Prices</th>
             <th>Active projects</th>
             <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
         </tr>
@@ -23,7 +25,20 @@
                 <td>@distributor.Company</td>
                 <td><a href="mailto:@distributor.ContactEmail" target="_top">@distributor.ContactEmail</a></td>
                 <td>@distributor.ShippingAddress</td>
-                <td>@distributor.DiscountFormatted</td>
+                <td>
+                    <div class="vxp-price-modifier-paceholder rounded">
+                        @{
+                            var priceModifier = distributor.PriceModifiers.FirstOrDefault() ?? new PriceModifierInputModel
+                            {
+                                BuyerId = distributor.Id,
+                                SellerId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value
+                            };
+
+                        }
+                        <a class="text-dark" href="#modal@(priceModifier.BuyerId)" data-toggle="modal" data-target="#modal@(priceModifier.BuyerId)">@priceModifier</a>
+                    </div>
+                    <partial name="_PriceModifierModalPartial" model="@priceModifier" />
+                </td>
                 <td>@distributor.ActiveProjects</td>
                 <td class="text-right">
 
@@ -53,6 +68,7 @@
         </tr>
     </tfoot>
 </table>
+
 @section Scripts{
     <script>
         $(document).ready(() => { $(".vxp-table").DataTable({ "lengthChange": false }); })
