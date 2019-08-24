@@ -39,6 +39,20 @@
                     <div class="col text-dark">@detail.Value</div>
                 </div>
             }
+            <div class="row bg-secondary rounded text-white px-2">Prices</div>
+
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3 font-weight-bold my-auto">
+                    Base price
+                </div>
+                <div class="col text-dark">€ @($"{@Model.BasePrice:N2}")</div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6 col-md-6 col-lg-3 font-weight-bold my-auto">
+                    Buy price
+                </div>
+                <div class="col text-dark">€ @($"{@Model.DistributorPrice:N2}")</div>
+            </div>
         </div>
     </div>
 </div>

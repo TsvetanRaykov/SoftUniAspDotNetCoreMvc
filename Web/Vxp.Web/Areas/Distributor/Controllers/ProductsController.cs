@@ -51,7 +51,20 @@
 
         public IActionResult Product(int id)
         {
-            var product = this._productsService.GetAllProducts<ProductViewModel>().FirstOrDefault(p => p.Id == id);
+            var product =
+                this._productsService.GetAllProducts<ProductViewModel>().FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                return this.RedirectToAction(nameof(this.Index));
+            }
+
+            var priceModifier =
+                this._productPricesService.GetBuyerPriceModifiers<PriceModifierDto>(this.User.Identity.Name)
+                .FirstOrDefault() ?? new PriceModifierDto();
+
+            product.PriceModifierType = priceModifier.PriceModifierType;
+            product.ModifierValue = priceModifier.PercentValue;
 
             product?.Images.Insert(0, product.Image);
 

@@ -1,19 +1,17 @@
-﻿using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Vxp.Data.Models;
-using Vxp.Services.Data.Users;
-using Vxp.Web.Controllers;
-using Vxp.Web.ViewModels.Users;
-
-namespace Vxp.Web.Areas.Users.Controllers
+﻿namespace Vxp.Web.Controllers
 {
+    using System.Linq;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI.Services;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
+    using Data.Models;
+    using Vxp.Services.Data.Users;
+    using ViewModels.Users;
+
     [Authorize]
     public class UsersController : BaseController
     {

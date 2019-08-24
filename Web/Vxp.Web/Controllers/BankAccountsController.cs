@@ -1,10 +1,9 @@
 ﻿namespace Vxp.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using System.Linq;
     using System.Threading.Tasks;
-    using Vxp.Services.Data.BankAccounts;
     using ViewModels.Users;
+    using Vxp.Services.Data.BankAccounts;
 
     public class BankAccountsController : ApiController
     {

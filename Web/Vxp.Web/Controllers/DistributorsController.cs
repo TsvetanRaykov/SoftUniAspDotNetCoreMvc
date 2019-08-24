@@ -1,8 +1,4 @@
-﻿using Vxp.Services.Data.BankAccounts;
-using Vxp.Services.Models;
-using Vxp.Web.ViewModels.Distributor;
-
-namespace Vxp.Web.Controllers
+﻿namespace Vxp.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using System.Linq;
@@ -11,6 +7,9 @@ namespace Vxp.Web.Controllers
     using Common;
     using Vxp.Services.Data.Users;
     using ViewModels.Users;
+    using Vxp.Services.Data.BankAccounts;
+    using Services.Models;
+    using ViewModels.Distributor;
 
     public class DistributorsController : ApiController
     {

@@ -1,6 +1,6 @@
 ﻿namespace Vxp.Data.Models
 {
-    using Vxp.Data.Common.Enums;
+    using Common.Enums;
     using Vxp.Data.Common.Models;
 
     public class OrderHistory : BaseDeletableModel<int>

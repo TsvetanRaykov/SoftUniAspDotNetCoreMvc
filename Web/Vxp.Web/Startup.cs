@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using CloudinaryDotNet;
+using Ganss.XSS;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -10,8 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
-using CloudinaryDotNet;
-using Ganss.XSS;
 using Vxp.Common;
 using Vxp.Data;
 using Vxp.Data.Common;
@@ -22,7 +22,7 @@ using Vxp.Data.Seeding;
 using Vxp.Services;
 using Vxp.Services.Data.BankAccounts;
 using Vxp.Services.Data.Products;
-using Vxp.Services.Data.Settings;
+using Vxp.Services.Data.Projects;
 using Vxp.Services.Data.Users;
 using Vxp.Services.Mapping;
 using Vxp.Services.Messaging;
@@ -30,7 +30,6 @@ using Vxp.Services.Models;
 using Vxp.Web.Areas.Identity.Pages.Account;
 using Vxp.Web.Infrastructure.Extensions;
 using Vxp.Web.ViewModels;
-using Vxp.Web.ViewModels.Administration.Dashboard;
 
 namespace Vxp.Web
 {
@@ -117,7 +116,7 @@ namespace Vxp.Web
             // Application services
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, VxpUserClaimsPrincipalFactory>();
             services.AddTransient<ISmsSender, NullMessageSender>();
-            services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IProjectsService, ProjectsService>();
             services.AddTransient<IDistributorsService, DistributorsService>();
             services.AddTransient<IEmailSender, SendGridEmailSender>(ctx =>
             {
