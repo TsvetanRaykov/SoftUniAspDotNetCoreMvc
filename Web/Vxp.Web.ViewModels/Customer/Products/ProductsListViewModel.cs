@@ -1,8 +1,8 @@
-﻿namespace Vxp.Web.ViewModels.Customers.Products
+﻿namespace Vxp.Web.ViewModels.Customer.Products
 {
     using System.Collections.Generic;
 
-    public partial class ProductsListViewModel
+    public class ProductsListViewModel
     {
         public ProductsListViewModel()
         {

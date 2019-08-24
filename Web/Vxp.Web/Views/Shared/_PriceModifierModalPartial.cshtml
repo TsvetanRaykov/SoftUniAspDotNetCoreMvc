@@ -1,4 +1,5 @@
-﻿@using Vxp.Data.Common.Enums
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@using Vxp.Data.Common.Enums
 @model Vxp.Web.ViewModels.Prices.PriceModifierInputModel
 <!-- Modal Price Modifier -->
 <div class="modal fade" id="modal@(Model.BuyerId)" tabindex="-1" role="dialog" aria-labelledby="modalPriceModifierLabel" aria-hidden="true">
@@ -12,9 +13,10 @@
             </div>
             <div class="modal-body">
                 <form asp-action="UpdatePriceModel">
-                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="PriceModifierId" />
                     <input type="hidden" asp-for="BuyerId" />
                     <input type="hidden" asp-for="SellerId" />
+                    <input type="hidden" asp-for="ReturnUrl" value="@this.Context.Request.GetDisplayUrl()" />
                     <div class="pb-1">
                         <label asp-for="Name" class="vxp-form-control-label"></label>
                         <input asp-for="Name" class="form-control text-dark font-weight-bold" />

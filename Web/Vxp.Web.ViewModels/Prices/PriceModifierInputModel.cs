@@ -4,13 +4,17 @@
     using Services.Mapping;
     using System.ComponentModel.DataAnnotations;
     using Vxp.Data.Common.Enums;
-    public class PriceModifierInputModel : IMapFrom<PriceModifier>, IMapTo<PriceModifier>
+    using AutoMapper;
+
+    public class PriceModifierInputModel : IHaveCustomMappings
     {
         public PriceModifierInputModel()
         {
             this.PriceModifierRange = PriceModifierRange.Total;
         }
-        public int? Id { get; set; }
+        public int PriceModifierId { get; set; }
+
+        public string ReturnUrl { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         public string SellerId { get; set; }
@@ -47,6 +51,14 @@
                 default:
                     return $"Up {this.PercentValue:N2} %";
             }
+        }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<PriceModifierInputModel, PriceModifier>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.PriceModifierId));
+            configuration.CreateMap<PriceModifier, PriceModifierInputModel>()
+                .ForMember(dest => dest.PriceModifierId, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

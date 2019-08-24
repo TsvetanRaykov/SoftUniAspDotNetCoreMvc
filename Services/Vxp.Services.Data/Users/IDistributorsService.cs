@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Vxp.Services.Models;
-
-namespace Vxp.Services.Data.Users
+﻿namespace Vxp.Services.Data.Users
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Models;
+
     public interface IDistributorsService
     {
-        //Task<string> GenerateNewDistributorKeyAsync(string distributorName);
-
         Task<bool> AddCustomerToDistributorAsync(string customerName, string distributorKey);
 
         Task<bool> RemoveCustomerFromDistributorAsync(string customerName, string distributorName);

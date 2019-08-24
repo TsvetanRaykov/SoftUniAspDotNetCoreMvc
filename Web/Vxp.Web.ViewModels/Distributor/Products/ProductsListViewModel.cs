@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Vxp.Web.ViewModels.Distributor.Products
+﻿namespace Vxp.Web.ViewModels.Distributor.Products
 {
+    using System.Collections.Generic;
+
     public class ProductsListViewModel
     {
         public ProductsListViewModel()

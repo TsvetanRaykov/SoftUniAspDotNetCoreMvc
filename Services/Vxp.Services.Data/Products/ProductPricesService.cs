@@ -23,11 +23,6 @@
             return modifiers;
         }
 
-        public IQueryable<TViewModel> GetSellerPriceModifiers<TViewModel>(string userName)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public Task<bool> DeleteProductPriceModifierAsync(int priceModifier)
         {
             throw new System.NotImplementedException();

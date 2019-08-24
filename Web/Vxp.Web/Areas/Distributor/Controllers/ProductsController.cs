@@ -48,5 +48,14 @@
 
             return View(viewModel);
         }
+
+        public IActionResult Product(int id)
+        {
+            var product = this._productsService.GetAllProducts<ProductViewModel>().FirstOrDefault(p => p.Id == id);
+
+            product?.Images.Insert(0, product.Image);
+
+            return this.View(product);
+        }
     }
 }

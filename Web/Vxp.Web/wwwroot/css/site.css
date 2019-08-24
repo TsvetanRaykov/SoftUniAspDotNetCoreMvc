@@ -483,13 +483,21 @@ button.product-category-btn {
     padding: 0 3px;
     background: #fae5ff !important;
 }
-.vxp-price-modifier-paceholder:hover {
-   
-    
-}
 
     .vxp-price-modifier-paceholder:hover a {
         color: #000 !important;
         font-weight: bold;
         text-decoration-line: underline;
     }
+
+#user-view-details {
+    font-size: 16px;
+}
+
+.bg-secondary {
+    background: #dc3545 !important;
+}
+
+#message-box textarea {
+    width: 98% !important;
+}

@@ -1,8 +1,8 @@
-﻿using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-
-namespace Vxp.Web.ViewModels.Customers.Products
+﻿namespace Vxp.Web.ViewModels.Distributor.Products
 {
+    using Data.Models;
+    using Services.Mapping;
+
     public class ProductCommonDetailViewModel : IMapFrom<CommonProductDetail>
     {
         public string Name { get; set; }

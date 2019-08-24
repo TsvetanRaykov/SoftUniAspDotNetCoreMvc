@@ -1,4 +1,4 @@
-﻿namespace Vxp.Web.ViewModels.Customers.Products
+﻿namespace Vxp.Web.ViewModels.Customer.Products
 {
     using Data.Models;
     using Services.Mapping;

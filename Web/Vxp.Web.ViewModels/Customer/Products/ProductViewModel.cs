@@ -2,7 +2,7 @@
 using Vxp.Data.Models;
 using Vxp.Services.Mapping;
 
-namespace Vxp.Web.ViewModels.Customers.Products
+namespace Vxp.Web.ViewModels.Customer.Products
 {
     public class ProductViewModel : IMapFrom<Product>
     {
@@ -10,6 +10,7 @@ namespace Vxp.Web.ViewModels.Customers.Products
         {
             this.Images = new List<ProductImageViewModel>();
             this.Details = new List<ProductDetailViewModel>();
+            this.Prices = new List<ProductPriceViewModel>();
         }
         public int Id { get; set; }
 
@@ -19,11 +20,14 @@ namespace Vxp.Web.ViewModels.Customers.Products
 
         public string CategoryName { get; set; }
 
+        public decimal BasePrice { get; set; }
+
         public ProductImageViewModel Image { get; set; }
 
         public List<ProductImageViewModel> Images { get; set; }
 
         public List<ProductDetailViewModel> Details { get; set; }
 
+        public List<ProductPriceViewModel> Prices { get; set; }
     }
 }

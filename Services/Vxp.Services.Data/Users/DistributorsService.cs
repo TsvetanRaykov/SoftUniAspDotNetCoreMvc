@@ -115,7 +115,10 @@ namespace Vxp.Services.Data.Users
 
         public Task<IQueryable<TViewModel>> GetCustomersAsync<TViewModel>(string distributorName)
         {
-            throw new System.NotImplementedException();
+            var customers = this._usersRepository.AllAsNoTracking()
+                .Where(u => u.Distributors.Any(d => d.DistributorKey.BankAccount.Owner.UserName == distributorName));
+
+            return Task.Run(() => customers.To<TViewModel>());
         }
 
         public Task<List<TViewModel>> GetCustomerInvitationsAsync<TViewModel>(string senderId)

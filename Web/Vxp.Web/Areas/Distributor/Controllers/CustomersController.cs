@@ -1,33 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Vxp.Services.Data.BankAccounts;
-using Vxp.Services.Data.Users;
-using Vxp.Services.Models;
-using Vxp.Web.ViewModels.Distributor.Customers;
-
-namespace Vxp.Web.Areas.Distributor.Controllers
+﻿namespace Vxp.Web.Areas.Distributor.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Text.Encodings.Web;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc.Rendering;
+    using Microsoft.EntityFrameworkCore;
+    using Vxp.Services.Data.BankAccounts;
+    using Vxp.Services.Data.Users;
+    using Services.Models;
+    using Vxp.Web.ViewModels.Distributor.Customers;
+    using Vxp.Services.Data.Products;
+    using ViewModels.Prices;
+
     public class CustomersController : DistributorsController
     {
         private readonly IDistributorsService _distributorsService;
         private readonly IBankAccountsService _bankAccountsService;
+        private readonly IProductPricesService _productsPricesService;
 
         public CustomersController(
             IDistributorsService distributorsService,
-            IBankAccountsService bankAccountsService)
+            IBankAccountsService bankAccountsService,
+            IProductPricesService productsPricesService)
         {
             this._distributorsService = distributorsService;
             this._bankAccountsService = bankAccountsService;
+            this._productsPricesService = productsPricesService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            var customers = await this._distributorsService.GetCustomersAsync<CustomersListViewModel>(this.User.Identity.Name);
+            var viewModel = await customers.ToListAsync();
+
+            return this.View(viewModel);
         }
 
         public async Task<IActionResult> Invite()
@@ -82,6 +91,39 @@ namespace Vxp.Web.Areas.Distributor.Controllers
             return this.RedirectToAction(nameof(Invite));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Customer(string id)
+        {
+            var customers = await
+                this._distributorsService.GetCustomersAsync<CustomerViewModelDetails>(this.User.Identity.Name);
+
+            var customerDetails = await customers.FirstOrDefaultAsync(u => u.Id == id);
+            var sellerId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var viewModel = new CustomerViewModel
+            {
+                Details = customerDetails,
+                PriceModifierInputModel = customerDetails.PriceModifiers
+                                              .FirstOrDefault(pm => pm.SellerId == sellerId) ?? new PriceModifierInputModel
+                                              {
+                                                  BuyerId = customerDetails.Id,
+                                                  SellerId = sellerId
+                                              }
+            };
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePriceModel(PriceModifierInputModel inputModel)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this._productsPricesService.SetProductPriceModifierAsync(inputModel);
+            }
+
+            return this.Redirect(inputModel.ReturnUrl);
+        }
 
         public IActionResult Pending()
         {

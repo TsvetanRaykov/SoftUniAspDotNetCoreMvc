@@ -1,5 +1,68 @@
-﻿@{
+﻿@using System.Security.Claims
+@using Vxp.Web.ViewModels.Prices
+@using Vxp.Web.ViewModels.Distributor.Customers
+@model IEnumerable<CustomersListViewModel>
+
+@{
     ViewData["Title"] = "Customers";
     ViewData["ActivePage"] = "CustomersList";
+    var sellerId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 <h4>@ViewData["Title"]</h4>
+<table class="vxp-table table rounded display hover cell-border" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Contact Email</th>
+            <th>Shipping Address</th>
+            <th>Prices</th>
+            <th>Active projects</th>
+            <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model)
+        {
+            string className = customer.IsDeleted ? "vxp-deleted-row" : string.Empty;
+            <tr class="@className">
+                <td>@customer.Name</td>
+                <td><a href="mailto:@customer.ContactEmail" target="_top">@customer.ContactEmail</a></td>
+                <td>@customer.ShippingAddress</td>
+                <td>
+                    <div class="vxp-price-modifier-paceholder rounded">
+                        @{
+                            var priceModifier = customer.PriceModifiers.FirstOrDefault() ?? new PriceModifierInputModel
+                            {
+                                BuyerId = customer.Id,
+                                SellerId = sellerId
+                            };
+
+                        }
+                        <a class="text-dark" href="#modal@(priceModifier.BuyerId)" data-toggle="modal" data-target="#modal@(priceModifier.BuyerId)">@priceModifier</a>
+                    </div>
+                    <partial name="_PriceModifierModalPartial" model="@priceModifier" />
+                </td>
+                <td>@customer.Projects</td>
+                <td class="text-right">
+                    <a class="btn btn-link btn-outline-success w-100" asp-area="Distributor" asp-controller="Customers" asp-action="Customer" asp-route-id="@customer.Id">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="text-right"></th>
+        </tr>
+    </tfoot>
+</table>
+
+@section Scripts{
+    <script>
+        $(document).ready(() => { $(".vxp-table").DataTable({ "lengthChange": false }); })
+    </script>
+}

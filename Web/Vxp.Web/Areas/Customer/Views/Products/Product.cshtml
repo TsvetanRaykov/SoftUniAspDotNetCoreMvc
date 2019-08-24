@@ -1,5 +1,5 @@
 ﻿@using System.Web
-@model Vxp.Web.ViewModels.Customers.Products.ProductViewModel
+@model Vxp.Web.ViewModels.Customer.Products.ProductViewModel
 @{
     ViewData["Title"] = @Model.Name;
 }
@@ -36,6 +36,18 @@
                 <div class="row @bgLight">
                     <div class="col-6 col-sm-6 col-md-6 col-lg-3 font-small my-auto">@detail.CommonDetail.Name@(string.IsNullOrEmpty(detail.CommonDetail.Measure) ? "" : $", {detail.CommonDetail.Measure}")</div>
                     <div class="col text-dark">@detail.Value</div>
+                </div>
+            }
+            <div class="row bg-secondary rounded text-white px-2">Prices</div>
+            @for (var i = 0; i < Model.Prices.Count; i++)
+            {
+                var price = Model.Prices[i];
+                var bgLight = i % 2 > 0 ? "bg-light" : "";
+                <div class="row @bgLight">
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-3 font-weight-bold my-auto">
+                        <a asp-area="Customer" asp-controller="Distributors" asp-action="Distributor" asp-route-id="@price.SellerId" title="Preview">@price.SellerName</a>
+                    </div>
+                    <div class="col text-dark">€ @price.PriceFormatted</div>
                 </div>
             }
         </div>

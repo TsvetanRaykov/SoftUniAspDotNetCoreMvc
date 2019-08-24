@@ -1,6 +1,5 @@
 ﻿@using System.Web
-@using Vxp.Web.ViewModels.Customers.Products
-@model ProductsListViewModel
+@model Vxp.Web.ViewModels.Customer.Products.ProductsListViewModel
 @{
     ViewData["Title"] = "Products";
 }
@@ -15,7 +14,7 @@
     {
         <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-3">
             <div class="card h-100">
-                <a asp-controller="Products" asp-action="View" asp-route-id="@product.Id">
+                <a asp-controller="Products" asp-action="Product" asp-route-id="@product.Id">
                     <div class="card-img-top zoom">
                         <img src="@HttpUtility.UrlDecode(product.Image.Url)" alt="@product.Image.Alt" title="@product.Image.Title">
                     </div>

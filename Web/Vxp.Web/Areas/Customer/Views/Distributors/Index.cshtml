@@ -1,0 +1,51 @@
+﻿@using Vxp.Web.ViewModels.Customer.Distributors
+@model IEnumerable<DistributorsListViewModel>
+
+@{
+    ViewData["Title"] = "Distributors";
+    ViewData["ActivePage"] = "DistributorsList";
+}
+<h4>@ViewData["Title"]</h4>
+<table class="vxp-table table rounded display hover cell-border" style="width: 100%">
+    <thead>
+        <tr>
+            <th>Distributor</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Projects</th>
+            <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var distributor in Model)
+        {
+        <tr>
+            <td>@distributor.Name</td>
+            <td><a href="mailto:@distributor.Email" target="_top">@distributor.Email</a></td>
+            <td>@distributor.Phone</td>
+            <td>@distributor.Address</td>
+            <td>@distributor.Projects</td>
+            <td class="text-right">
+                <a class="btn btn-link btn-outline-success w-100" asp-area="Customer" asp-controller="Distributors" asp-action="Distributor" asp-route-id="@distributor.Id">View</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="text-right"></th>
+        </tr>
+    </tfoot>
+</table>
+
+@section Scripts{
+    <script>
+        $(document).ready(() => { $(".vxp-table").DataTable({ "lengthChange": false }); })
+    </script>
+}
