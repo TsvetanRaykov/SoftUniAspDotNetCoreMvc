@@ -24,20 +24,41 @@
             return newProject.Id;
         }
 
+        public async Task<TViewModel> UpdateProjectAsync<TViewModel>(TViewModel project)
+        {
+            var projectUpdate = AutoMapper.Mapper.Map<Project>(project);
+            var projectFromDb = await this._projectsRepository.AllWithDeleted()
+                .FirstOrDefaultAsync(p => p.Id == projectUpdate.Id);
+
+            if (projectFromDb == null)
+            {
+                return default;
+            }
+
+            AutoMapper.Mapper.Map(project, projectFromDb);
+            this._projectsRepository.Update(projectFromDb);
+            await this._projectsRepository.SaveChangesAsync();
+            return AutoMapper.Mapper.Map<TViewModel>(projectFromDb);
+        }
+
         public IQueryable<TViewModel> GetAllProjects<TViewModel>(string userName)
         {
-            var projectsFromDb = this._projectsRepository.AllAsNoTrackingWithDeleted()
+            var projectsFromDb = this._projectsRepository.AllAsNoTracking()
                 .Where(p => p.Owner.UserName == userName);
 
             return projectsFromDb.To<TViewModel>();
         }
 
-        public async Task<TViewModel> GetProjectAsync<TViewModel>(int projectId)
+        public async Task<bool> DeleteProjectAsync(int projectId)
         {
-            var projectFromDb = await this._projectsRepository.AllAsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == projectId);
-
-            return AutoMapper.Mapper.Map<TViewModel>(projectFromDb);
+            var projectsFromDb = await this._projectsRepository.GetByIdWithDeletedAsync(projectId);
+            if (projectsFromDb == null)
+            {
+                return false;
+            }
+            this._projectsRepository.Delete(projectsFromDb);
+            await this._projectsRepository.SaveChangesAsync();
+            return true;
         }
     }
 }

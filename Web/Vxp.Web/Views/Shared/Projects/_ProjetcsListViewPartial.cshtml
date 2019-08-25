@@ -1,3 +1,65 @@
-﻿@model IEnumerable<Vxp.Web.ViewModels.Projects.ProjectViewModel>
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@model Vxp.Web.ViewModels.Projects.ProjectsListViewModel
 
-<h1>Hello from Projects list view partial</h1>
+<div class="border rounded h-100 py-1 px-2" id="projectsViewWrapper">
+    <form class="w-100" id="frmProjectsAdd" method="post" asp-controller="Projects" asp-action="Create">
+        <input type="hidden" asp-for="Input.ReturnUrl" value="@this.Context.Request.GetDisplayUrl()" />
+        <table class="vxp-table table table-borderless">
+            <tr>
+                <td>
+                    <label class="vxp-form-control-label" asp-for="Input.Name">New Project</label>
+                    <input class="form-control font-weight-bold" asp-for="Input.Name" placeholder="Project name" />
+                    <span asp-validation-for="Input.Name" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                </td>
+                <td>
+                    <label class="vxp-form-control-label" asp-for="Input.Description"></label>
+                    <textarea class="form-control font-weight-bold" asp-for="Input.Description" placeholder="Description" rows="1"></textarea>
+                    <span asp-validation-for="Input.Description" class="text-danger d-block vxp-validation-errors-placeholder"></span>
+                </td>
+                <td class="text-left w-20">
+                    <button type="submit" class="btn btn-success rounded product-category-btn">Add</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table class="table vxp-table vxp-data-table table-striped">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Description</th>
+                <th class="text-right">Orders</th>
+                <th class="text-right">Documents</th>
+                <th class="text-right">Created</th>
+                <th class="text-right">Updated</th>
+                <th class="text-right"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in Model.ExistingProjects)
+            {
+                var disableDelete = project.Documents.Count() + project.Orders.Count() > 0 ? "disabled='disabled'" : null;
+                <tr>
+                    <td>@project.Name</td>
+                    <td>@project.Description</td>
+                    <td class="text-right">@project.Orders.Count()</td>
+                    <td class="text-right">@project.Documents.Count()</td>
+                    <td class="text-right">@project.CreatedOn.ToLocalTime()</td>
+                    <td class="text-right">@project.ModifiedOn?.ToLocalTime()</td>
+                    <td class="text-right">
+                        <a class="btn btn-primary rounded product-category-btn" asp-action="Project" asp-route-id="@project.Id">View</a>
+                        <button class="btn btn-success rounded product-category-btn" type="button" data-toggle="modal" data-target="#modalEditProject@(project.Id)">Edit</button>
+                        <partial name="Projects/_ProjectUpdateViewPartial" model="@project" />
+                        <form class="d-inline" method="post" asp-controller="Projects" asp-action="Delete" data-name="@project.Name" onsubmit="deleteProject(event)">
+                            <input type="hidden" asp-for="@project.Id" />
+                            <input type="hidden" asp-for="@project.OwnerId" />
+                            <input type="hidden" asp-for="@project.Name" />
+                            <input type="hidden" asp-for="@project.Description" />
+                            <input type="hidden" asp-for="@project.ReturnUrl" value="@this.Context.Request.GetDisplayUrl()" />
+                            <button type="submit" class="btn btn-danger rounded product-category-btn" @disableDelete>Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

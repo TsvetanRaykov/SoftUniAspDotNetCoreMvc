@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Vxp.Services.Data.Projects;
-using Vxp.Web.ViewModels.Projects;
-
-namespace Vxp.Web.Areas.Distributor.Controllers
+﻿namespace Vxp.Web.Areas.Distributor.Controllers
 {
+    using Infrastructure.Attributes.ActionFilters;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Vxp.Services.Data.Projects;
+    using ViewModels.Projects;
+
     public class ProjectsController : DistributorsController
     {
         private readonly IProjectsService _projectsService;
@@ -15,13 +16,33 @@ namespace Vxp.Web.Areas.Distributor.Controllers
             this._projectsService = projectsService;
         }
 
+        [RestoreModelStateFromTempData]
         public async Task<IActionResult> Index()
         {
-            var projects = await this._projectsService
-                .GetAllProjects<ProjectViewModel>(this.User.Identity.Name)
-                .ToListAsync();
+            var viewModel = new ProjectsListViewModel
+            {
+                ExistingProjects = await this._projectsService
+                    .GetAllProjects<ProjectInputModel>(this.User.Identity.Name)
+                    .ToListAsync()
+            };
 
-            return this.View(projects);
+            return this.View(viewModel);
+        }
+
+        [RestoreModelStateFromTempData]
+        public async Task<IActionResult> Project(int id)
+        {
+            var inputModel = await this._projectsService
+                .GetAllProjects<ProjectInputModel>(this.User.Identity.Name)
+                .SingleOrDefaultAsync(p => p.Id == id);
+            if (inputModel == null)
+            {
+                return this.NotFound();
+            }
+
+            inputModel.UploadInputModel.ProjectId = inputModel.Id;
+
+            return this.View(inputModel);
         }
     }
 }

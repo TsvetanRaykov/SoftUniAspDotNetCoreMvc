@@ -1,8 +1,12 @@
-﻿
+﻿@model Vxp.Web.ViewModels.Projects.ProjectsListViewModel
 @{
     ViewData["Title"] = "Projects";
     ViewData["ActivePage"] = "ProjectsList";
 }
 <h4>@ViewData["Title"]</h4>
 
-<partial name="Projects/_ProjetcsListViewPartial"/>
+<partial name="Projects/_ProjetcsListViewPartial" />
+
+@section Scripts {
+    <script src="/js/common-project-list.js"></script>
+}

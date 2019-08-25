@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
 
@@ -27,7 +26,7 @@
                           {
                               new RolesSeeder(),
                               new UsersSeeder(),
-                              new SettingsSeeder(),
+                              //new SettingsSeeder(),
                           };
 
             foreach (var seeder in seeders)

@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@using Vxp.Data.Common.Enums
+@model Vxp.Web.ViewModels.Documents.DocumentUploadInputModel
+<!-- Modal Upload Project File -->
+<div class="modal fade" id="modalUploadFile" tabindex="-1" role="dialog" aria-labelledby="modalUploadFileLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">File Upload</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form enctype="multipart/form-data" class="my-2" method="post" asp-controller="Projects" asp-action="UploadProjectDocument">
+                    <input type="hidden" asp-for="ProjectId" />
+                    <input type="hidden" asp-for="ReturnUrl" value="@this.Context.Request.GetDisplayUrl()" />
+                    <div>
+                        <label class="vxp-form-control-label my-auto" asp-for="FormFile"></label><br />
+                        <input asp-for="FormFile" class="vxp-file-upload border rounded w-100 text-dark font-small">
+                        <span asp-validation-for="FormFile" class="vxp-validation-errors-placeholder d-block text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Description" class="vxp-form-control-label"></label>
+                        <input asp-for="Description" class="form-control" placeholder="Description" />
+                        <span asp-validation-for="Description" class="vxp-validation-errors-placeholder d-block text-danger"></span>
+                    </div>
+                    <div>
+                        <label asp-for="Type" class="vxp-form-control-label"></label>
+                        <select asp-for="Type" asp-items="Html.GetEnumSelectList(typeof(DocumentType))" class="form-control"></select>
+                        <span asp-validation-for="Type" class="vxp-validation-errors-placeholder d-block text-danger"></span>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" type="submit">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

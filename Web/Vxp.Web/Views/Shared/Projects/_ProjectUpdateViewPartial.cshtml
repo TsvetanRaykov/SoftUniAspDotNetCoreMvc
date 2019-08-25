@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@model Vxp.Web.ViewModels.Projects.ProjectInputModel
+<!-- Modal Edit Project -->
+<div class="modal fade" id="modalEditProject@(Model.Id)" tabindex="-1" role="dialog" aria-labelledby="modalEditProjectLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Projects" asp-action="Update" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="OwnerId" />
+                    <input type="hidden" asp-for="ReturnUrl" value="@this.Context.Request.GetDisplayUrl()" />
+                    <div class="text-left">
+                        <label asp-for="Name" class="vxp-form-control-label "></label>
+                        <input asp-for="Name" class="form-control font-weight-bold" />
+                        <span asp-validation-for="Name" class="text-danger d-block"></span>
+                    </div>
+                    <div class="text-left">
+                        <label asp-for="Description" class="vxp-form-control-label"></label>
+                        <input asp-for="Description" class="form-control font-weight-bold" />
+                        <span asp-validation-for="Description" class="text-danger d-block"></span>
+                    </div>
+                    <div class="pt-3 d-flex">
+                        <div class="w-50 d-flex flex-nowrap align-content-end">
+                            <input type="submit" value="Submit" class="btn btn-success" />
+                            <input type="button" value="Cancel" class="btn btn-secondary ml-1" data-dismiss="modal" aria-label="Close" />
+                        </div>
+                        <div class="w-50">
+                            <div class="text-danger vxp-validation-errors-placeholder"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

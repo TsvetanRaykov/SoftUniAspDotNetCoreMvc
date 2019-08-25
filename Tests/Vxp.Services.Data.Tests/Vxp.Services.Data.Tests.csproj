@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="SettingsServiceTests.cs" />
     <Compile Remove="UserControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>

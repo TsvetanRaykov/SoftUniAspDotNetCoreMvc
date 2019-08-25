@@ -35,7 +35,7 @@ namespace Vxp.Web
 {
     public class Startup
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
@@ -148,6 +148,7 @@ namespace Vxp.Web
             services.AddTransient<IProductDetailsService, ProductDetailsService>();
             services.AddTransient<IImageUploadService, CloudinaryImageUploadService>();
             services.AddTransient<IProductPricesService, ProductPricesService>();
+            services.AddScoped<IFilesService, FilesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

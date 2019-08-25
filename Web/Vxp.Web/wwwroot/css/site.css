@@ -116,7 +116,8 @@
     text-decoration: none;
 }
 
-input::placeholder {
+input::placeholder,
+textarea::placeholder {
     color: rgba(0, 0, 0, 0.5) !important;
     font-weight: normal;
 }
@@ -364,7 +365,7 @@ input::placeholder {
 }
 
 
-button.product-category-btn {
+.product-category-btn {
     min-width: 70px;
 }
 
@@ -500,4 +501,17 @@ button.product-category-btn {
 
 #message-box textarea {
     width: 98% !important;
+}
+
+#vxp-doc-upload-icon {
+    line-height: inherit;
+}
+.vxp-doc-download-icon {
+    line-height: inherit;
+}
+.vxp-doc-download-icon:hover span {
+    color: #ffffff !important;
+}
+.vxp-document-date-time-placeholder {
+    min-width: 150px;
 }

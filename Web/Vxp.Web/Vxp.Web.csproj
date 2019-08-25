@@ -47,6 +47,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\AllCountriesInTheWorlds.csv" />
+    <EmbeddedResource Include="Resources\AllowedMimeTypes.csv" />
   </ItemGroup>
 
   <ItemGroup>

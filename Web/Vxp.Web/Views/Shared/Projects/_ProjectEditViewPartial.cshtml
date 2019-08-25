@@ -1,0 +1,45 @@
+﻿@model Vxp.Web.ViewModels.Projects.ProjectInputModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+<h4 class="d-inline">@ViewData["Title"]</h4> <p class="d-inline ml-5 text-dark">@Model.Description</p>
+
+<div class="d-flex">
+    <div class="w-50 p-1">
+        <div class="border rounded p-2">
+            <div class="bg-secondary p-1 text-white rounded mb-2 d-flex justify-content-between">
+                <span>Documents</span>
+                <a class="btn btn-success text-white product-category-btn p-0" href="#modalUploadFile" data-toggle="modal" data-target="#modalUploadFile" title="Upload">
+                    <span class="icon icon-upload" id="vxp-doc-upload-icon"></span>
+                </a>
+                <partial name="Projects/_ProjectFileUploadPartial" model="@Model.UploadInputModel" />
+            </div>
+            <span asp-validation-for="UploadInputModel" class="text-danger vxp-validation-errors-placeholder d-block"></span>
+
+            @for (var i = 0; i < Model.Documents.Count(); i++)
+            {
+                var document = Model.Documents[i];
+                var className = i % 2 > 0 ? "bg-light" : null;
+            <div class="d-flex justify-content-between pl-2 pr-1 pb-1 text-dark @className">
+                <div class="font-small my-auto font-weight-bold">@($"{document.Description}, {document.OriginalFileName}")</div>
+                <div class="d-flex justify-content-end">
+                    <div class="font-small my-auto px-2 vxp-document-date-time-placeholder"> @document.DocumentDate.ToLocalTime()</div>
+                    <form method="post" asp-controller="Projects" asp-action="DownloadDocument" class="my-auto">
+                        <button class="btn btn-outline-primary text-danger product-category-btn p-0 vxp-doc-download-icon" title="Download" type="submit">
+                            <span class="icon icon-download vxp-doc-download-icon"></span>
+                        </button>
+                        <input type="hidden" asp-for="@document.Id" name="Id" />
+                    </form>
+                </div>
+            </div>
+            }
+
+
+        </div>
+    </div>
+    <div class="w-50 p-1">
+        <div class="border rounded p-2">
+            <div class="bg-secondary p-1 text-white rounded mb-2">Orders</div>
+        </div>
+    </div>
+</div>

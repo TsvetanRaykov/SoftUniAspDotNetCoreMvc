@@ -6,7 +6,8 @@ namespace Vxp.Services.Data.Projects
     public interface IProjectsService
     {
         Task<int> CreateProjectAsync<TViewModel>(TViewModel project);
-        Task<TViewModel> GetProjectAsync<TViewModel>(int projectId);
+        Task<TViewModel> UpdateProjectAsync<TViewModel>(TViewModel project);
         IQueryable<TViewModel> GetAllProjects<TViewModel>(string userName);
+        Task<bool> DeleteProjectAsync(int projectId);
     }
 }
