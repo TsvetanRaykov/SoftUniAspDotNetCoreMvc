@@ -65,3 +65,27 @@ function SendVerificationEmail(userId) {
         }
     });
 }
+
+function addToOrder(productId) {
+    let token = $('input[name="__RequestVerificationToken"]').val();
+    let badge = $('.vxp-card-order-preview .badge');
+    $.ajax({
+        url: "/Orders/AddProductToOrder",
+        type: "POST",
+        headers: {
+            'RequestVerificationToken': token
+        },
+        data: {
+            productId: productId
+        },
+        success: (count) => {
+            badge.text(count);
+        },
+        error: (data) => {
+            console.error(data);
+        },
+        complete: () => {
+            // ignore
+        }
+    });
+}

@@ -1,5 +1,6 @@
 ﻿namespace Vxp.Web.ViewModels.Customer.Products
 {
+    using Vxp.Web.ViewModels.Products;
     using System.Collections.Generic;
     using Data.Models;
     using Services.Mapping;

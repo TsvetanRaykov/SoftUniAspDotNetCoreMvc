@@ -1,0 +1,22 @@
+﻿@using System.Web
+@model Vxp.Web.ViewModels.Orders.OrderInputModel
+
+
+<div class="d-flex flex-column">
+    
+    @for (int i = 0; i < Model.Products.Count(); i++)
+    {
+        var product = Model.Products[i];
+        <div class="d-flex">
+            <div class="w-20">
+                <div class="card-img-top zoom">
+                    <img src="@HttpUtility.UrlDecode(product.Image.Url)" alt="@product.Image.Alt" title="@product.Image.Title">
+                </div>
+            </div>
+            <div class="p-2"></div>
+            <div class="w-100">@product.Name</div>
+            <div class="p-2"></div>
+            <div class="">- +</div>
+        </div>
+    }
+</div>

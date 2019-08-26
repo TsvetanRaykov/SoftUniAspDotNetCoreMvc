@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-
-namespace Vxp.Web.ViewModels.Customer.Products
+﻿namespace Vxp.Web.ViewModels.Customer.Products
 {
+    using System.Collections.Generic;
+    using Data.Models;
+    using Services.Mapping;
+    using Vxp.Web.ViewModels.Products;
+
     public class ProductViewModel : IMapFrom<Product>
     {
         public ProductViewModel()

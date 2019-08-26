@@ -21,6 +21,7 @@ using Vxp.Data.Repositories;
 using Vxp.Data.Seeding;
 using Vxp.Services;
 using Vxp.Services.Data.BankAccounts;
+using Vxp.Services.Data.Orders;
 using Vxp.Services.Data.Products;
 using Vxp.Services.Data.Projects;
 using Vxp.Services.Data.Users;
@@ -149,6 +150,7 @@ namespace Vxp.Web
             services.AddTransient<IImageUploadService, CloudinaryImageUploadService>();
             services.AddTransient<IProductPricesService, ProductPricesService>();
             services.AddScoped<IFilesService, FilesService>();
+            services.AddTransient<IOrdersService, OrdersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

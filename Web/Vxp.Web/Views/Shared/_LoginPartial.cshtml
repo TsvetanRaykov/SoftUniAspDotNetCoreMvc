@@ -59,6 +59,12 @@
         <li class="nav-item">
             <a class="nav-link" asp-area="Identity" asp-page="/Account/Logout"><span>Logout</span></a>
         </li>
+        if (this.User.IsInRole(GlobalConstants.Roles.DistributorRoleName) || this.User.IsInRole(GlobalConstants.Roles.CustomerRoleName))
+        {
+            <li class="nav-item">
+                <vc:order-basked></vc:order-basked>
+            </li>
+        }
     }
     else
     {

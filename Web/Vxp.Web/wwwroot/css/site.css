@@ -506,12 +506,49 @@ textarea::placeholder {
 #vxp-doc-upload-icon {
     line-height: inherit;
 }
+
 .vxp-doc-download-icon {
     line-height: inherit;
 }
-.vxp-doc-download-icon:hover span {
-    color: #ffffff !important;
-}
+
+    .vxp-doc-download-icon:hover span {
+        color: #ffffff !important;
+    }
+
 .vxp-document-date-time-placeholder {
     min-width: 150px;
 }
+
+.vxp-card-order-add {
+    position: absolute;
+    z-index: 1000;
+    color: blueviolet;
+    cursor: pointer;
+    padding: 2px;
+    font-size: 25px;
+}
+
+    .vxp-card-order-add:hover {
+        color: red;
+    }
+
+.vxp-card-order-preview {
+    color: #6e5773;
+    font-size: 25px;
+    position: absolute;
+    display: block;
+    bottom: 30px;
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+    .vxp-card-order-preview:hover {
+        color: red;
+    }
+
+    .vxp-card-order-badge {
+        color: red;
+        position: absolute;
+        bottom: -10px;
+        left: 35px;
+    }
