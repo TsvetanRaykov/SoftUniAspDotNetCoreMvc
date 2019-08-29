@@ -1,12 +1,18 @@
 ﻿@using Vxp.Web.ViewModels.Customer.Distributors
-@model IEnumerable<DistributorsListViewModel>
+@model DistributorsListViewModel
 
 @{
     ViewData["Title"] = "Distributors";
     ViewData["ActivePage"] = "DistributorsList";
 }
-<h4>@ViewData["Title"]</h4>
-<table class="vxp-table table rounded display hover cell-border" style="width: 100%">
+<div class="d-flex">
+    <h4>@ViewData["Title"]</h4>
+    <div>
+        <button class="btn btn-success ml-5" data-toggle="modal" data-target="#modal-register-distributor-key">Add Distributor</button>
+    </div>
+</div>
+
+<table class="vxp-table vxp-data-table table rounded display hover cell-border" style="width: 100%">
     <thead>
         <tr>
             <th>Distributor</th>
@@ -18,18 +24,18 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var distributor in Model)
+        @foreach (var distributor in Model.Distributors)
         {
-        <tr>
-            <td>@distributor.Name</td>
-            <td><a href="mailto:@distributor.Email" target="_top">@distributor.Email</a></td>
-            <td>@distributor.Phone</td>
-            <td>@distributor.Address</td>
-            <td>@distributor.Projects</td>
-            <td class="text-right">
-                <a class="btn btn-link btn-outline-success w-100" asp-area="Customer" asp-controller="Distributors" asp-action="Distributor" asp-route-id="@distributor.Id">View</a>
-            </td>
-        </tr>
+            <tr>
+                <td>@distributor.Name</td>
+                <td><a href="mailto:@distributor.Email" target="_top">@distributor.Email</a></td>
+                <td>@distributor.Phone</td>
+                <td>@distributor.Address</td>
+                <td>@distributor.Projects</td>
+                <td class="text-right">
+                    <a class="btn btn-link btn-outline-success w-100" asp-area="Customer" asp-controller="Distributors" asp-action="Distributor" asp-route-id="@distributor.Id">View</a>
+                </td>
+            </tr>
         }
     </tbody>
     <tfoot>
@@ -44,8 +50,25 @@
     </tfoot>
 </table>
 
-@section Scripts{
-    <script>
-        $(document).ready(() => { $(".vxp-table").DataTable({ "lengthChange": false }); })
-    </script>
-}
+<!-- Modal Register Distributor Key -->
+<div class="modal fade" id="modal-register-distributor-key" tabindex="-1" role="dialog" aria-labelledby="modalRegisterDistributorKeyTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalRegisterDistributorKeyTitle">Distributor Key<strong><span class="text-primary" id="modal-invitation-recipient-field"></span></strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column">
+                    <form method="post" asp-area="Customer" asp-controller="Distributors" asp-action="Add">
+                        <input class="form-control my-2" asp-for="DistributorKeyRegisterInputModel.DistributorKey" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+                        <span asp-validation-for="DistributorKeyRegisterInputModel.DistributorKey" class="vxp-validation-errors-placeholder d-block text-danger"></span>
+                        <button class="btn btn-primary">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

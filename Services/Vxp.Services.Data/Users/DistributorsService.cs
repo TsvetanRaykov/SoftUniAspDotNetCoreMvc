@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper.QueryableExtensions;
 using Vxp.Common;
 using Vxp.Data.Common.Repositories;
 using Vxp.Data.Models;
@@ -102,6 +103,22 @@ namespace Vxp.Services.Data.Users
         {
             var invitations = this._customerInvitationsRepository.AllAsNoTracking().Where(i => i.SenderId == senderId);
             return invitations.To<TViewModel>().ToListAsync();
+        }
+
+        public async Task<TViewModel> GetDistributorByKey<TViewModel>(Guid distributorKey)
+        {
+            var distributor = await this._distributorKeysRepository.All()
+                .Include(dk => dk.BankAccount)
+                .ThenInclude(bs => bs.Owner)
+                .Where(dk => dk.KeyCode == distributorKey)
+                .Select(dk => dk.BankAccount.Owner).FirstOrDefaultAsync();
+                
+            if (distributor == null)
+            {
+                return default;
+            }
+
+            return AutoMapper.Mapper.Map<TViewModel>(distributor);
         }
 
         public Task<IQueryable<TViewModel>> GetDistributorsForUserAsync<TViewModel>(string customerName)

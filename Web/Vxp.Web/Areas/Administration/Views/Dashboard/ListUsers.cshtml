@@ -16,7 +16,7 @@
 
 @Html.AntiForgeryToken()
 
-<table class="vxp-table table rounded display hover cell-border" style="width: 100%">
+<table class="vxp-table vxp-data-table table rounded display hover cell-border" style="width: 100%">
     <thead>
         <tr>
             <th>Role</th>
@@ -73,9 +73,6 @@
 
     <script>
         $(document).ready(function () {
-            $('.vxp-table').DataTable({
-                "lengthChange": false
-            });
 
             $(".confirm-user-restore").off("click").on("click",
                 function (a) {

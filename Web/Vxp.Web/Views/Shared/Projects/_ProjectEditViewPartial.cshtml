@@ -20,26 +20,55 @@
             {
                 var document = Model.Documents[i];
                 var className = i % 2 > 0 ? "bg-light" : null;
-            <div class="d-flex justify-content-between pl-2 pr-1 pb-1 text-dark @className">
-                <div class="font-small my-auto font-weight-bold">@($"{document.Description}, {document.OriginalFileName}")</div>
-                <div class="d-flex justify-content-end">
-                    <div class="font-small my-auto px-2 vxp-document-date-time-placeholder"> @document.DocumentDate.ToLocalTime()</div>
-                    <form method="post" asp-controller="Projects" asp-action="DownloadDocument" class="my-auto">
-                        <button class="btn btn-outline-primary text-danger product-category-btn p-0 vxp-doc-download-icon" title="Download" type="submit">
-                            <span class="icon icon-download vxp-doc-download-icon"></span>
-                        </button>
-                        <input type="hidden" asp-for="@document.Id" name="Id" />
-                    </form>
+                <div class="d-flex justify-content-between pl-2 pr-1 pb-1 text-dark @className">
+                    <div class="font-small my-auto font-weight-bold">@($"{document.Description}, {document.OriginalFileName}")</div>
+                    <div class="d-flex justify-content-end">
+                        <div class="font-small my-auto px-2 vxp-document-date-time-placeholder"> @document.DocumentDate.ToLocalTime()</div>
+                        <form method="post" asp-controller="Projects" asp-action="DownloadDocument" class="my-auto">
+                            <button class="btn btn-outline-primary text-danger product-category-btn p-0 vxp-doc-download-icon" title="Download" type="submit">
+                                <span class="icon icon-download vxp-doc-download-icon"></span>
+                            </button>
+                            <input type="hidden" asp-for="@document.Id" name="Id" />
+                        </form>
+                    </div>
                 </div>
-            </div>
             }
-
 
         </div>
     </div>
     <div class="w-50 p-1">
         <div class="border rounded p-2">
             <div class="bg-secondary p-1 text-white rounded mb-2">Orders</div>
+        </div>
+        <div class="font-small">
+            <table class="w-100 vxp-data-table">
+                <thead>
+                    <tr>
+                        <th>Seller</th>
+                        <th>Created</th>
+                        <th>#</th>
+                        <th>&euro; </th>
+                        <th>Status</th>
+                        <th class="text-right">Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Orders.Count(); i++)
+                    {
+                        var order = Model.Orders[i];
+                        var className = i % 2 > 0 ? "bg-light" : null;
+
+                        <tr class="text-dark @className">
+                            <td class="font-weight-bold">@order.Seller.Name</td>
+                            <td>@order.CreatedOn.Date.ToLocalTime().ToShortDateString()</td>
+                            <td class="font-weight-bold">@order.Products.Count</td>
+                            <td>@order.TotalPrice</td>
+                            <td class="font-weight-bold">@order.Status</td>
+                            <td class="text-right">@order.ModifiedOn.ToLocalTime().ToShortDateString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

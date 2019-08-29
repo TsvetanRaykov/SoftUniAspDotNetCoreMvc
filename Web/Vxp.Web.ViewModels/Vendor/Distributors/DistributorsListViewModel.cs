@@ -24,7 +24,7 @@
                         new[] { src.Company.Name, src.Company.ContactAddress.City, src.Company.ContactAddress.CountryName }
                             .Where(e => !string.IsNullOrWhiteSpace(e)))))
                 .ForMember(dest => dest.ContactEmail, opt => opt
-                    .MapFrom(src => src.Company.ContactAddress.Email))
+                    .MapFrom(src => src.Company.ContactAddress.Email ?? src.Email))
                 .ForMember(dest => dest.ShippingAddress, opt => opt
                     .MapFrom(src => string.Join(", ",
                         new[] { src.Company.ShippingAddress.AddressLocation, src.Company.ShippingAddress.City, src.Company.ShippingAddress.CountryName }

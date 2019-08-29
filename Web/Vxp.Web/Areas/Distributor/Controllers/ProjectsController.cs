@@ -1,4 +1,6 @@
-﻿namespace Vxp.Web.Areas.Distributor.Controllers
+﻿using System.Linq;
+
+namespace Vxp.Web.Areas.Distributor.Controllers
 {
     using Infrastructure.Attributes.ActionFilters;
     using System.Threading.Tasks;
@@ -41,6 +43,8 @@
             }
 
             inputModel.UploadInputModel.ProjectId = inputModel.Id;
+
+            inputModel.Orders = inputModel.Orders.OrderByDescending(o => o.ModifiedOn).ToList();
 
             return this.View(inputModel);
         }

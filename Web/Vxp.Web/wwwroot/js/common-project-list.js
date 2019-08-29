@@ -26,4 +26,3 @@
         }
     });
 }
-$(document).ready(() => { $(".vxp-data-table").DataTable({ "lengthChange": false }); });

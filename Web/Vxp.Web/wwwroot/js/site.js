@@ -89,3 +89,7 @@ function addToOrder(productId) {
         }
     });
 }
+
+$('.vxp-data-table').DataTable({
+    "lengthChange": false
+});

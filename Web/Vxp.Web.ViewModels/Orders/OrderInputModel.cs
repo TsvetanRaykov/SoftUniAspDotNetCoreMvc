@@ -1,5 +1,7 @@
 ﻿namespace Vxp.Web.ViewModels.Orders
 {
+    using System;
+    using Vxp.Data.Common.Enums;
     using System.Linq;
     using Data.Models;
     using Products;
@@ -17,6 +19,8 @@
 
         public string SellerId { get; set; }
 
+        public ProductSellerViewModel Seller { get; set; }
+
         public List<ProductSellerViewModel> Sellers { get; set; }
 
         public List<OrderProductViewModel> Products { get; set; }
@@ -30,6 +34,10 @@
         {
             get { return $"{this.Products.Sum(p => p.Price * p.Quantity):N2}"; }
         }
+
+        public DateTime CreatedOn { get; set; }
+        public DateTime ModifiedOn { get; set; }
+        public OrderStatus Status { get; set; }
 
         public bool Create { get; set; }
     }

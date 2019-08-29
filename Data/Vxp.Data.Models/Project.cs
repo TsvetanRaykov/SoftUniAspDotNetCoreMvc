@@ -25,5 +25,8 @@ namespace Vxp.Data.Models
 
         public virtual ApplicationUser Owner { get; set; }
 
+        public string PartnerId { get; set; }
+        public ApplicationUser Partner { get; set; }
+
     }
 }

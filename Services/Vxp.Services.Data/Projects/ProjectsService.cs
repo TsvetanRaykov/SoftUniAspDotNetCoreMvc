@@ -45,7 +45,7 @@
         {
             var projectsFromDb = this._projectsRepository.AllAsNoTracking()
                 .Where(p => p.Owner.UserName == userName);
-
+            
             return projectsFromDb.To<TViewModel>();
         }
 

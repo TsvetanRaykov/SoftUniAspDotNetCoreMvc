@@ -36,7 +36,7 @@
 
         public bool IsDeleted { get; set; }
 
-        public IEnumerable<OrderInputModel> Orders { get; set; }
+        public List<OrderInputModel> Orders { get; set; }
 
         public List<DocumentViewModel> Documents { get; set; }
 

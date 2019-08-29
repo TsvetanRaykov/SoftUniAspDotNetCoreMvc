@@ -9,7 +9,7 @@
     var sellerId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 <h4>@ViewData["Title"]</h4>
-<table class="vxp-table table rounded display hover cell-border" style="width: 100%">
+<table class="vxp-table vxp-data-table table rounded display hover cell-border" style="width: 100%">
     <thead>
         <tr>
             <th>Customer</th>
@@ -61,8 +61,3 @@
     </tfoot>
 </table>
 
-@section Scripts{
-    <script>
-        $(document).ready(() => { $(".vxp-table").DataTable({ "lengthChange": false }); })
-    </script>
-}

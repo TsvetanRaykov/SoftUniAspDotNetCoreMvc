@@ -1,64 +1,68 @@
-﻿using System.Globalization;
-using System.Security.Claims;
-using Vxp.Services.Data.Orders;
-using Vxp.Services.Data.Projects;
+﻿using Vxp.Data.Common.Enums;
 
-namespace Vxp.Web.Areas.Distributor.Controllers
+namespace Vxp.Web.Areas.Customer.Controllers
 {
-    using Microsoft.EntityFrameworkCore;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Common;
-    using Vxp.Services.Data.Products;
-    using Vxp.Services.Data.Users;
-    using Services.Models;
-    using ViewModels.Orders;
-    using ViewModels.Products;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Services.Models;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Threading.Tasks;
+    using ViewModels.Orders;
+    using ViewModels.Products;
+    using Vxp.Services.Data.Orders;
+    using Vxp.Services.Data.Products;
+    using Vxp.Services.Data.Projects;
+    using Vxp.Services.Data.Users;
 
-    public class OrdersController : DistributorsController
+    public class OrdersController : CustomersController
     {
         private readonly IProductsService _productsService;
-        private readonly IProductPricesService _productPricesService;
-        private readonly IUsersService _usersService;
         private readonly IProjectsService _projectsService;
+        private readonly IProductPricesService _productPricesService;
         private readonly IOrdersService _ordersService;
+        private readonly IDistributorsService _distributorsService;
 
         public OrdersController(
             IProductsService productsService,
-            IProductPricesService productPricesService,
-            IUsersService usersService,
             IProjectsService projectsService,
-            IOrdersService ordersService)
+            IProductPricesService productPricesService,
+            IOrdersService ordersService,
+            IDistributorsService distributorsService)
         {
             this._productsService = productsService;
-            this._productPricesService = productPricesService;
-            this._usersService = usersService;
             this._projectsService = projectsService;
+            this._productPricesService = productPricesService;
             this._ordersService = ordersService;
+            this._distributorsService = distributorsService;
         }
 
         public async Task<IActionResult> OrderNew()
         {
             var currentOrder = this.HttpContext.Session.Get<List<int>>("order") ?? new List<int>();
-
             var viewModel = new OrderInputModel
             {
                 Products = await this._productsService.GetAllProducts<OrderProductViewModel>()
                     .Where(p => currentOrder.Contains(p.ProductId)).ToListAsync(),
-                Sellers = await this._usersService
-                    .GetAllInRoleAsync<ProductSellerViewModel>(GlobalConstants.Roles.VendorRoleName)
+                Sellers = await this._distributorsService.GetDistributorsForUserAsync<ProductSellerViewModel>(this.User.Identity.Name)
                     .GetAwaiter().GetResult().ToListAsync(),
                 AvailableProjects = await this._projectsService.GetAllProjects<OrderProjectViewModel>(this.User.Identity.Name).ToListAsync()
             };
 
-            var vendor = viewModel.Sellers.First();
+            if (this.TempData.ContainsKey("SellerId"))
+            {
+                viewModel.SellerId = this.TempData["SellerId"] as string;
+            }
+            var seller = viewModel.Sellers.FirstOrDefault(s => s.Id == viewModel.SellerId) ?? viewModel.Sellers.First();
+            viewModel.SellerId = seller.Id;
+
             var priceModifier = await
-                this._productPricesService.GetBuyerPriceModifiers<PriceModifierDto>(this.User.Identity.Name)
-                    .Where(pm => pm.SellerId == vendor.Id)
-                    .FirstOrDefaultAsync() ?? new PriceModifierDto();
+                                    this._productPricesService.GetBuyerPriceModifiers<PriceModifierDto>(this.User.Identity.Name)
+                                        .Where(pm => pm.SellerId == seller.Id)
+                                        .FirstOrDefaultAsync() ?? new PriceModifierDto { PriceModifierType = PriceModifierType.Decrease };
 
             foreach (var product in viewModel.Products)
             {
@@ -98,9 +102,10 @@ namespace Vxp.Web.Areas.Distributor.Controllers
                         await this._ordersService.CreateOrderAsync(inputModel,
                             this.User.FindFirstValue(ClaimTypes.NameIdentifier));
                     }
-
-                    return this.OrderNewRemove();
+                    this.HttpContext.Session.Remove("order");
+                    return this.RedirectToAction("Project", new { controller = "Projects", id = inputModel.ProjectId });
                 }
+
                 var updatedOrder = new List<int>();
                 foreach (var product in inputModel.Products)
                 {
@@ -111,6 +116,8 @@ namespace Vxp.Web.Areas.Distributor.Controllers
                 }
                 this.HttpContext.Session.Set("order", updatedOrder);
             }
+
+            this.TempData["SellerId"] = inputModel.SellerId;
 
             return this.RedirectToAction(nameof(this.OrderNew));
 

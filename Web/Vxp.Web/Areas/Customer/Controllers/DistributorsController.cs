@@ -1,4 +1,7 @@
-﻿namespace Vxp.Web.Areas.Customer.Controllers
+﻿using System;
+using Vxp.Services.Models;
+
+namespace Vxp.Web.Areas.Customer.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -17,8 +20,11 @@
 
         public async Task<IActionResult> Index()
         {
-            var distributors = await this._distributorsService.GetDistributorsForUserAsync<DistributorsListViewModel>(this.User.Identity.Name);
-            var viewModel = await distributors.ToListAsync();
+            var viewModel = new DistributorsListViewModel
+            {
+                Distributors = await this._distributorsService.GetDistributorsForUserAsync<DistributorListViewModel>(this.User.Identity.Name)
+                    .GetAwaiter().GetResult().ToListAsync(),
+            };
 
             return this.View(viewModel);
         }
@@ -35,6 +41,37 @@
             };
 
             return this.View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add([FromForm(Name = "DistributorKeyRegisterInputModel")] DistributorKeyRegisterInputModel inputModel)
+        {
+            if (this.ModelState.IsValid)
+            {
+                await this._distributorsService.AddCustomerToDistributorAsync(this.User.Identity.Name, inputModel.DistributorKey);
+            }
+
+            return this.RedirectToAction(nameof(this.Index));
+        }
+
+        [AcceptVerbs("Post")]
+        public async Task<IActionResult> ValidateDistributorKey([FromForm(Name = "DistributorKeyRegisterInputModel.DistributorKey")]string key)
+        {
+            if (!Guid.TryParse(key, out var keyGuid))
+            {
+                return this.Json("Invalid distributor key.");
+            }
+
+            var distributor = await this._distributorsService.GetDistributorByKey<UserDto>(keyGuid);
+            if (distributor == null)
+            {
+                return this.Json("Distributor not found.");
+            }
+
+
+
+            return this.Json(true);
         }
     }
 }

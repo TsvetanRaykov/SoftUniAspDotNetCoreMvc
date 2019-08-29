@@ -52,7 +52,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Shared\Orders\" />
     <Folder Include="wwwroot\lib\build\" />
     <Folder Include="wwwroot\lib\qrcode\build\" />
   </ItemGroup>
