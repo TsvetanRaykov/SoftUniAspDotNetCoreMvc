@@ -1,7 +1,7 @@
 ﻿// ReSharper disable VirtualMemberCallInConstructor
-
 namespace Vxp.Data.Models
 {
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using Vxp.Data.Common.Models;
 
@@ -29,8 +29,10 @@ namespace Vxp.Data.Models
 
         public virtual List<ProductDetail> Details { get; set; }
 
+        [JsonIgnore]
         public virtual List<ProductImage> Images { get; set; }
 
+        [JsonIgnore]
         public virtual List<OrderProduct> Orders { get; set; }
 
         public bool IsAvailable { get; set; }

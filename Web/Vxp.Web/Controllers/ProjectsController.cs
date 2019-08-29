@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Vxp.Services.Models;
 using Vxp.Web.ViewModels.Documents;
 
@@ -88,7 +89,23 @@ namespace Vxp.Web.Controllers
 
                 var storeFile = AutoMapper.Mapper.Map<FileStoreDto>(inputModel);
                 storeFile.UserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await this._filesService.StoreFileAsync(storeFile);
+                var newFile = await this._filesService.StoreFileToDatabaseAsync(storeFile);
+                if (!string.IsNullOrWhiteSpace(newFile.Location))
+                {
+                    try
+                    {
+                        using (var fileStream = new FileStream(newFile.Location, FileMode.Create, FileAccess.Write))
+                        {
+                            await inputModel.FormFile.CopyToAsync(fileStream);
+                        }
+                    }
+                    catch
+                    {
+                        await this._filesService.DeleteFileFromDataBaseAsync(newFile.Id);
+                    }
+
+                }
+
             }
             return this.Redirect(inputModel.ReturnUrl);
         }

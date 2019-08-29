@@ -22,6 +22,7 @@ namespace Vxp.Data.Models
         public virtual ICollection<Document> Documents { get; set; }
 
         public string OwnerId { get; set; }
+
         public virtual ApplicationUser Owner { get; set; }
 
     }

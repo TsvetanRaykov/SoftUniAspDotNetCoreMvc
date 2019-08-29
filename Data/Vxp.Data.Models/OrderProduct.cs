@@ -15,5 +15,6 @@
         public virtual Product Product { get; set; }
 
         public string ProductData { get; set; }
+        public string PriceModifierData { get; set; }
     }
 }

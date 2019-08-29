@@ -1,13 +1,12 @@
 ﻿namespace Vxp.Services.Models
 {
     using AutoMapper;
-    using Vxp.Data.Models;
-    using Mapping;
     using Data.Common.Enums;
-    using Microsoft.AspNetCore.Http;
+    using Mapping;
+    using Vxp.Data.Models;
     public class FileStoreDto : IMapTo<Document>, IHaveCustomMappings
     {
-        public IFormFile FormFile { get; set; }
+        public int Id { get; set; }
         public string UserId { get; set; }
         public int ProjectId { get; set; }
         public DocumentType Type { get; set; }

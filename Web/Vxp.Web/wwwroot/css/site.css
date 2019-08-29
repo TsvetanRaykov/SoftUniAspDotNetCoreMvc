@@ -546,9 +546,28 @@ textarea::placeholder {
         color: red;
     }
 
-    .vxp-card-order-badge {
-        color: red;
-        position: absolute;
-        bottom: -10px;
-        left: 35px;
-    }
+.vxp-card-order-badge {
+    color: red;
+    position: absolute;
+    bottom: -10px;
+    left: 35px;
+}
+
+.vxp-order-product-price {
+    display: inline;
+    width: 70px;
+    height: 20px;
+    border: 0;
+    
+}
+
+.vxp-product-quantity-input {
+    display: inline;
+    width: 60px;
+    height: 20px;
+}
+
+
+#order-total-price-placeholder {
+    border-top: 1px solid black;
+}

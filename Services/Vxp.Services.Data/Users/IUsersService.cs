@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using Vxp.Data.Models;
-using Vxp.Web.ViewModels.Users;
-
-namespace Vxp.Services.Data.Users
+﻿namespace Vxp.Services.Data.Users
 {
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using Vxp.Data.Models;
+    using Vxp.Web.ViewModels.Users;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

@@ -1,4 +1,6 @@
-﻿namespace Vxp.Services.Data.Projects
+﻿using Vxp.Data.Common.Enums;
+
+namespace Vxp.Services.Data.Projects
 {
     using Microsoft.Extensions.Configuration;
     using Models;
@@ -22,17 +24,11 @@
             this._documentsRepository = documentsRepository;
         }
 
-        public async Task<string> StoreFileAsync(FileStoreDto fileDto)
+        public async Task<FileStoreDto> StoreFileToDatabaseAsync(FileStoreDto fileDto)
         {
-            var configPath = this._configuration["FileStorage:AppUsers"];
-            var directoryPath = Path.GetFullPath(configPath);
+            var fileName = Guid.NewGuid() + Path.GetExtension(fileDto.OriginalFileName);
 
-            directoryPath = Path.Combine(
-                directoryPath,
-                fileDto.UserId,
-                fileDto.Type.ToString());
-
-            var fileName = Guid.NewGuid() + Path.GetExtension(fileDto.FormFile.FileName);
+            var directoryPath = this.GetNewApplicationUserFolder(fileDto.UserId, fileDto.Type);
 
             if (!Directory.Exists(directoryPath))
             {
@@ -41,10 +37,10 @@
 
             fileDto.Location = Path.Combine(directoryPath, fileName);
 
-            using (var fileStream = new FileStream(fileDto.Location, FileMode.Create, FileAccess.Write))
-            {
-                fileDto.FormFile.CopyTo(fileStream);
-            }
+            //using (var fileStream = new FileStream(fileDto.Location, FileMode.Create, FileAccess.Write))
+            //{
+            //    await fileDto.Stream.CopyToAsync(fileStream);
+            //}
 
             var newDocument = AutoMapper.Mapper.Map<Document>(fileDto);
             newDocument.DocumentDate = DateTime.UtcNow;
@@ -52,7 +48,7 @@
             await this._documentsRepository.AddAsync(newDocument);
             await this._documentsRepository.SaveChangesAsync();
 
-            return fileDto.Location;
+            return AutoMapper.Mapper.Map<FileStoreDto>(newDocument);
         }
 
         public bool ValidateFileType(string mimeType)
@@ -94,6 +90,37 @@
             }
 
             return AutoMapper.Mapper.Map<FileStoreDto>(fileFromDb);
+        }
+
+        public string GetNewApplicationUserFolder(string userId, DocumentType documentType)
+        {
+            var configPath = this._configuration["FileStorage:AppUsers"];
+            var directoryPath = Path.GetFullPath(configPath);
+
+            directoryPath = Path.Combine(
+                directoryPath,
+                userId,
+                documentType.ToString());
+
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            return directoryPath;
+        }
+
+        public async Task<bool> DeleteFileFromDataBaseAsync(int fileId)
+        {
+            var fileFromDb = await this._documentsRepository.GetByIdWithDeletedAsync(fileId);
+            if (fileFromDb == null)
+            {
+                return false;
+            }
+
+            this._documentsRepository.Delete(fileFromDb);
+            await this._documentsRepository.SaveChangesAsync();
+            return true;
         }
     }
 }

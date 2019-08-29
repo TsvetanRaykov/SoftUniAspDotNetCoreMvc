@@ -48,10 +48,18 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\AllCountriesInTheWorlds.csv" />
     <EmbeddedResource Include="Resources\AllowedMimeTypes.csv" />
+    <EmbeddedResource Include="Resources\terms_and_conditions.pdf" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Shared\Orders\" />
     <Folder Include="wwwroot\lib\build\" />
     <Folder Include="wwwroot\lib\qrcode\build\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\terms_and_conditions.pdf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

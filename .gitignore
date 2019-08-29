@@ -350,3 +350,4 @@ appsettings.Production.json
 #*.min.css
 #*.min.js
 /Web/Vxp.Web/appsettings.Development.json
+/Web/Vxp.Web/UserFiles

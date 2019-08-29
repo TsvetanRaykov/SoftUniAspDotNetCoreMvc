@@ -1,4 +1,6 @@
-﻿namespace Vxp.Data.Models
+﻿using Newtonsoft.Json;
+
+namespace Vxp.Data.Models
 {
     using System.Collections.Generic;
     using Vxp.Data.Common.Models;
@@ -12,6 +14,7 @@
 
         public string Measure { get; set; }
 
+        [JsonIgnore]
         public ICollection<ProductDetail> ProductDetails { get; set; }
 
     }

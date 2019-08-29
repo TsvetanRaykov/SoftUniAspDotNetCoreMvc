@@ -1,4 +1,6 @@
-﻿namespace Vxp.Data.Models
+﻿using Newtonsoft.Json;
+
+namespace Vxp.Data.Models
 {
     using Vxp.Data.Common.Models;
 
@@ -8,6 +10,7 @@
         public string Value { get; set; }
 
         public int ProductId { get; set; }
+        [JsonIgnore]
         public virtual Product Product { get; set; }
 
         public int CommonDetailId { get; set; }

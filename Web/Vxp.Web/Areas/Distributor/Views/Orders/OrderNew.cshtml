@@ -1,22 +1,85 @@
 ﻿@using System.Web
+@using Vxp.Common
 @model Vxp.Web.ViewModels.Orders.OrderInputModel
-
-
-<div class="d-flex flex-column">
-    
-    @for (int i = 0; i < Model.Products.Count(); i++)
-    {
-        var product = Model.Products[i];
+@{
+    ViewData["Title"] = "Order details";
+}
+<h4>@ViewData["Title"]</h4>
+<form method="post" asp-controller="Orders" asp-action="OrderNew">
+    <div class="d-flex flex-column">
         <div class="d-flex">
-            <div class="w-20">
-                <div class="card-img-top zoom">
-                    <img src="@HttpUtility.UrlDecode(product.Image.Url)" alt="@product.Image.Alt" title="@product.Image.Title">
+            <label class="p-2">Seller</label>
+            @if (this.User.IsInRole(GlobalConstants.Roles.CustomerRoleName))
+            {
+                <select asp-for="SellerId" class="form-control w-25 mb-5"
+                        asp-items="@(new SelectList(Model.Sellers, "Id", "Name"))">
+                </select>
+            }
+            else
+            {
+                var vendor = @Model.Sellers.First();
+                <div class="form-control w-25 mb-5"> @vendor.Name</div>
+                <input type="hidden" asp-for="@Model.SellerId" value="@vendor.Id" />
+            }
+
+            @if (Model.AvailableProjects.Count > 0)
+            {
+                <label class="p-2 pl-5">Project</label>
+                <select class="form-control w-25 mb-5" asp-for="ProjectId" asp-items="@(new SelectList(Model.AvailableProjects, "Id","Name"))"></select>
+            }
+            else
+            {
+                <label class="vxp-validation-errors-placeholder text-danger pl-5">
+                    You must have at least one project where to add your orders.<br />
+                    Can add one from <a asp-controller="Projects" asp-action="Index">here</a>.
+                </label>
+            }
+        </div>
+        @for (int i = 0; i < Model.Products.Count(); i++)
+        {
+            <input type="hidden" asp-for="@Model.Products[i].ProductId" />
+            <input type="hidden" asp-for="@Model.Products[i].PriceModifierType" />
+            <input type="hidden" asp-for="@Model.Products[i].ModifierValue" />
+            <div class="row pb-3">
+                <div class="col-1 my-auto">
+                    <div class="card-img-top zoom">
+                        <img src="@HttpUtility.UrlDecode(Model.Products[i].ProductImage.Url)" alt="@Model.Products[i].ProductImage.Alt" title="@Model.Products[i].ProductImage.Title">
+                    </div>
+                </div>
+                <div class="col-4 my-auto">@Model.Products[i].ProductName, <span class="font-small">@Model.Products[i].ProductDescription</span></div>
+
+                <div class="col-3 my-auto d-flex justify-content-end">
+                    <del class="font-small pt-1">
+                        &euro; @Model.Products[i].OldPrice
+                    </del>
+                    <div class="form-control vxp-order-product-price font-small text-dark text-right font-weight-bold">&euro; @Model.Products[i].PriceFormatted</div>
+                    <input asp-for="@Model.Products[i].Quantity" class="form-control p-0 vxp-product-quantity-input my-auto text-center" min="0" />
+                    <div style="width: 10px;"><span class="text-danger pl-2" asp-validation-for="@Model.Products[i].Quantity"></span></div>
+                </div>
+                <div class="col-2 my-auto d-flex justify-content-end">
+                    <span class="text-success">
+                        &euro; @Model.Products[i].TotalPrice
+                    </span>
                 </div>
             </div>
-            <div class="p-2"></div>
-            <div class="w-100">@product.Name</div>
-            <div class="p-2"></div>
-            <div class="">- +</div>
+        }
+        <div class="col-10 d-flex justify-content-end">
+            <div id="order-total-price-placeholder" class="text-dark pl-4">
+                <span>Total: </span><span class="font-weight-bold">&euro; @Model.TotalPrice</span>
+            </div>
         </div>
-    }
-</div>
+        <div>
+            @if (Model.AvailableProjects.Count > 0)
+            {
+                <button class="btn btn-primary" type="submit" name="Create" value="True">Submit</button>
+            }
+            <button class="btn btn-success" type="submit">Update</button>
+            <button class="btn btn-danger" type="button" onclick="DeleteNewOrderConfirm()">Remove</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts
+{
+    <script src="/js/order-new-remove-confirmation.js"></script>
+}

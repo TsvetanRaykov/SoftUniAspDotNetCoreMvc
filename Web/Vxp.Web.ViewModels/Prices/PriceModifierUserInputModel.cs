@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using Vxp.Data.Models;
-using Vxp.Services.Mapping;
-
-namespace Vxp.Web.ViewModels.Prices
+﻿namespace Vxp.Web.ViewModels.Prices
 {
+    using AutoMapper;
+    using Data.Models;
+    using Services.Mapping;
+
     public class PriceModifierUserInputModel : IHaveCustomMappings
     {
         public string Id { get; set; }

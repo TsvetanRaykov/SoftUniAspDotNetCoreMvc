@@ -1,4 +1,10 @@
-﻿namespace Vxp.Services.Data.Users
+﻿using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.Extensions.FileProviders;
+using Vxp.Data.Common.Enums;
+using Vxp.Services.Data.Projects;
+using Vxp.Services.Models;
+
+namespace Vxp.Services.Data.Users
 {
     using Mapping;
     using Microsoft.AspNetCore.Identity;
@@ -21,15 +27,21 @@
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IDeletableEntityRepository<ApplicationUser> _usersRepository;
+        private readonly IFilesService _filesService;
+        private readonly IProjectsService _projectsService;
 
         public UsersService(
             UserManager<ApplicationUser> userManager,
             IDeletableEntityRepository<ApplicationUser> usersRepository,
-            RoleManager<ApplicationRole> roleManager)
+            RoleManager<ApplicationRole> roleManager,
+            IFilesService filesService,
+            IProjectsService projectsService)
         {
             this._userManager = userManager;
             this._usersRepository = usersRepository;
             this._roleManager = roleManager;
+            this._filesService = filesService;
+            this._projectsService = projectsService;
         }
 
         public Task<IQueryable<TViewModel>> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp)
@@ -77,6 +89,46 @@
             if (!user.Succeeded) { return null; }
 
             await this._userManager.AddToRoleAsync(applicationUser, role);
+
+            var defaultProject = new ProjectDto
+            {
+                OwnerId = applicationUser.Id,
+                Name = "Default project",
+                Description = "Welcome new user!"
+            };
+
+            var defaultProjectId = await this._projectsService.CreateProjectAsync(defaultProject);
+            var termsAndConditionsPdf = new FileStoreDto
+            {
+                Description = "Terms and conditions",
+                UserId = applicationUser.Id,
+                Type = DocumentType.Contract,
+                ContentType = "application/pdf",
+                ProjectId = defaultProjectId,
+                OriginalFileName = "terms_and_conditions.pdf"
+            };
+
+            var newFile = await this._filesService.StoreFileToDatabaseAsync(termsAndConditionsPdf);
+
+            if (!string.IsNullOrWhiteSpace(newFile.Location))
+            {
+                var assembly = Assembly.GetEntryAssembly();
+                try
+                {
+                    using (var resourceStream = assembly?.GetManifestResourceStream("Vxp.Web.Resources.terms_and_conditions.pdf"))
+                    {
+                        using (var fileStream = new FileStream(newFile.Location, FileMode.Create, FileAccess.Write))
+                        {
+                            if (resourceStream != null) await resourceStream.CopyToAsync(fileStream);
+                        }
+                    }
+                }
+                catch
+                {
+                    await this._filesService.DeleteFileFromDataBaseAsync(newFile.Id);
+                }
+
+            }
 
             return applicationUser.Id;
 
