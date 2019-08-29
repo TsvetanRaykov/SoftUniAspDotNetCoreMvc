@@ -1,6 +1,4 @@
-﻿using Vxp.Data.Common.Enums;
-
-namespace Vxp.Web.Areas.Customer.Controllers
+﻿namespace Vxp.Web.Areas.Customer.Controllers
 {
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
@@ -12,11 +10,10 @@ namespace Vxp.Web.Areas.Customer.Controllers
     using System.Security.Claims;
     using System.Threading.Tasks;
     using ViewModels.Orders;
-    using ViewModels.Products;
+    using Vxp.Data.Common.Enums;
     using Vxp.Services.Data.Orders;
     using Vxp.Services.Data.Products;
     using Vxp.Services.Data.Projects;
-    using Vxp.Services.Data.Users;
 
     public class OrdersController : CustomersController
     {
@@ -24,20 +21,18 @@ namespace Vxp.Web.Areas.Customer.Controllers
         private readonly IProjectsService _projectsService;
         private readonly IProductPricesService _productPricesService;
         private readonly IOrdersService _ordersService;
-        private readonly IDistributorsService _distributorsService;
 
         public OrdersController(
             IProductsService productsService,
             IProjectsService projectsService,
             IProductPricesService productPricesService,
-            IOrdersService ordersService,
-            IDistributorsService distributorsService)
+            IOrdersService ordersService
+            )
         {
             this._productsService = productsService;
             this._projectsService = projectsService;
             this._productPricesService = productPricesService;
             this._ordersService = ordersService;
-            this._distributorsService = distributorsService;
         }
 
         public async Task<IActionResult> OrderNew()
@@ -47,21 +42,28 @@ namespace Vxp.Web.Areas.Customer.Controllers
             {
                 Products = await this._productsService.GetAllProducts<OrderProductViewModel>()
                     .Where(p => currentOrder.Contains(p.ProductId)).ToListAsync(),
-                Sellers = await this._distributorsService.GetDistributorsForUserAsync<ProductSellerViewModel>(this.User.Identity.Name)
-                    .GetAwaiter().GetResult().ToListAsync(),
                 AvailableProjects = await this._projectsService.GetAllProjects<OrderProjectViewModel>(this.User.Identity.Name).ToListAsync()
             };
 
-            if (this.TempData.ContainsKey("SellerId"))
+            if (this.TempData.ContainsKey("ProjectId"))
             {
-                viewModel.SellerId = this.TempData["SellerId"] as string;
+                viewModel.ProjectId = (int)this.TempData["ProjectId"];
             }
-            var seller = viewModel.Sellers.FirstOrDefault(s => s.Id == viewModel.SellerId) ?? viewModel.Sellers.First();
-            viewModel.SellerId = seller.Id;
+
+            var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var project = viewModel.AvailableProjects.FirstOrDefault(p => p.Id == viewModel.ProjectId) ?? viewModel.AvailableProjects.FirstOrDefault();
+
+            if (project == null)
+            {
+                return this.View(viewModel);
+            }
+
+            viewModel.Seller = project.Partner.Id == currentUserId ? project.Owner : project.Partner;
+            viewModel.SellerId = viewModel.Seller.Id;
 
             var priceModifier = await
                                     this._productPricesService.GetBuyerPriceModifiers<PriceModifierDto>(this.User.Identity.Name)
-                                        .Where(pm => pm.SellerId == seller.Id)
+                                        .Where(pm => pm.SellerId == viewModel.SellerId)
                                         .FirstOrDefaultAsync() ?? new PriceModifierDto { PriceModifierType = PriceModifierType.Decrease };
 
             foreach (var product in viewModel.Products)
@@ -117,7 +119,7 @@ namespace Vxp.Web.Areas.Customer.Controllers
                 this.HttpContext.Session.Set("order", updatedOrder);
             }
 
-            this.TempData["SellerId"] = inputModel.SellerId;
+            this.TempData["ProjectId"] = inputModel.ProjectId;
 
             return this.RedirectToAction(nameof(this.OrderNew));
 

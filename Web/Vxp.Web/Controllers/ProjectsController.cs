@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Vxp.Services.Models;
 using Vxp.Web.ViewModels.Documents;
 
@@ -47,7 +49,7 @@ namespace Vxp.Web.Controllers
 
             if (this.ModelState.IsValid)
             {
-                if (!this.ValidateUserRightsOn(project))
+                if (project.OwnerId != this.User.FindFirstValue(ClaimTypes.NameIdentifier))
                 {
                     return this.Redirect("/Identity/Account/AccessDenied");
                 }
@@ -60,18 +62,24 @@ namespace Vxp.Web.Controllers
 
         [HttpPost]
         [SetTempDataModelState]
-        public async Task<IActionResult> Delete(ProjectInputModel project)
+        public async Task<IActionResult> Delete([FromForm(Name = "project.Id")]int projectId, [FromForm(Name = "project.ReturnUrl")]string returnUrl)
         {
-            if (this.ModelState.IsValid)
+            var project = await this._projectsService.GetAllProjects<ProjectDto>(this.User.Identity.Name)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
+
+            if (project == null)
             {
-                if (!this.ValidateUserRightsOn(project))
-                {
-                    return this.Redirect("/Identity/Account/AccessDenied");
-                }
-                await this._projectsService.DeleteProjectAsync(project.Id);
+                return this.NotFound();
             }
 
-            return this.Redirect(project.ReturnUrl);
+            if (project.OwnerId != this.User.FindFirstValue(ClaimTypes.NameIdentifier))
+            {
+                return this.Redirect("/Identity/Account/AccessDenied");
+            }
+
+            await this._projectsService.DeleteProjectAsync(project.Id);
+
+            return this.Redirect(returnUrl);
         }
 
         [HttpPost]
@@ -117,7 +125,9 @@ namespace Vxp.Web.Controllers
             var file = await this._filesService.GetDocumentByIdAsync(id);
             if (file != null)
             {
-                if (file.UserId != this.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (!new[] { file.Project.OwnerId, file.Project.PartnerId }.Contains(currentUserId))
                 {
                     return this.Redirect("/Identity/Account/AccessDenied");
                 }
@@ -132,12 +142,6 @@ namespace Vxp.Web.Controllers
             }
 
             return this.NotFound();
-        }
-
-
-        private bool ValidateUserRightsOn(ProjectInputModel project)
-        {
-            return project.OwnerId == this.User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

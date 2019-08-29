@@ -17,6 +17,7 @@
             this.Orders = new List<OrderInputModel>();
             this.Documents = new List<DocumentViewModel>();
             this.UploadInputModel = new DocumentUploadInputModel();
+            this.AvailablePartners = new List<ProjectPartnerInputModel>();
         }
 
         [Required(AllowEmptyStrings = false)]
@@ -33,7 +34,10 @@
 
         public int Id { get; set; }
         public string OwnerId { get; set; }
-
+        public ProjectPartnerInputModel Owner { get; set; }
+        public string PartnerId { get; set; }
+        public ProjectPartnerInputModel Partner { get; set; }
+        public List<ProjectPartnerInputModel> AvailablePartners { get; set; }
         public bool IsDeleted { get; set; }
 
         public List<OrderInputModel> Orders { get; set; }

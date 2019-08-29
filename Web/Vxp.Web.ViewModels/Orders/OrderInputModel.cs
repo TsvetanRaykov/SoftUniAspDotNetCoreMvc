@@ -13,7 +13,7 @@
         public OrderInputModel()
         {
             this.Products = new List<OrderProductViewModel>();
-            this.Sellers = new List<ProductSellerViewModel>();
+          //  this.Sellers = new List<ProductSellerViewModel>();
             this.AvailableProjects = new List<OrderProjectViewModel>();
         }
 
@@ -21,7 +21,7 @@
 
         public ProductSellerViewModel Seller { get; set; }
 
-        public List<ProductSellerViewModel> Sellers { get; set; }
+        //public List<ProductSellerViewModel> Sellers { get; set; }
 
         public List<OrderProductViewModel> Products { get; set; }
 

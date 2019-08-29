@@ -44,8 +44,8 @@
         public IQueryable<TViewModel> GetAllProjects<TViewModel>(string userName)
         {
             var projectsFromDb = this._projectsRepository.AllAsNoTracking()
-                .Where(p => p.Owner.UserName == userName);
-            
+                .Where(p => p.Owner.UserName == userName || p.Partner.UserName == userName);
+
             return projectsFromDb.To<TViewModel>();
         }
 

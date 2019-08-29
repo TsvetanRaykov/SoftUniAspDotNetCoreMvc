@@ -1,5 +1,6 @@
 ﻿namespace Vxp.Web.Areas.Customer.Controllers
 {
+    using Vxp.Services.Data.Users;
     using Infrastructure.Attributes.ActionFilters;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@
     public class ProjectsController : CustomersController
     {
         private readonly IProjectsService _projectsService;
+        private readonly IDistributorsService _distributorsService;
 
-        public ProjectsController(IProjectsService projectsService)
+        public ProjectsController(IProjectsService projectsService, IDistributorsService distributorsService)
         {
             this._projectsService = projectsService;
+            this._distributorsService = distributorsService;
         }
 
         [RestoreModelStateFromTempData]
@@ -23,7 +26,12 @@
             {
                 ExistingProjects = await this._projectsService
                     .GetAllProjects<ProjectInputModel>(this.User.Identity.Name)
-                    .ToListAsync()
+                    .ToListAsync(),
+                Input = new ProjectInputModel
+                {
+                    AvailablePartners = await this._distributorsService.GetDistributorsForUserAsync<ProjectPartnerInputModel>(this.User.Identity.Name)
+                        .GetAwaiter().GetResult().ToListAsync()
+                }
             };
 
             return this.View(viewModel);

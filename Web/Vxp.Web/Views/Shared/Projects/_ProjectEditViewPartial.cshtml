@@ -1,8 +1,11 @@
-﻿@model Vxp.Web.ViewModels.Projects.ProjectInputModel
+﻿@using System.Security.Claims
+@model Vxp.Web.ViewModels.Projects.ProjectInputModel
 @{
     ViewData["Title"] = Model.Name;
+    var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
-<h4 class="d-inline">@ViewData["Title"]</h4> <p class="d-inline ml-5 text-dark">@Model.Description</p>
+
+<h4 class="d-inline">@(currentUserId == Model.OwnerId ? Model.Partner.Name : Model.Owner.Name),  @ViewData["Title"]</h4> <p class="d-inline ml-5 text-dark">@Model.Description</p>
 
 <div class="d-flex">
     <div class="w-50 p-1">

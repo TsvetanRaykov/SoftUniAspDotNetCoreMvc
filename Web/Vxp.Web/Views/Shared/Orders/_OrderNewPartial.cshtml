@@ -1,35 +1,27 @@
 ﻿@using System.Web
-@using Vxp.Common
 @model Vxp.Web.ViewModels.Orders.OrderInputModel
 <form method="post" asp-controller="Orders" asp-action="OrderNew">
     <div class="d-flex flex-column">
         <div class="d-flex">
-            <label class="p-2">Seller</label>
-            @if (this.User.IsInRole(GlobalConstants.Roles.CustomerRoleName))
-            {
-                <select asp-for="SellerId" class="form-control w-25 mb-5"  onchange="this.form.submit()"
-                        asp-items="@(new SelectList(Model.Sellers, "Id", "Name", @Model.SellerId))">
-                </select>
-            }
-            else
-            {
-                var vendor = @Model.Sellers.First();
-                <div class="form-control w-25 mb-5"> @vendor.Name</div>
-                <input type="hidden" asp-for="@Model.SellerId" value="@vendor.Id" />
-            }
-
             @if (Model.AvailableProjects.Count > 0)
             {
-                <label class="p-2 pl-5">Project</label>
-                <select class="form-control w-25 mb-5" asp-for="ProjectId" asp-items="@(new SelectList(Model.AvailableProjects, "Id","Name"))"></select>
+                <label class="p-2">Project</label>
+                <select class="form-control w-25 mb-5" asp-for="ProjectId" onchange="this.form.submit()"
+                        asp-items="@(new SelectList(Model.AvailableProjects, "Id","Name", @Model.ProjectId))"></select>
+
+                <label class="p-2 pl-5">Seller</label>
+                <div class="form-control w-25 mb-5"> @Model.Seller.Name</div>
+                <input type="hidden" asp-for="@Model.SellerId" />
+
             }
             else
             {
                 <label class="vxp-validation-errors-placeholder text-danger pl-5">
-                    You must have at least one project where to add your orders.<br />
-                    Can add one from <a asp-controller="Projects" asp-action="Index">here</a>.
+                    You must have at least one project where to add your orders. Can add one from <a asp-controller="Projects" asp-action="Index">here</a>.
                 </label>
             }
+
+
         </div>
         @for (int i = 0; i < Model.Products.Count(); i++)
         {
@@ -68,9 +60,9 @@
             @if (Model.AvailableProjects.Count > 0)
             {
                 <button class="btn btn-primary" type="submit" name="Create" value="True">Submit</button>
+                <button class="btn btn-success" type="submit">Update</button>
+                <button class="btn btn-danger" type="button" onclick="DeleteNewOrderConfirm()">Remove</button>
             }
-            <button class="btn btn-success" type="submit">Update</button>
-            <button class="btn btn-danger" type="button" onclick="DeleteNewOrderConfirm()">Remove</button>
         </div>
     </div>
 </form>

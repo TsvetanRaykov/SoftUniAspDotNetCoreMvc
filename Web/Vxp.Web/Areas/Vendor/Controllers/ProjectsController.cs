@@ -1,5 +1,7 @@
 ﻿namespace Vxp.Web.Areas.Vendor.Controllers
 {
+    using Common;
+    using Vxp.Services.Data.Users;
     using Infrastructure.Attributes.ActionFilters;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
@@ -10,10 +12,12 @@
     public class ProjectsController : VendorsController
     {
         private readonly IProjectsService _projectsService;
+        private readonly IUsersService _usersService;
 
-        public ProjectsController(IProjectsService projectsService)
+        public ProjectsController(IProjectsService projectsService, IUsersService usersService)
         {
             this._projectsService = projectsService;
+            this._usersService = usersService;
         }
 
         [RestoreModelStateFromTempData]
@@ -23,7 +27,12 @@
             {
                 ExistingProjects = await this._projectsService
                     .GetAllProjects<ProjectInputModel>(this.User.Identity.Name)
-                    .ToListAsync()
+                    .ToListAsync(),
+                Input = new ProjectInputModel
+                {
+                    AvailablePartners = await this._usersService.GetAllInRoleAsync<ProjectPartnerInputModel>(GlobalConstants.Roles.DistributorRoleName)
+                    .GetAwaiter().GetResult().ToListAsync()
+                }
             };
 
             return this.View(viewModel);

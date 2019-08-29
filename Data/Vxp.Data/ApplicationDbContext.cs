@@ -247,6 +247,7 @@
             builder.Entity<Project>(entity =>
             {
                 entity.Property(p => p.Name).IsRequired();
+                entity.Property(p => p.PartnerId).IsRequired();
             });
         }
 
@@ -408,13 +409,6 @@
                     .HasForeignKey(p => p.OwnerId)
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasMany(e => e.Projects)
-                    .WithOne(p => p.Partner)
-                    .HasForeignKey(p=>p.PartnerId)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
-
 
                 entity.HasMany(e => e.PriceModifiersReceive)
                     .WithOne(p => p.Buyer)

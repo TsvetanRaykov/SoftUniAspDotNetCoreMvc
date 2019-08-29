@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.Security.Claims;
-using Vxp.Services.Data.Orders;
-using Vxp.Services.Data.Projects;
+﻿using Vxp.Data.Common.Enums;
 
 namespace Vxp.Web.Areas.Distributor.Controllers
 {
@@ -17,6 +14,10 @@ namespace Vxp.Web.Areas.Distributor.Controllers
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.Security.Claims;
+    using Vxp.Services.Data.Orders;
+    using Vxp.Services.Data.Projects;
 
     public class OrdersController : DistributorsController
     {
@@ -48,17 +49,17 @@ namespace Vxp.Web.Areas.Distributor.Controllers
             {
                 Products = await this._productsService.GetAllProducts<OrderProductViewModel>()
                     .Where(p => currentOrder.Contains(p.ProductId)).ToListAsync(),
-                Sellers = await this._usersService
-                    .GetAllInRoleAsync<ProductSellerViewModel>(GlobalConstants.Roles.VendorRoleName)
-                    .GetAwaiter().GetResult().ToListAsync(),
                 AvailableProjects = await this._projectsService.GetAllProjects<OrderProjectViewModel>(this.User.Identity.Name).ToListAsync()
             };
 
-            var vendor = viewModel.Sellers.First();
+            viewModel.Seller = await this._usersService
+                .GetAllInRoleAsync<ProductSellerViewModel>(GlobalConstants.Roles.VendorRoleName)
+                .GetAwaiter().GetResult().FirstOrDefaultAsync();
+
             var priceModifier = await
                 this._productPricesService.GetBuyerPriceModifiers<PriceModifierDto>(this.User.Identity.Name)
-                    .Where(pm => pm.SellerId == vendor.Id)
-                    .FirstOrDefaultAsync() ?? new PriceModifierDto();
+                    .Where(pm => pm.SellerId == viewModel.SellerId)
+                    .FirstOrDefaultAsync() ?? new PriceModifierDto { PriceModifierType = PriceModifierType.Decrease };
 
             foreach (var product in viewModel.Products)
             {

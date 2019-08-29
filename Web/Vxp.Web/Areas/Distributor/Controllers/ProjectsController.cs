@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using Vxp.Common;
+using Vxp.Services.Data.Users;
 
 namespace Vxp.Web.Areas.Distributor.Controllers
 {
@@ -12,10 +14,12 @@ namespace Vxp.Web.Areas.Distributor.Controllers
     public class ProjectsController : DistributorsController
     {
         private readonly IProjectsService _projectsService;
+        private readonly IUsersService _usersService;
 
-        public ProjectsController(IProjectsService projectsService)
+        public ProjectsController(IProjectsService projectsService, IUsersService usersService)
         {
             this._projectsService = projectsService;
+            this._usersService = usersService;
         }
 
         [RestoreModelStateFromTempData]
@@ -25,7 +29,12 @@ namespace Vxp.Web.Areas.Distributor.Controllers
             {
                 ExistingProjects = await this._projectsService
                     .GetAllProjects<ProjectInputModel>(this.User.Identity.Name)
-                    .ToListAsync()
+                    .ToListAsync(),
+                Input = new ProjectInputModel
+                {
+                    AvailablePartners = await this._usersService.GetAllInRoleAsync<ProjectPartnerInputModel>(GlobalConstants.Roles.VendorRoleName)
+                        .GetAwaiter().GetResult().ToListAsync()
+                }
             };
 
             return this.View(viewModel);
