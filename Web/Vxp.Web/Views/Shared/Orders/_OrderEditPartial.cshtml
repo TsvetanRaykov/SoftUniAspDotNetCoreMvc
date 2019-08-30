@@ -1,0 +1,92 @@
+﻿@using System.Security.Claims
+@using System.Web
+@using Microsoft.AspNetCore.Http.Extensions
+@using Vxp.Data.Common.Enums
+@model Vxp.Web.ViewModels.Orders.OrderEditInputModel
+@{
+    var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+<h4>Order</h4>
+<div class="d-flex flex-column">
+    <div class="d-flex mb-3 col-10 justify-content-between">
+        @if (@Model.BuyerId == currentUserId)
+        {
+            <div class="d-flex">
+                <div class="vxp-form-control-label my-2 my-auto"> Seller: </div>
+                <div class="form-control border-0 m-2 font-weight-bold text-dark"> @Model.Seller.Name </div>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex">
+                <div class="vxp-form-control-label my-2 my-auto"> Buyer: </div>
+                <div class="form-control border-0 m-2 font-weight-bold text-dark"> @Model.Buyer.Name </div>
+            </div>
+        }
+        <div class="d-flex">
+            <label class="vxp-form-control-label my-2 my-auto text-nowrap" asp-for="CreatedOn"></label>
+            <div class="form-control border-0 m-2 font-weight-bold text-dark">@Model.CreatedOn.ToLocalTime().ToShortDateString()</div>
+        </div>
+    </div>
+    <div class="border rounded pt-3">
+        @for (int i = 0; i < Model.Products.Count(); i++)
+        {
+            <div class="row pb-3">
+                <div class="col-1 my-auto">
+                    <a asp-action="Product" asp-controller="Products" asp-route-id="@Model.Products[i].ProductId">
+                        <div class="card-img-top zoom">
+                            <img src="@HttpUtility.UrlDecode(Model.Products[i].ProductImage.Url)" alt="@Model.Products[i].ProductImage.Alt" title="@Model.Products[i].ProductImage.Title">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-4 my-auto">@Model.Products[i].ProductName, <span class="font-small">@Model.Products[i].ProductDescription</span></div>
+
+                <div class="col-3 my-auto d-flex justify-content-end">
+                    <del class="font-small pt-1">
+                        &euro; @Model.Products[i].OldPrice
+                    </del>
+                    <div class="form-control vxp-order-product-price font-small text-dark text-right font-weight-bold">&euro; @Model.Products[i].PriceFormatted</div>
+
+                    <div style="width: 10px;"></div>
+                </div>
+                <div class="col-2 my-auto d-flex justify-content-between">
+                    <div class="text-dark font-weight-bold">@Model.Products[i].Quantity</div>
+                    <span class="text-success">
+                        &euro; @Model.Products[i].TotalPrice
+                    </span>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-10 d-flex justify-content-between mt-5">
+        <div>
+            @if (currentUserId == Model.SellerId)
+            {
+            <form method="post" class="d-flex" asp-action="UpdateOrderStatus">
+                <input type="hidden" asp-for="SellerId" />
+                <input type="hidden" asp-for="BuyerId" />
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ReturnUrl" />
+                <label class="vxp-form-control-label text-nowrap my-auto" asp-for="Status"></label>
+                <select class="form-control ml-5 mr-3" asp-for="Status" asp-items="@Html.GetEnumSelectList(typeof(OrderStatus))"></select>
+                <button class="btn btn-success" type="submit">Update</button>
+                <label class="vxp-form-control-label text-nowrap my-auto ml-5" asp-for="ModifiedOn"></label>
+                <div class="vxp-form-control-label text-nowrap my-auto text-dark ml-2">@Model.ModifiedOn?.ToLocalTime().ToShortDateString()</div>
+            </form>
+            }
+            else
+            {
+                <div class="d-flex">
+                    <label class="vxp-form-control-label text-nowrap my-auto" asp-for="Status"></label>
+                    <div class="form-control border-0 m-2 font-weight-bold text-dark">@Model.Status</div>
+                    <label class="vxp-form-control-label text-nowrap my-auto ml-5" asp-for="ModifiedOn"></label>
+                    <div class="vxp-form-control-label text-nowrap my-auto text-dark ml-2">@Model.ModifiedOn?.ToLocalTime().ToShortDateString()</div>
+                </div>
+            }
+        </div>
+        <div id="order-total-price-placeholder" class="text-dark pl-4">
+            <span>Total: </span><span class="font-weight-bold">&euro; @Model.TotalPrice</span>
+        </div>
+    </div>
+
+</div>

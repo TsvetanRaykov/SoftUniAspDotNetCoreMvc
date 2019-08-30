@@ -1,4 +1,6 @@
-﻿namespace Vxp.Services.Data.Orders
+﻿using System;
+
+namespace Vxp.Services.Data.Orders
 {
     using Microsoft.EntityFrameworkCore;
     using Web.Infrastructure.Extensions;
@@ -18,7 +20,7 @@
             this._ordersRepository = ordersRepository;
         }
 
-        public Task<IQueryable<TViewModel>> GetAllOrders<TViewModel>(string userName)
+        public Task<IQueryable<TViewModel>> GetAllOrdersAsync<TViewModel>(string userName)
         {
             return Task.Run(() =>
             {
@@ -52,16 +54,19 @@
                     product.ProductData = product.Product.ToJson();
                 }
 
-                await this.UpdateOrderHistoryAsync(newOrder.Id, OrderStatus.New);
+                await this.UpdateOrderStatusAsync(newOrder.Id, OrderStatus.New);
                 return true;
             }
 
             return false;
         }
 
-        public async Task<bool> UpdateOrderHistoryAsync(int orderId, OrderStatus newStatus)
+        public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus newStatus)
         {
-            var orderFromDb = await this._ordersRepository.GetByIdWithDeletedAsync(orderId);
+            var orderFromDb = await this._ordersRepository.AllWithDeleted()
+                .Include(o => o.Project)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
             if (orderFromDb == null)
             {
                 return false;
@@ -72,6 +77,8 @@
                 OldStatus = orderFromDb.Status,
                 NewStatus = newStatus
             };
+
+            orderFromDb.Project.ModifiedOn = DateTime.UtcNow;
 
             orderFromDb.OrderHistories.Add(newHistoryRecord);
             orderFromDb.Status = newStatus;

@@ -1,6 +1,4 @@
-﻿using Vxp.Web.ViewModels.Prices;
-
-namespace Vxp.Web.Areas.Vendor.Controllers
+﻿namespace Vxp.Web.Areas.Vendor.Controllers
 {
     using Common;
     using Microsoft.AspNetCore.Mvc;
@@ -83,6 +81,8 @@ namespace Vxp.Web.Areas.Vendor.Controllers
             return this.View(viewModel);
         }
 
+        public IActionResult Product(int id) { return this.RedirectToAction(nameof(this.Edit), new { id = id }); }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ProductInputModel inputModel)
@@ -99,6 +99,11 @@ namespace Vxp.Web.Areas.Vendor.Controllers
 
             return this.RedirectToAction(nameof(Edit), new { id = inputModel.Id });
         }
+
+        //public IActionResult Product(int id)
+        //{
+        //    return this.RedirectToAction(nameof(this.Edit), new { id = id });
+        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]

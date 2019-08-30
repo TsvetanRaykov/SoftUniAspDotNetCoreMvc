@@ -1,12 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Vxp.Services.Models;
-using Vxp.Web.ViewModels.Documents;
-
-namespace Vxp.Web.Controllers
+﻿namespace Vxp.Web.Controllers
 {
+    using System.IO;
+    using System.Linq;
+    using Microsoft.EntityFrameworkCore;
+    using Services.Models;
+    using ViewModels.Documents;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using ViewModels.Projects;
@@ -46,7 +44,8 @@ namespace Vxp.Web.Controllers
         [SetTempDataModelState]
         public async Task<IActionResult> Update(ProjectInputModel project)
         {
-
+            this.ModelState.Remove("UploadInputModel.Description");
+            this.ModelState.Remove("UploadInputModel.FormFile");
             if (this.ModelState.IsValid)
             {
                 if (project.OwnerId != this.User.FindFirstValue(ClaimTypes.NameIdentifier))

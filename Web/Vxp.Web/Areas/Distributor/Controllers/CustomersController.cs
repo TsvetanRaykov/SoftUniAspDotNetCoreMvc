@@ -1,4 +1,7 @@
-﻿namespace Vxp.Web.Areas.Distributor.Controllers
+﻿using Vxp.Services.Data.Projects;
+using Vxp.Web.ViewModels.Projects;
+
+namespace Vxp.Web.Areas.Distributor.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using System;
@@ -20,15 +23,18 @@
         private readonly IDistributorsService _distributorsService;
         private readonly IBankAccountsService _bankAccountsService;
         private readonly IProductPricesService _productsPricesService;
+        private readonly IProjectsService _projectsService;
 
         public CustomersController(
             IDistributorsService distributorsService,
             IBankAccountsService bankAccountsService,
-            IProductPricesService productsPricesService)
+            IProductPricesService productsPricesService,
+            IProjectsService projectsService)
         {
             this._distributorsService = distributorsService;
             this._bankAccountsService = bankAccountsService;
             this._productsPricesService = productsPricesService;
+            this._projectsService = projectsService;
         }
 
         public async Task<IActionResult> Index()
@@ -94,20 +100,28 @@
         [HttpGet]
         public async Task<IActionResult> Customer(string id)
         {
-            var customers = await
-                this._distributorsService.GetCustomersAsync<CustomerViewModelDetails>(this.User.Identity.Name);
+            var customer = await
+                this._distributorsService.GetCustomersAsync<CustomerViewModelDetails>(this.User.Identity.Name)
+                    .GetAwaiter().GetResult().SingleOrDefaultAsync(u => u.Id == id);
 
-            var customerDetails = await customers.FirstOrDefaultAsync(u => u.Id == id);
+            if (customer == null)
+            {
+                return this.NotFound();
+            }
+
             var sellerId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var viewModel = new CustomerViewModel
             {
-                Details = customerDetails,
-                PriceModifierInputModel = customerDetails.PriceModifiers
+                Details = customer,
+                PriceModifierInputModel = customer.PriceModifiers
                                               .FirstOrDefault(pm => pm.SellerId == sellerId) ?? new PriceModifierInputModel
                                               {
-                                                  BuyerId = customerDetails.Id,
+                                                  BuyerId = customer.Id,
                                                   SellerId = sellerId
-                                              }
+                                              },
+                ExistingProjects = await this._projectsService.GetAllProjects<ProjectInputModel>(this.User.Identity.Name)
+                    .Where(p => p.OwnerId == id || p.PartnerId == id)
+                    .ToListAsync()
             };
 
             return this.View(viewModel);

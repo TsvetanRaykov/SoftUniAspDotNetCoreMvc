@@ -68,11 +68,28 @@
                     var disableAction = project.OwnerId != currentUserId;
                     var disableDelete = disableAction || (project.Documents.Count() + project.Orders.Count() > 0) ? "disabled='disabled'" : null;
                     var disableEdit = disableAction ? "disabled='disabled'" : null;
+
                     <tr>
                         <td>@project.Name</td>
                         <td>@project.Description</td>
-                        <td>@project.Owner.Name</td>
-                        <td>@project.Partner.Name</td>
+                        <td>
+                            @if (currentUserId == project.OwnerId)
+                            {
+                                @project.Owner.Name
+                            }
+                            else
+                            {
+                            <mark>@project.Owner.Name</mark>
+                            }
+                        </td>
+                        <td> @if (currentUserId == project.PartnerId)
+                             {
+                                 @project.Partner.Name
+                             }
+                             else
+                             {
+                                 <mark>@project.Partner.Name</mark>
+                             }</td>
                         <td class="text-right">@project.Orders.Count()</td>
                         <td class="text-right">@project.Documents.Count()</td>
                         <td class="text-right">@project.CreatedOn.ToLocalTime().ToShortDateString()</td>
@@ -84,6 +101,7 @@
                             <form class="d-inline" method="post" asp-controller="Projects" asp-action="Delete" data-name="@project.Name" onsubmit="deleteProject(event)">
                                 <input type="hidden" asp-for="@project.Id" />
                                 <input type="hidden" asp-for="@project.OwnerId" />
+                                <input type="hidden" asp-for="@project.PartnerId" />
                                 <input type="hidden" asp-for="@project.Name" />
                                 <input type="hidden" asp-for="@project.Description" />
                                 <input type="hidden" asp-for="@project.ReturnUrl" value="@this.Context.Request.GetDisplayUrl()" />

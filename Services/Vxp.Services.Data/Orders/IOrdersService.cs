@@ -6,8 +6,8 @@
 
     public interface IOrdersService
     {
-        Task<IQueryable<TViewModel>> GetAllOrders<TViewModel>(string userName);
+        Task<IQueryable<TViewModel>> GetAllOrdersAsync<TViewModel>(string userName);
         Task<bool> CreateOrderAsync<TViewModel>(TViewModel order, string buyerId);
-        Task<bool> UpdateOrderHistoryAsync(int orderId, OrderStatus newStatus);
+        Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus newStatus);
     }
 }

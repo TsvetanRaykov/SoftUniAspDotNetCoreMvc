@@ -31,7 +31,7 @@ namespace Vxp.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> ListUsers()
         {
-            var viewModel = await this._usersService.GetAllWithDeleted<ListUserViewModel>().GetAwaiter().GetResult().ToListAsync();
+            var viewModel = await this._usersService.GetAllWithDeletedAsync<ListUserViewModel>().GetAwaiter().GetResult().ToListAsync();
             return this.View(viewModel);
         }
 

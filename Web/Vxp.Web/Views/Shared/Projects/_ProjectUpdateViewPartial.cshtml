@@ -14,6 +14,7 @@
                 <form asp-controller="Projects" asp-action="Update" method="post">
                     <input type="hidden" asp-for="Id" />
                     <input type="hidden" asp-for="OwnerId" />
+                    <input type="hidden" asp-for="PartnerId" />
                     <input type="hidden" asp-for="ReturnUrl" value="@this.Context.Request.GetDisplayUrl()" />
                     <div class="text-left">
                         <label asp-for="Name" class="vxp-form-control-label "></label>

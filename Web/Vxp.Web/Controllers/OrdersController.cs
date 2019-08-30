@@ -1,20 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Vxp.Common;
 using Vxp.Services.Data.Orders;
 using Vxp.Services.Data.Products;
 using Vxp.Services.Data.Projects;
 using Vxp.Services.Data.Users;
-using Vxp.Services.Models;
 using Vxp.Web.Infrastructure.Extensions;
 using Vxp.Web.ViewModels.Orders;
-using Vxp.Web.ViewModels.Products;
 
 namespace Vxp.Web.Controllers
 {

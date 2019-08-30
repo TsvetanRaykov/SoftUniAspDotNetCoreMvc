@@ -1,80 +1,30 @@
-﻿using System;
-using Vxp.Data.Common.Enums;
-
-namespace Vxp.Web.Areas.Distributor.Controllers
+﻿namespace Vxp.Web.Areas.Vendor.Controllers
 {
-    using Microsoft.EntityFrameworkCore;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Common;
-    using Vxp.Services.Data.Products;
-    using Vxp.Services.Data.Users;
-    using Services.Models;
-    using ViewModels.Orders;
-    using ViewModels.Products;
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Services.Models;
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Security.Claims;
+    using System.Threading.Tasks;
+    using ViewModels.Orders;
+    using Vxp.Data.Common.Enums;
     using Vxp.Services.Data.Orders;
-    using Vxp.Services.Data.Projects;
+    using Vxp.Services.Data.Users;
 
-    public class OrdersController : DistributorsController
+    public class OrdersController : VendorsController
     {
-        private readonly IProductsService _productsService;
-        private readonly IProductPricesService _productPricesService;
         private readonly IUsersService _usersService;
-        private readonly IProjectsService _projectsService;
         private readonly IOrdersService _ordersService;
 
         public OrdersController(
-            IProductsService productsService,
-            IProductPricesService productPricesService,
             IUsersService usersService,
-            IProjectsService projectsService,
             IOrdersService ordersService)
         {
-            this._productsService = productsService;
-            this._productPricesService = productPricesService;
             this._usersService = usersService;
-            this._projectsService = projectsService;
             this._ordersService = ordersService;
-        }
-
-        public async Task<IActionResult> OrderNew()
-        {
-            var currentOrder = this.HttpContext.Session.Get<List<int>>("order") ?? new List<int>();
-
-            var viewModel = new OrderInputModel
-            {
-                Products = await this._productsService.GetAllProducts<OrderProductViewModel>()
-                    .Where(p => currentOrder.Contains(p.ProductId)).ToListAsync(),
-                AvailableProjects = await this._projectsService.GetAllProjects<OrderProjectViewModel>(this.User.Identity.Name).ToListAsync()
-            };
-
-            if (this.TempData.ContainsKey("ProjectId"))
-            {
-                viewModel.ProjectId = (int)this.TempData["ProjectId"];
-            }
-
-            viewModel.Seller = await this._usersService
-                .GetAllInRoleAsync<ProductSellerViewModel>(GlobalConstants.Roles.VendorRoleName)
-                .GetAwaiter().GetResult().FirstOrDefaultAsync();
-            viewModel.SellerId = viewModel.Seller.Id;
-            var priceModifier = await
-                this._productPricesService.GetBuyerPriceModifiers<PriceModifierDto>(this.User.Identity.Name)
-                    .Where(pm => pm.SellerId == viewModel.SellerId)
-                    .FirstOrDefaultAsync() ?? new PriceModifierDto { PriceModifierType = PriceModifierType.Decrease };
-
-            foreach (var product in viewModel.Products)
-            {
-                product.Quantity = currentOrder.Count(p => p == product.ProductId);
-                product.PriceModifierType = priceModifier.PriceModifierType;
-                product.ModifierValue = priceModifier.PercentValue;
-            }
-
-            return this.View(viewModel);
         }
 
         [HttpPost]

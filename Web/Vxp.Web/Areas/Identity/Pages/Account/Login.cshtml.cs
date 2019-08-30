@@ -77,9 +77,8 @@
                 var result = await this._signInManager.PasswordSignInAsync(this.Input.Email, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-
+                    
                     this._logger.LogInformation("User logged in.");
-
                     //return this.LocalRedirect(returnUrl);
                     return this.RedirectToPage("./Login");
                 }

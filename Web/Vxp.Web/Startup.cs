@@ -1,4 +1,5 @@
-﻿using CloudinaryDotNet;
+﻿using System;
+using CloudinaryDotNet;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -68,6 +69,9 @@ namespace Vxp.Web
                 .AddDefaultTokenProviders()
                 .AddDefaultUI(UIFramework.Bootstrap4);
 
+            services.AddDistributedMemoryCache();
+            services.AddSession();
+
             services
                 .AddMvc(options =>
                 {
@@ -81,8 +85,6 @@ namespace Vxp.Web
                     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
                 })
                 .AddSessionStateTempDataProvider();
-
-            services.AddSession();
 
             services
                 .ConfigureApplicationCookie(options =>

@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Http.Extensions
 @model Vxp.Web.ViewModels.Projects.ProjectInputModel
 @{
     ViewData["Title"] = Model.Name;
@@ -44,14 +45,15 @@
             <div class="bg-secondary p-1 text-white rounded mb-2">Orders</div>
         </div>
         <div class="font-small">
+            <form></form>
             <table class="w-100 vxp-data-table">
                 <thead>
                     <tr>
-                        <th>Seller</th>
-                        <th>Created</th>
-                        <th>#</th>
-                        <th>&euro; </th>
-                        <th>Status</th>
+                        <th>Partner</th>
+                        <th class="text-right">Created</th>
+                        <th class="text-right">#</th>
+                        <th class="text-right">&euro; </th>
+                        <th class="text-right">Status</th>
                         <th class="text-right">Updated</th>
                     </tr>
                 </thead>
@@ -62,12 +64,49 @@
                         var className = i % 2 > 0 ? "bg-light" : null;
 
                         <tr class="text-dark @className">
-                            <td class="font-weight-bold">@order.Seller.Name</td>
-                            <td>@order.CreatedOn.Date.ToLocalTime().ToShortDateString()</td>
-                            <td class="font-weight-bold">@order.Products.Count</td>
-                            <td>@order.TotalPrice</td>
-                            <td class="font-weight-bold">@order.Status</td>
-                            <td class="text-right">@order.ModifiedOn.ToLocalTime().ToShortDateString()</td>
+                            <td class="font-weight-bold">
+                                <form id="form-@i" method="post" asp-controller="Orders" asp-action="OrderEdit">
+                                    <input type="hidden" asp-for="@order.BuyerId" />
+                                    <input type="hidden" asp-for="@order.SellerId" />
+                                    <input type="hidden" asp-for="@order.Id" />
+                                    <input type="hidden" asp-for="ReturnUrl" value="@this.Context.Request.GetDisplayUrl()" />
+                                </form>
+                                <button type="submit" class="btn btn-link font-small text-nowrap font-weight-bold text-left" form="form-@i">
+                                    @if (currentUserId == order.SellerId)
+                                    {
+                                        @order.Buyer.Name
+                                    }
+                                    else
+                                    {
+                                        @order.Seller.Name
+                                    }
+                                </button>
+                            </td>
+                            <td class="text-right">
+                                <button type="submit" class="btn btn-link font-small text-nowrap text-right" form="form-@i">
+                                    @order.CreatedOn.Date.ToLocalTime().ToShortDateString()
+                                </button>
+                            </td>
+                            <td class="font-weight-bold text-right">
+                                <button type="submit" class="btn btn-link font-small text-nowrap text-right" form="form-@i">
+                                    @order.Products.Count
+                                </button>
+                            </td>
+                            <td class="text-right">
+                                <button type="submit" class="btn btn-link font-small text-nowrap text-right" form="form-@i">
+                                    @order.TotalPrice
+                                </button>
+                            </td>
+                            <td class="font-weight-bold text-right">
+                                <button type="submit" class="btn btn-link font-small text-nowrap font-weight-bold text-right" form="form-@i">
+                                    @order.Status
+                                </button>
+                            </td>
+                            <td class="text-right">
+                                <button type="submit" class="btn btn-link font-small text-nowrap text-right" form="form-@i">
+                                    @order.ModifiedOn.ToLocalTime().ToShortDateString()
+                                </button>
+                            </td>
                         </tr>
                     }
                 </tbody>

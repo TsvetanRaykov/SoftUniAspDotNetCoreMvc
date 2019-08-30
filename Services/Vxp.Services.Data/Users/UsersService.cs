@@ -49,7 +49,7 @@ namespace Vxp.Services.Data.Users
             return GetAllUsers<TViewModel>(false, exp);
         }
 
-        public Task<IQueryable<TViewModel>> GetAllWithDeleted<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null)
+        public Task<IQueryable<TViewModel>> GetAllWithDeletedAsync<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null)
         {
             return GetAllUsers<TViewModel>(true, exp);
         }

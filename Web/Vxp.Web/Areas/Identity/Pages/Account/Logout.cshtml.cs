@@ -27,6 +27,7 @@
         public async Task<IActionResult> OnGet()
         {
             await this.signInManager.SignOutAsync();
+            this.HttpContext.Session.Clear();
             this.logger.LogInformation("User logged out.");
             return this.LocalRedirect("/");
         }
@@ -34,6 +35,7 @@
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await this.signInManager.SignOutAsync();
+            this.HttpContext.Session.Clear();
             this.logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {

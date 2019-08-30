@@ -11,7 +11,7 @@
     public interface IUsersService
     {
         Task<IQueryable<TViewModel>> GetAll<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null);
-        Task<IQueryable<TViewModel>> GetAllWithDeleted<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null);
+        Task<IQueryable<TViewModel>> GetAllWithDeletedAsync<TViewModel>(Expression<Func<ApplicationUser, bool>> exp = null);
         Task<IQueryable<TViewModel>> GetAllInRoleAsync<TViewModel>(string roleName);
         Task<string> CreateUserAsync<TViewModel>(TViewModel userModel, string password, string role);
         Task<bool> UpdateUserAsync<TViewModel>(TViewModel userModel, IEnumerable<string> roleNames);

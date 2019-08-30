@@ -7,28 +7,36 @@
     using Products;
     using Services.Mapping;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public class OrderInputModel : IMapFrom<Order>, IMapTo<Order>
     {
         public OrderInputModel()
         {
             this.Products = new List<OrderProductViewModel>();
-          //  this.Sellers = new List<ProductSellerViewModel>();
             this.AvailableProjects = new List<OrderProjectViewModel>();
         }
 
+        public int Id { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [StringLength(36, MinimumLength = 36)]
         public string SellerId { get; set; }
 
         public ProductSellerViewModel Seller { get; set; }
 
-        //public List<ProductSellerViewModel> Sellers { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        [StringLength(36, MinimumLength = 36)]
+        public string BuyerId { get; set; }
+
+        public ProductSellerViewModel Buyer { get; set; }
 
         public List<OrderProductViewModel> Products { get; set; }
 
+        [Required]
         public int ProjectId { get; set; }
 
         public List<OrderProjectViewModel> AvailableProjects { get; set; }
-
 
         public string TotalPrice
         {
