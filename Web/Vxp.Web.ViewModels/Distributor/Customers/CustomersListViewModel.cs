@@ -24,9 +24,15 @@
                 .ForMember(dest => dest.ContactEmail, opt => opt
                     .MapFrom(src => src.ContactAddress.Email ?? src.Email))
                 .ForMember(dest => dest.ShippingAddress, opt => opt
-                    .MapFrom(src => string.Join(", ",
+                    .MapFrom(src => 
+                        src.Company.ShippingAddress != null ?
+                        string.Join(", ",
                         new[] { src.Company.ShippingAddress.AddressLocation, src.Company.ShippingAddress.City, src.Company.ShippingAddress.CountryName }
-                            .Where(e => !string.IsNullOrWhiteSpace(e)))))
+                            .Where(e => !string.IsNullOrWhiteSpace(e))) :
+                        string.Join(", ",
+                            new[] { src.ContactAddress.AddressLocation, src.ContactAddress.City, src.ContactAddress.CountryName }
+                                .Where(e => !string.IsNullOrWhiteSpace(e)))
+                        ))
                 .ForMember(dest => dest.Projects, opt => opt
                     .MapFrom(src => src.Projects.Count))
                 .ForMember(dest => dest.PriceModifiers, opt => opt

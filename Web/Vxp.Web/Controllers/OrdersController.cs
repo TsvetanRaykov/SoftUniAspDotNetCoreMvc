@@ -50,51 +50,51 @@ namespace Vxp.Web.Controllers
         }
         
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OrderNew(OrderInputModel inputModel)
-        {
-            if (this.ModelState.IsValid)
-            {
-                if (inputModel.Create)
-                {
-                    inputModel.Products.RemoveAll(p => p.Quantity == 0);
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> OrderNew(OrderInputModel inputModel)
+        //{
+        //    if (this.ModelState.IsValid)
+        //    {
+        //        if (inputModel.Create)
+        //        {
+        //            inputModel.Products.RemoveAll(p => p.Quantity == 0);
 
-                    foreach (var product in inputModel.Products)
-                    {
-                        var priceModifierData = new Dictionary<string, string>
-                            {
-                                {nameof(product.PriceModifierType), product.PriceModifierType.ToString()},
-                                {
-                                    nameof(product.ModifierValue),
-                                    product.ModifierValue.ToString(CultureInfo.InvariantCulture)
-                                }
-                            };
-                        product.PriceModifierData = priceModifierData.ToJson();
-                    }
+        //            foreach (var product in inputModel.Products)
+        //            {
+        //                var priceModifierData = new Dictionary<string, string>
+        //                    {
+        //                        {nameof(product.PriceModifierType), product.PriceModifierType.ToString()},
+        //                        {
+        //                            nameof(product.ModifierValue),
+        //                            product.ModifierValue.ToString(CultureInfo.InvariantCulture)
+        //                        }
+        //                    };
+        //                product.PriceModifierData = priceModifierData.ToJson();
+        //            }
 
-                    if (inputModel.Products.Count > 0)
-                    {
-                        await this._ordersService.CreateOrderAsync(inputModel,
-                            this.User.FindFirstValue(ClaimTypes.NameIdentifier));
-                    }
+        //            if (inputModel.Products.Count > 0)
+        //            {
+        //                await this._ordersService.CreateOrderAsync(inputModel,
+        //                    this.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        //            }
 
-                    return this.OrderNewRemove();
-                }
-                var updatedOrder = new List<int>();
-                foreach (var product in inputModel.Products)
-                {
-                    for (int i = 0; i < product.Quantity; i++)
-                    {
-                        updatedOrder.Add(product.ProductId);
-                    }
-                }
-                this.HttpContext.Session.Set("order", updatedOrder);
-            }
+        //            return this.OrderNewRemove();
+        //        }
+        //        var updatedOrder = new List<int>();
+        //        foreach (var product in inputModel.Products)
+        //        {
+        //            for (int i = 0; i < product.Quantity; i++)
+        //            {
+        //                updatedOrder.Add(product.ProductId);
+        //            }
+        //        }
+        //        this.HttpContext.Session.Set("order", updatedOrder);
+        //    }
 
-            return this.RedirectToAction(nameof(this.OrderNew));
+        //    return this.RedirectToAction(nameof(this.OrderNew));
 
-        }
+        //}
 
         public IActionResult OrderNewRemove()
         {

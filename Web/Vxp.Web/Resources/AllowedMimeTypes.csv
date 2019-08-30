@@ -30,4 +30,4 @@
 .png	image/png
 .pdf	application/pdf
 .rar	application/x-rar-compressed
-.zip	application/zip
+.zip	application/x-zip-compressed

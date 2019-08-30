@@ -1,4 +1,6 @@
-﻿@using Vxp.Web.ViewModels.Customer.Distributors
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Http.Extensions
+@using Vxp.Web.ViewModels.Customer.Distributors
 @model DistributorViewModel
 @{
     ViewData["Title"] = Model.Details.FullName;
@@ -125,6 +127,75 @@
         </form>
     </div>
 </div>
-<div>
-    Projects list
+@* TODO: Move to partial view *@
+<div class="font-small">
+    <table class="table vxp-table vxp-data-table table-striped">
+        <thead>
+            <tr>
+                <th>Project</th>
+                <th>Description</th>
+                <th>Owner</th>
+                <th>Partner</th>
+                <th class="text-right">Orders</th>
+                <th class="text-right">Documents</th>
+                <th class="text-right">Created</th>
+                <th class="text-right">Updated</th>
+                <th class="text-right"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var currentUserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            }
+            @foreach (var project in Model.ExistingProjects)
+            {
+                var disableAction = project.OwnerId != currentUserId;
+                var disableDelete = disableAction || (project.Documents.Count() + project.Orders.Count() > 0) ? "disabled='disabled'" : null;
+                var disableEdit = disableAction ? "disabled='disabled'" : null;
+
+                <tr>
+                    <td>@project.Name</td>
+                    <td>@project.Description</td>
+                    <td>
+                        @if (currentUserId == project.OwnerId)
+                        {
+                            @project.Owner.Name
+                        }
+                        else
+                        {
+                            <mark>@project.Owner.Name</mark>
+                        }
+                    </td>
+                    <td>
+                        @if (currentUserId == project.PartnerId)
+                        {
+                            @project.Partner.Name
+                        }
+                        else
+                        {
+                            <mark>@project.Partner.Name</mark>
+                        }
+                    </td>
+                    <td class="text-right">@project.Orders.Count()</td>
+                    <td class="text-right">@project.Documents.Count()</td>
+                    <td class="text-right">@project.CreatedOn.ToLocalTime().ToShortDateString()</td>
+                    <td class="text-right">@project.ModifiedOn?.ToLocalTime().ToShortDateString()</td>
+                    <td class="text-right">
+                        <a class="btn btn-primary rounded product-category-btn" asp-controller="Projects" asp-action="Project" asp-route-id="@project.Id">View</a>
+                        <button class="btn btn-success rounded product-category-btn" type="button" data-toggle="modal" data-target="#modalEditProject@(project.Id)" @disableEdit>Edit</button>
+                        <partial name="Projects/_ProjectUpdateViewPartial" model="@project" />
+                        <form class="d-inline" method="post" asp-controller="Projects" asp-action="Delete" data-name="@project.Name" onsubmit="deleteProject(event)">
+                            <input type="hidden" asp-for="@project.Id" />
+                            <input type="hidden" asp-for="@project.OwnerId" />
+                            <input type="hidden" asp-for="@project.PartnerId" />
+                            <input type="hidden" asp-for="@project.Name" />
+                            <input type="hidden" asp-for="@project.Description" />
+                            <input type="hidden" asp-for="@project.ReturnUrl" value="@this.Context.Request.GetDisplayUrl()" />
+                            <button type="submit" class="btn btn-danger rounded product-category-btn" @disableDelete>Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

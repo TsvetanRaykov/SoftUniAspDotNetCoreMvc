@@ -1,4 +1,7 @@
-﻿namespace Vxp.Web.Areas.Customer.Controllers
+﻿using System;
+using Vxp.Services.Data.Users;
+
+namespace Vxp.Web.Areas.Customer.Controllers
 {
     using Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
@@ -21,18 +24,20 @@
         private readonly IProjectsService _projectsService;
         private readonly IProductPricesService _productPricesService;
         private readonly IOrdersService _ordersService;
+        private readonly IUsersService _usersService;
 
         public OrdersController(
             IProductsService productsService,
             IProjectsService projectsService,
             IProductPricesService productPricesService,
-            IOrdersService ordersService
-            )
+            IOrdersService ordersService, 
+            IUsersService usersService)
         {
             this._productsService = productsService;
             this._projectsService = projectsService;
             this._productPricesService = productPricesService;
             this._ordersService = ordersService;
+            this._usersService = usersService;
         }
 
         public async Task<IActionResult> OrderNew()
@@ -129,6 +134,41 @@
         {
             this.HttpContext.Session.Remove("order");
             return this.RedirectToAction("Index", new { controller = "Products" });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OrderEdit([FromForm(Name = "order")]OrderInputModel inputModel, string returnUrl)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var user = await this._usersService.GetAllWithDeletedAsync<UserDto>(u => u.Id == inputModel.BuyerId)
+                    .GetAwaiter().GetResult().FirstOrDefaultAsync();
+
+                var viewModel = await this._ordersService.GetAllOrdersAsync<OrderEditInputModel>(user?.UserName)
+                    .GetAwaiter().GetResult().FirstOrDefaultAsync(o => o.Id == inputModel.Id);
+
+                if (viewModel != null)
+                {
+
+                    foreach (var product in viewModel.Products)
+                    {
+                        var priceModifierData = product.PriceModifierData.ToObject<Dictionary<string, string>>();
+
+                        Enum.TryParse(priceModifierData[nameof(product.PriceModifierType)], true,
+                            out PriceModifierType modifierType);
+
+                        decimal.TryParse(priceModifierData[nameof(product.ModifierValue)], out var modifierValue);
+
+                        product.ModifierValue = modifierValue;
+                        product.PriceModifierType = modifierType;
+                    }
+                    viewModel.ReturnUrl = returnUrl;
+                    return this.View(viewModel);
+                }
+            }
+
+            return this.NotFound();
         }
 
     }

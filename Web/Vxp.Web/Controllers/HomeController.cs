@@ -22,17 +22,17 @@
 
             if (this.User.IsInRole(GlobalConstants.Roles.VendorRoleName))
             {
-                return this.RedirectToAction("Index", "Products", new { area = "Vendor" });
+                return this.RedirectToAction("Index", "Projects", new { area = "Vendor" });
             }
 
             if (this.User.IsInRole(GlobalConstants.Roles.DistributorRoleName))
             {
-                return this.RedirectToAction("Index", "Products", new { area = "Distributor" });
+                return this.RedirectToAction("Index", "Projects", new { area = "Distributor" });
             }
 
             if (this.User.IsInRole(GlobalConstants.Roles.CustomerRoleName))
             {
-                return this.RedirectToAction("Index", "Products", new { area = "Customer" });
+                return this.RedirectToAction("Index", "Projects", new { area = "Customer" });
             }
 
             return this.View();

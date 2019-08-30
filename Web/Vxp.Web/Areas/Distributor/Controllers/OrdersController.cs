@@ -1,7 +1,4 @@
-﻿using System;
-using Vxp.Data.Common.Enums;
-
-namespace Vxp.Web.Areas.Distributor.Controllers
+﻿namespace Vxp.Web.Areas.Distributor.Controllers
 {
     using Microsoft.EntityFrameworkCore;
     using System.Linq;
@@ -19,6 +16,8 @@ namespace Vxp.Web.Areas.Distributor.Controllers
     using System.Security.Claims;
     using Vxp.Services.Data.Orders;
     using Vxp.Services.Data.Projects;
+    using System;
+    using Vxp.Data.Common.Enums;
 
     public class OrdersController : DistributorsController
     {
@@ -50,7 +49,10 @@ namespace Vxp.Web.Areas.Distributor.Controllers
             {
                 Products = await this._productsService.GetAllProducts<OrderProductViewModel>()
                     .Where(p => currentOrder.Contains(p.ProductId)).ToListAsync(),
-                AvailableProjects = await this._projectsService.GetAllProjects<OrderProjectViewModel>(this.User.Identity.Name).ToListAsync()
+                AvailableProjects = await this._projectsService
+                    .GetAllProjects<OrderProjectViewModel>(this.User.Identity.Name)
+                    .Where(p => p.Owner.Id == this.User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    .ToListAsync()
             };
 
             if (this.TempData.ContainsKey("ProjectId"))

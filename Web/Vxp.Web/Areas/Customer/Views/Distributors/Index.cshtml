@@ -11,45 +11,45 @@
         <button class="btn btn-success ml-5" data-toggle="modal" data-target="#modal-register-distributor-key">Add Distributor</button>
     </div>
 </div>
-
-<table class="vxp-table vxp-data-table table rounded display hover cell-border" style="width: 100%">
-    <thead>
-        <tr>
-            <th>Distributor</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Projects</th>
-            <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var distributor in Model.Distributors)
-        {
+<div class="font-small">
+    <table class="vxp-table vxp-data-table table rounded display hover cell-border" style="width: 100%">
+        <thead>
             <tr>
-                <td>@distributor.Name</td>
-                <td><a href="mailto:@distributor.Email" target="_top">@distributor.Email</a></td>
-                <td>@distributor.Phone</td>
-                <td>@distributor.Address</td>
-                <td>@distributor.Projects</td>
-                <td class="text-right">
-                    <a class="btn btn-link btn-outline-success w-100" asp-area="Customer" asp-controller="Distributors" asp-action="Distributor" asp-route-id="@distributor.Id">View</a>
-                </td>
+                <th>Distributor</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Projects</th>
+                <th class="text-right"><span class="icon d-block icon-wrench"></span></th>
             </tr>
-        }
-    </tbody>
-    <tfoot>
-        <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th class="text-right"></th>
-        </tr>
-    </tfoot>
-</table>
-
+        </thead>
+        <tbody>
+            @foreach (var distributor in Model.Distributors)
+            {
+                <tr>
+                    <td>@distributor.Name</td>
+                    <td><a href="mailto:@distributor.Email" target="_top">@distributor.Email</a></td>
+                    <td>@distributor.Phone</td>
+                    <td>@distributor.Address</td>
+                    <td>@distributor.Projects</td>
+                    <td class="text-right">
+                        <a class="btn btn-link btn-outline-success w-100" asp-area="Customer" asp-controller="Distributors" asp-action="Distributor" asp-route-id="@distributor.Id">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="text-right"></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
 <!-- Modal Register Distributor Key -->
 <div class="modal fade" id="modal-register-distributor-key" tabindex="-1" role="dialog" aria-labelledby="modalRegisterDistributorKeyTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

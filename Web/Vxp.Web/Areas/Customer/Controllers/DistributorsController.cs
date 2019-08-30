@@ -1,21 +1,25 @@
-﻿using System;
-using Vxp.Services.Models;
-
-namespace Vxp.Web.Areas.Customer.Controllers
+﻿namespace Vxp.Web.Areas.Customer.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using System.Threading.Tasks;
     using Vxp.Services.Data.Users;
     using Vxp.Web.ViewModels.Customer.Distributors;
+    using System;
+    using Vxp.Services.Data.Projects;
+    using Services.Models;
+    using ViewModels.Projects;
+    using System.Linq;
 
     public class DistributorsController : CustomersController
     {
         private readonly IDistributorsService _distributorsService;
+        private readonly IProjectsService _projectsService;
 
-        public DistributorsController(IDistributorsService distributorsService)
+        public DistributorsController(IDistributorsService distributorsService, IProjectsService projectsService)
         {
             this._distributorsService = distributorsService;
+            this._projectsService = projectsService;
         }
 
         public async Task<IActionResult> Index()
@@ -37,7 +41,10 @@ namespace Vxp.Web.Areas.Customer.Controllers
 
             var viewModel = new DistributorViewModel
             {
-                Details = await distributors.FirstOrDefaultAsync(u => u.Id == id)
+                Details = await distributors.FirstOrDefaultAsync(u => u.Id == id),
+                ExistingProjects = await this._projectsService.GetAllProjects<ProjectInputModel>(this.User.Identity.Name)
+                    .Where(p => p.OwnerId == id || p.PartnerId == id)
+                    .ToListAsync()
             };
 
             return this.View(viewModel);

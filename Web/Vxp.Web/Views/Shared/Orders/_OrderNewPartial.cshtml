@@ -1,13 +1,15 @@
-﻿@using System.Web
+﻿@using System.Security.Claims
+@using System.Web
 @model Vxp.Web.ViewModels.Orders.OrderInputModel
 <form method="post" asp-controller="Orders" asp-action="OrderNew">
+    <input type="hidden" asp-for="BuyerId" value="@this.User.FindFirstValue(ClaimTypes.NameIdentifier)" />
     <div class="d-flex flex-column">
         <div class="d-flex">
             @if (Model.AvailableProjects.Count > 0)
             {
                 <label class="p-2">Project</label>
                 <select class="form-control w-25 mb-5" asp-for="ProjectId" onchange="this.form.submit()"
-                        asp-items="@(new SelectList(Model.AvailableProjects, "Id","Name", @Model.ProjectId))"></select>
+                        asp-items="@(new SelectList(Model.AvailableProjects, "Id", "Name", @Model.ProjectId))"></select>
 
                 <label class="p-2 pl-5">Seller</label>
                 <div class="form-control w-25 mb-5"> @Model.Seller.Name</div>
@@ -57,7 +59,7 @@
             </div>
         </div>
         <div>
-            @if (Model.AvailableProjects.Count > 0)
+            @if (Model.AvailableProjects.Count > 0 && Model.Products.Count > 0)
             {
                 <button class="btn btn-primary" type="submit" name="Create" value="True">Submit</button>
                 <button class="btn btn-success" type="submit">Update</button>
