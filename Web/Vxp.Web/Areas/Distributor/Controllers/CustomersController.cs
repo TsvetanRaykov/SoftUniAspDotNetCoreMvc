@@ -70,7 +70,7 @@
                 {
                     Scheme = this.HttpContext.Request.Scheme,
                     Host = this.HttpContext.Request.Host.Host,
-                    Port = this.HttpContext.Request.Host.Port.GetValueOrDefault(80),
+                    Port = this.HttpContext.Request.Host.Port.GetValueOrDefault(443),
                     Path = "/Identity/Account/Register/",
                     Query = $"key={inputModel.DistributorKey}"
                 };

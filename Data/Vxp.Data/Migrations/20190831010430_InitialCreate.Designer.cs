@@ -10,8 +10,8 @@ using Vxp.Data;
 namespace Vxp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190828204537_AddOrderHystoryCollectionToOrder")]
-    partial class AddOrderHystoryCollectionToOrder
+    [Migration("20190831010430_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -471,7 +471,8 @@ namespace Vxp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AuthorId");
+                    b.Property<string>("AuthorId")
+                        .IsRequired();
 
                     b.Property<string>("Body")
                         .IsRequired();
@@ -484,7 +485,8 @@ namespace Vxp.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedOn");
 
-                    b.Property<int>("TopicId");
+                    b.Property<string>("RecipientId")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -492,39 +494,9 @@ namespace Vxp.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.HasIndex("TopicId")
-                        .IsUnique();
-
-                    b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("Vxp.Data.Models.MessageRecipient", b =>
-                {
-                    b.Property<int>("MessageId");
-
-                    b.Property<string>("RecipientId");
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<int>("Id");
-
-                    b.Property<bool>("IsDeleted");
-
-                    b.Property<DateTime?>("ModifiedOn");
-
-                    b.Property<DateTime?>("ReadOn");
-
-                    b.HasKey("MessageId", "RecipientId");
-
-                    b.HasAlternateKey("Id");
-
-                    b.HasIndex("IsDeleted");
-
                     b.HasIndex("RecipientId");
 
-                    b.ToTable("MessageRecipient");
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Vxp.Data.Models.Order", b =>
@@ -806,11 +778,16 @@ namespace Vxp.Data.Migrations
                     b.Property<string>("OwnerId")
                         .IsRequired();
 
+                    b.Property<string>("PartnerId")
+                        .IsRequired();
+
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("PartnerId");
 
                     b.ToTable("Projects");
                 });
@@ -952,20 +929,8 @@ namespace Vxp.Data.Migrations
             modelBuilder.Entity("Vxp.Data.Models.Message", b =>
                 {
                     b.HasOne("Vxp.Data.Models.ApplicationUser", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId");
-
-                    b.HasOne("Vxp.Data.Models.Message", "Topic")
-                        .WithOne()
-                        .HasForeignKey("Vxp.Data.Models.Message", "TopicId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Vxp.Data.Models.MessageRecipient", b =>
-                {
-                    b.HasOne("Vxp.Data.Models.Message", "Message")
-                        .WithMany("Recipients")
-                        .HasForeignKey("MessageId")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Vxp.Data.Models.ApplicationUser", "Recipient")
@@ -1062,6 +1027,11 @@ namespace Vxp.Data.Migrations
                     b.HasOne("Vxp.Data.Models.ApplicationUser", "Owner")
                         .WithMany("Projects")
                         .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Vxp.Data.Models.ApplicationUser", "Partner")
+                        .WithMany()
+                        .HasForeignKey("PartnerId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 

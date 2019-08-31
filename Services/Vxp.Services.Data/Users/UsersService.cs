@@ -91,7 +91,7 @@ namespace Vxp.Services.Data.Users
             await this._userManager.AddToRoleAsync(applicationUser, role);
 
             var vendor = await this.GetAllInRoleAsync<UserDto>(GlobalConstants.Roles.VendorRoleName)
-                .GetAwaiter().GetResult().FirstAsync();
+                             .GetAwaiter().GetResult().FirstOrDefaultAsync() ?? AutoMapper.Mapper.Map<UserDto>(applicationUser);
 
             var defaultProject = new ProjectDto
             {

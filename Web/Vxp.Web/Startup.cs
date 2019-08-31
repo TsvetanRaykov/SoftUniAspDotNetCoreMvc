@@ -1,6 +1,5 @@
 ﻿using System;
 using CloudinaryDotNet;
-using Ganss.XSS;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,6 +33,8 @@ using Vxp.Web.Areas.Identity.Pages.Account;
 using Vxp.Web.Hubs;
 using Vxp.Web.Infrastructure.Extensions;
 using Vxp.Web.ViewModels;
+using Ganss.XSS;
+using IHtmlSanitizer = AjaxControlToolkit.HtmlEditor.Sanitizer.IHtmlSanitizer;
 
 namespace Vxp.Web
 {
@@ -146,7 +147,6 @@ namespace Vxp.Web
             Cloudinary cloudinaryUtility = new Cloudinary(cloudinaryAccount);
 
             services.AddSingleton(cloudinaryUtility);
-            services.AddSingleton<IHtmlSanitizer, HtmlSanitizer>();
 
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IRolesService, RolesService>();
@@ -179,10 +179,10 @@ namespace Vxp.Web
                 {
 
                     //dbContext.Database.EnsureDeleted();
-                    //dbContext.Database.Migrate();
+                   // dbContext.Database.Migrate();
 
                 }
-
+               
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 

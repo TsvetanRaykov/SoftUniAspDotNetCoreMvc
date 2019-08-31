@@ -312,6 +312,34 @@ namespace Vxp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CustomerInvitations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    MessageBody = table.Column<string>(nullable: true),
+                    Subject = table.Column<string>(nullable: true),
+                    EmailTo = table.Column<string>(nullable: true),
+                    DistributorKey = table.Column<string>(nullable: true),
+                    TimeAccepted = table.Column<DateTime>(nullable: true),
+                    SenderId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerInvitations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CustomerInvitations_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
@@ -322,8 +350,8 @@ namespace Vxp.Data.Migrations
                     IsDeleted = table.Column<bool>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Body = table.Column<string>(nullable: false),
-                    TopicId = table.Column<int>(nullable: false),
-                    AuthorId = table.Column<string>(nullable: true)
+                    AuthorId = table.Column<string>(nullable: false),
+                    RecipientId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -335,9 +363,9 @@ namespace Vxp.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Messages_Messages_TopicId",
-                        column: x => x.TopicId,
-                        principalTable: "Messages",
+                        name: "FK_Messages_AspNetUsers_RecipientId",
+                        column: x => x.RecipientId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -389,7 +417,8 @@ namespace Vxp.Data.Migrations
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    OwnerId = table.Column<string>(nullable: false)
+                    OwnerId = table.Column<string>(nullable: false),
+                    PartnerId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -397,6 +426,12 @@ namespace Vxp.Data.Migrations
                     table.ForeignKey(
                         name: "FK_Projects_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Projects_AspNetUsers_PartnerId",
+                        column: x => x.PartnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -427,37 +462,6 @@ namespace Vxp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MessageRecipient",
-                columns: table => new
-                {
-                    MessageId = table.Column<int>(nullable: false),
-                    RecipientId = table.Column<string>(nullable: false),
-                    Id = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    ModifiedOn = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    ReadOn = table.Column<DateTime>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MessageRecipient", x => new { x.MessageId, x.RecipientId });
-                    table.UniqueConstraint("AK_MessageRecipient_Id", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MessageRecipient_Messages_MessageId",
-                        column: x => x.MessageId,
-                        principalTable: "Messages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MessageRecipient_AspNetUsers_RecipientId",
-                        column: x => x.RecipientId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Documents",
                 columns: table => new
                 {
@@ -468,6 +472,8 @@ namespace Vxp.Data.Migrations
                     IsDeleted = table.Column<bool>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Type = table.Column<int>(nullable: false),
+                    OriginalFileName = table.Column<string>(nullable: true),
+                    ContentType = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Location = table.Column<string>(nullable: false),
                     DocumentDate = table.Column<DateTime>(nullable: false),
@@ -558,7 +564,7 @@ namespace Vxp.Data.Migrations
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
-                    OrderId = table.Column<int>(nullable: true),
+                    OrderId = table.Column<int>(nullable: false),
                     OldStatus = table.Column<int>(nullable: false),
                     NewStatus = table.Column<int>(nullable: false)
                 },
@@ -609,7 +615,8 @@ namespace Vxp.Data.Migrations
                     Quantity = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: false),
                     ProductId = table.Column<int>(nullable: true),
-                    ProductData = table.Column<string>(nullable: true)
+                    ProductData = table.Column<string>(nullable: true),
+                    PriceModifierData = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -636,7 +643,8 @@ namespace Vxp.Data.Migrations
                     Description = table.Column<string>(nullable: true),
                     CategoryId = table.Column<int>(nullable: false),
                     ProductImageId = table.Column<int>(nullable: false),
-                    IsAvailable = table.Column<bool>(nullable: false)
+                    IsAvailable = table.Column<bool>(nullable: false),
+                    BasePrice = table.Column<decimal>(type: "Money", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -768,6 +776,16 @@ namespace Vxp.Data.Migrations
                 column: "ShippingAddressId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CustomerInvitations_IsDeleted",
+                table: "CustomerInvitations",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerInvitations_SenderId",
+                table: "CustomerInvitations",
+                column: "SenderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DistributorKeys_BankAccountId",
                 table: "DistributorKeys",
                 column: "BankAccountId");
@@ -793,16 +811,6 @@ namespace Vxp.Data.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MessageRecipient_IsDeleted",
-                table: "MessageRecipient",
-                column: "IsDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MessageRecipient_RecipientId",
-                table: "MessageRecipient",
-                column: "RecipientId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Messages_AuthorId",
                 table: "Messages",
                 column: "AuthorId");
@@ -813,10 +821,9 @@ namespace Vxp.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_TopicId",
+                name: "IX_Messages_RecipientId",
                 table: "Messages",
-                column: "TopicId",
-                unique: true);
+                column: "RecipientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderHistories_IsDeleted",
@@ -924,6 +931,11 @@ namespace Vxp.Data.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Projects_PartnerId",
+                table: "Projects",
+                column: "PartnerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Settings_IsDeleted",
                 table: "Settings",
                 column: "IsDeleted");
@@ -975,13 +987,16 @@ namespace Vxp.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CustomerInvitations");
+
+            migrationBuilder.DropTable(
                 name: "DistributorUser");
 
             migrationBuilder.DropTable(
                 name: "Documents");
 
             migrationBuilder.DropTable(
-                name: "MessageRecipient");
+                name: "Messages");
 
             migrationBuilder.DropTable(
                 name: "OrderHistories");
@@ -1003,9 +1018,6 @@ namespace Vxp.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "DistributorKeys");
-
-            migrationBuilder.DropTable(
-                name: "Messages");
 
             migrationBuilder.DropTable(
                 name: "Orders");
