@@ -22,7 +22,8 @@ namespace Vxp.Data.Models
             this.BankAccounts = new HashSet<BankAccount>();
             this.Distributors = new HashSet<DistributorUser>();
             this.Projects = new HashSet<Project>();
-            this.ReceivedMessages = new HashSet<MessageRecipient>();
+            this.ReceivedMessages = new HashSet<Message>();
+            this.SentMessages = new HashSet<Message>();
             this.PriceModifiersReceive = new HashSet<PriceModifier>();
             this.PriceModifiersGive = new HashSet<PriceModifier>();
         }
@@ -60,7 +61,8 @@ namespace Vxp.Data.Models
 
         public virtual ICollection<Project> Projects { get; set; }
 
-        public virtual ICollection<MessageRecipient> ReceivedMessages { get; set; }
+        public virtual ICollection<Message> ReceivedMessages { get; set; }
+        public virtual ICollection<Message> SentMessages { get; set; }
 
         public virtual ICollection<PriceModifier> PriceModifiersReceive { get; set; }
 

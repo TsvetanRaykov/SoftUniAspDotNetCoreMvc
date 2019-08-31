@@ -6,6 +6,7 @@
 
     public class CustomerViewModel
     {
+        public string Id { get; set; }
         public CustomerViewModel()
         {
             this.Details = new CustomerViewModelDetails();

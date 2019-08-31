@@ -571,3 +571,11 @@ textarea::placeholder {
 #order-total-price-placeholder {
     border-top: 1px solid black;
 }
+
+#vxp-chat-window {
+    height: 200px;
+    font-size: small;
+    color: black;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+}

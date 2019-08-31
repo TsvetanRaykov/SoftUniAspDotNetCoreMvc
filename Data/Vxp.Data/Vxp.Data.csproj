@@ -25,6 +25,8 @@
     <Compile Remove="Migrations\20190817162830_ImageProductFkCascade.Designer.cs" />
     <Compile Remove="Migrations\20190818150126_ProductImageRemoveProductId.cs" />
     <Compile Remove="Migrations\20190818150126_ProductImageRemoveProductId.Designer.cs" />
+    <Compile Remove="Migrations\20190830205143_FixMessageRecipientRelation.cs" />
+    <Compile Remove="Migrations\20190830205143_FixMessageRecipientRelation.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

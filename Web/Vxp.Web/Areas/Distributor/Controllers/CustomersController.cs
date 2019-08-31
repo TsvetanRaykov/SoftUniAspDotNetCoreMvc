@@ -1,8 +1,7 @@
-﻿using Vxp.Services.Data.Projects;
-using Vxp.Web.ViewModels.Projects;
-
-namespace Vxp.Web.Areas.Distributor.Controllers
+﻿namespace Vxp.Web.Areas.Distributor.Controllers
 {
+    using Vxp.Services.Data.Projects;
+    using ViewModels.Projects;
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Linq;
@@ -112,6 +111,7 @@ namespace Vxp.Web.Areas.Distributor.Controllers
             var sellerId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var viewModel = new CustomerViewModel
             {
+                Id = id,
                 Details = customer,
                 PriceModifierInputModel = customer.PriceModifiers
                                               .FirstOrDefault(pm => pm.SellerId == sellerId) ?? new PriceModifierInputModel

@@ -1,0 +1,15 @@
+﻿@model string
+<div id="message-box" class="d-flex flex-column w-50 justify-content-between m-1 pb-2 border rounded bg-light">
+    <div class="bg-white m-2 p-1 border rounded" id="vxp-chat-window"></div>
+    <input type="hidden" name="RecipientId" value="@Model" id="vxp-chat-recipient-id"/>
+    @Html.AntiForgeryToken()
+    <div>
+        <div>
+            <textarea class="form-control mx-2 mb-2 mx-auto" rows="1" id="vxp-chat-input"></textarea>
+        </div>
+        <div class="text-center">
+            <button class="btn btn-success w-20" type="button" id="vxp-chat-send-button">Send</button>
+
+        </div>
+    </div>
+</div>

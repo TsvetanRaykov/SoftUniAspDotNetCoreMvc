@@ -11,6 +11,8 @@
             this.Messages = new List<string>();
             this.ExistingProjects = new List<ProjectInputModel>();
         }
+
+        public string Id { get; set; }
         public DistributorViewModelDetails Details { get; set; }
         public IEnumerable<string> Messages { get; set; }
 

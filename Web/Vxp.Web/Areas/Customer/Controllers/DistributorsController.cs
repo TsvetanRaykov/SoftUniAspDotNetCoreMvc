@@ -41,6 +41,7 @@
 
             var viewModel = new DistributorViewModel
             {
+                Id = id,
                 Details = await distributors.FirstOrDefaultAsync(u => u.Id == id),
                 ExistingProjects = await this._projectsService.GetAllProjects<ProjectInputModel>(this.User.Identity.Name)
                     .Where(p => p.OwnerId == id || p.PartnerId == id)

@@ -90,9 +90,9 @@
             </div>
         </nav>
     </header>
-<main id="main">
-    @this.RenderBody()
-</main>
+    <main id="main">
+        @this.RenderBody()
+    </main>
     <partial name="_CookieConsentPartial" />
     <partial name="_FooterPartial" />
 
@@ -124,10 +124,14 @@
     <script src="~/lib/DataTables/datatables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js" integrity="sha256-c4gVE6fn+JRKMRvqjoDp+tlG4laudNYrXI1GncbfAYY=" crossorigin="anonymous"></script>
 
+    <script src="~/js/vxp-chat.js"></script>
+
     <environment names="Development">
+        <script src="~/lib/signalr/dist/browser/signalr.js"></script>
         <script src="~/js/site.js"></script>
     </environment>
     <environment names="Staging,Production">
+        <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 

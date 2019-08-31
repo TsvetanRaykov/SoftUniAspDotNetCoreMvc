@@ -22,6 +22,7 @@ using Vxp.Data.Repositories;
 using Vxp.Data.Seeding;
 using Vxp.Services;
 using Vxp.Services.Data.BankAccounts;
+using Vxp.Services.Data.Messages;
 using Vxp.Services.Data.Orders;
 using Vxp.Services.Data.Products;
 using Vxp.Services.Data.Projects;
@@ -30,6 +31,7 @@ using Vxp.Services.Mapping;
 using Vxp.Services.Messaging;
 using Vxp.Services.Models;
 using Vxp.Web.Areas.Identity.Pages.Account;
+using Vxp.Web.Hubs;
 using Vxp.Web.Infrastructure.Extensions;
 using Vxp.Web.ViewModels;
 
@@ -116,6 +118,9 @@ namespace Vxp.Web
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
+            // 
+            services.AddSignalR();
+
             // Application services
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, VxpUserClaimsPrincipalFactory>();
             services.AddTransient<ISmsSender, NullMessageSender>();
@@ -153,6 +158,7 @@ namespace Vxp.Web
             services.AddTransient<IProductPricesService, ProductPricesService>();
             services.AddScoped<IFilesService, FilesService>();
             services.AddTransient<IOrdersService, OrdersService>();
+            services.AddTransient<IMessagesService, MessagesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -180,6 +186,8 @@ namespace Vxp.Web
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
+            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -201,11 +209,15 @@ namespace Vxp.Web
 
             app.UseResponseCompression();
 
+            app.UseSignalR(routes => routes.MapHub<ChatHub>("/messaging"));
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+
+            
         }
     }
 }

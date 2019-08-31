@@ -4,9 +4,9 @@
 @inject SignInManager<ApplicationUser> SignInManager
 
 <ul class="navbar-nav nav flex-grow-1">
-    <li class="nav-item">
-        <a class="nav-link" href="#main"><span>Home</span></a>
-    </li>
+    @*<li class="nav-item">
+            <a class="nav-link" href="#main"><span>Home</span></a>
+        </li>*@
     @if (!this.SignInManager.IsSignedIn(this.User))
     {
         <li class="nav-item">
@@ -19,7 +19,7 @@
             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Technology"><span>Technology</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#"><span>Products</span></a>
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Login"><span>Products</span></a>
         </li>
     }
 </ul>

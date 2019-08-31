@@ -115,17 +115,7 @@
             </div>
         </div>
     </div>
-    <div id="message-box" class="d-flex flex-column w-50 justify-content-between m-1 pb-2 border rounded bg-light">
-        <div class="bg-white m-2 p-1 border rounded h-100"></div>
-        <form>
-            <div>
-                <textarea class="form-control mx-2 mb-2 mx-auto" rows="1"></textarea>
-            </div>
-            <div class="text-center">
-                <button class="btn btn-success w-20" type="submit">Send</button>
-            </div>
-        </form>
-    </div>
+    <partial name="_ChatWindowPartial" model="@Model.Id"/>
 </div>
 @* TODO: Move to partial view *@
 <div class="font-small">

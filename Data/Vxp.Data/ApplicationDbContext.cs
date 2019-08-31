@@ -9,7 +9,7 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Vxp.Data.Common.Models;
-    using Vxp.Data.Models;
+    using Models;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -131,7 +131,7 @@
 
             ConfigureMessage(builder);
 
-            ConfigureMessageRecipient(builder);
+            //ConfigureMessageRecipient(builder);
 
             ConfigureProduct(builder);
 
@@ -282,32 +282,19 @@
             });
         }
 
-        private static void ConfigureMessageRecipient(ModelBuilder builder)
-        {
-            builder.Entity<MessageRecipient>(entity =>
-            {
-                entity.HasKey(k => new { k.MessageId, k.RecipientId });
-
-                entity.HasOne(m => m.Message)
-                    .WithMany(m => m.Recipients)
-                    .HasForeignKey(m => m.MessageId)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(m => m.Recipient)
-                    .WithMany(u => u.ReceivedMessages)
-                    .HasForeignKey(m => m.RecipientId)
-                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
-        }
-
         private static void ConfigureMessage(ModelBuilder builder)
         {
             builder.Entity<Message>(entity =>
             {
-                entity.HasOne(m => m.Topic)
-                    .WithOne()
+                entity.HasOne(m => m.Author)
+                    .WithMany(a => a.SentMessages)
+                    .HasForeignKey(m => m.AuthorId)
+                    .IsRequired()
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(m => m.Recipient)
+                    .WithMany(a => a.ReceivedMessages)
+                    .HasForeignKey(m => m.RecipientId)
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
 
@@ -419,6 +406,7 @@
                     .WithOne(p => p.Seller)
                     .IsRequired()
                     .OnDelete(DeleteBehavior.Restrict);
+
             });
         }
 

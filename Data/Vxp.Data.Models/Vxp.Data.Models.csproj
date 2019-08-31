@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Compile Remove="Country.cs" />
+    <Compile Remove="MessageRecipient.cs" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" />

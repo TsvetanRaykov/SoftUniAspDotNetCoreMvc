@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0",
   "defaultProvider": "unpkg",
   "libraries": [
@@ -42,6 +42,14 @@
       "files": [
         "build/qrcode.min.js",
         "build/qrcode.min.js.map"
+      ]
+    },
+    {
+      "library": "@aspnet/signalr@1.1.4",
+      "destination": "wwwroot/lib/signalr/",
+      "files": [
+        "dist/browser/signalr.js",
+        "dist/browser/signalr.min.js"
       ]
     }
   ]
