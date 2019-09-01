@@ -1,13 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-
-namespace Vxp.Services.Data.BankAccounts
+﻿namespace Vxp.Services.Data.BankAccounts
 {
+    using System;
+    using Mapping;
     using System.Linq;
     using System.Threading.Tasks;
     using Vxp.Data.Common.Repositories;
     using Vxp.Data.Models;
-    using Mapping;
 
     public class BankAccountsService : IBankAccountsService
     {
@@ -85,7 +83,12 @@ namespace Vxp.Services.Data.BankAccounts
         public async Task UpdateBankAccountAsync<TViewModel>(TViewModel bankAccount)
         {
             var appBankAccount = AutoMapper.Mapper.Map<BankAccount>(bankAccount);
-            this._bankAccountsRepository.Update(appBankAccount);
+
+            var bankAccountFromDb = await this._bankAccountsRepository.GetByIdWithDeletedAsync(appBankAccount.Id);
+
+            AutoMapper.Mapper.Map(bankAccount, bankAccountFromDb);
+
+         //   this._bankAccountsRepository.Update(appBankAccount);
             await this._bankAccountsRepository.SaveChangesAsync();
 
         }

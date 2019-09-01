@@ -1,7 +1,7 @@
-﻿using Vxp.Data.Common.Enums;
-
-namespace Vxp.Services.Data.Projects
+﻿namespace Vxp.Services.Data.Projects
 {
+    using Vxp.Data.Common.Enums;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Models;
     using System;
@@ -10,7 +10,6 @@ namespace Vxp.Services.Data.Projects
     using System.Threading.Tasks;
     using Vxp.Data.Common.Repositories;
     using Document = Vxp.Data.Models.Document;
-    using Microsoft.EntityFrameworkCore;
 
     public class FilesService : IFilesService
     {
@@ -36,11 +35,6 @@ namespace Vxp.Services.Data.Projects
             }
 
             fileDto.Location = Path.Combine(directoryPath, fileName);
-
-            //using (var fileStream = new FileStream(fileDto.Location, FileMode.Create, FileAccess.Write))
-            //{
-            //    await fileDto.Stream.CopyToAsync(fileStream);
-            //}
 
             var newDocument = AutoMapper.Mapper.Map<Document>(fileDto);
             newDocument.DocumentDate = DateTime.UtcNow;

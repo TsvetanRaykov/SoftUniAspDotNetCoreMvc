@@ -1,5 +1,4 @@
-﻿using System;
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,8 +32,6 @@ using Vxp.Web.Areas.Identity.Pages.Account;
 using Vxp.Web.Hubs;
 using Vxp.Web.Infrastructure.Extensions;
 using Vxp.Web.ViewModels;
-using Ganss.XSS;
-using IHtmlSanitizer = AjaxControlToolkit.HtmlEditor.Sanitizer.IHtmlSanitizer;
 
 namespace Vxp.Web
 {

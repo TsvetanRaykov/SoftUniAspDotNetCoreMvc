@@ -26,8 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AjaxControlToolkit" Version="19.1.0" />
-    <PackageReference Include="HtmlSanitizer" Version="4.0.217" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />

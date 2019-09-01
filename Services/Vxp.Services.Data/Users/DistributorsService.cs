@@ -82,8 +82,8 @@ namespace Vxp.Services.Data.Users
 
             if (!await this._userManager.IsInRoleAsync(customerFromDb, GlobalConstants.Roles.CustomerRoleName))
             {
-                var roles = await this._userManager.GetRolesAsync(customerFromDb);
-                await this._userManager.RemoveFromRolesAsync(customerFromDb, roles.ToArray());
+                var roles = this._userManager.GetRolesAsync(customerFromDb).GetAwaiter().GetResult() ?? new List<string>();
+                await this._userManager.RemoveFromRolesAsync(customerFromDb, roles);
                 await this._userManager.AddToRoleAsync(customerFromDb, GlobalConstants.Roles.CustomerRoleName);
             }
 
@@ -112,7 +112,7 @@ namespace Vxp.Services.Data.Users
                 .ThenInclude(bs => bs.Owner)
                 .Where(dk => dk.KeyCode == distributorKey)
                 .Select(dk => dk.BankAccount.Owner).FirstOrDefaultAsync();
-                
+
             if (distributor == null)
             {
                 return default;

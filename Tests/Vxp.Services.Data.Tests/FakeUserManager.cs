@@ -11,7 +11,8 @@ namespace Vxp.Services.Data.Tests
     public class FakeUserManager : UserManager<ApplicationUser>
     {
         public FakeUserManager()
-            : base(new Mock<IUserStore<ApplicationUser>>().Object,
+            : base(
+                new Mock<IUserStore<ApplicationUser>>().Object,
                 new Mock<IOptions<IdentityOptions>>().Object,
                 new Mock<IPasswordHasher<ApplicationUser>>().Object,
                 new IUserValidator<ApplicationUser>[0],

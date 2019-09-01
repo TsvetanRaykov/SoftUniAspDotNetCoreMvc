@@ -12,7 +12,7 @@
     using ModelBinders;
     using Common;
 
-    public class UserProfileInputModel : IMapFrom<ApplicationUser>, IMapTo<ApplicationUser>, IHaveCustomMappings
+    public class UserProfileInputModel : IHaveCustomMappings
     {
         public bool IsNewUser { get; set; }
 
@@ -26,7 +26,6 @@
             this.AvailableCountries = new List<SelectListItem>();
             this.AvailableDistributors = new List<SelectListItem>();
             this.AvailableRoles = new List<SelectListItem>();
-            // this.ContactAddress = new UserProfileAddressInputModel();
             this.Company = new UserProfileCompanyInputModel();
         }
 

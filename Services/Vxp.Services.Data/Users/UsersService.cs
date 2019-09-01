@@ -123,7 +123,8 @@ namespace Vxp.Services.Data.Users
                     {
                         using (var fileStream = new FileStream(newFile.Location, FileMode.Create, FileAccess.Write))
                         {
-                            if (resourceStream != null) await resourceStream.CopyToAsync(fileStream);
+                            //if (resourceStream != null)
+                            await resourceStream.CopyToAsync(fileStream);
                         }
                     }
                 }
@@ -151,7 +152,7 @@ namespace Vxp.Services.Data.Users
 
             AutoMapper.Mapper.Map(userModel, userFromDb);
 
-            if (userFromDb.Company.Name == null)
+            if (userFromDb.Company?.Name == null)
             {
                 userFromDb.Company = null;
             }

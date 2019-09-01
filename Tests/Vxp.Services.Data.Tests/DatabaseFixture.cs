@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq;
+using System.Reflection;
+using Vxp.Common;
 using Vxp.Data;
 using Vxp.Data.Models;
 using Vxp.Services.Data.Tests;
@@ -12,6 +12,10 @@ namespace Vxp.Services.Data.Tests
 {
     public class DatabaseFixture : IDisposable
     {
+        public readonly string TestDistributorKey = "5f9005bb-6b53-445a-ae73-f22e7df5e349";
+        public readonly string TestDistributorName = "distributor@email.com";
+        public readonly string TestCustomerName = "customer@email.com";
+
         public ApplicationDbContext DbContext { get; private set; }
 
         public DatabaseFixture()
@@ -21,8 +25,18 @@ namespace Vxp.Services.Data.Tests
                .Options;
 
             this.DbContext = new ApplicationDbContext(options);
+            this.AddRoles();
             this.AddUsers();
             this.DbContext.SaveChanges();
+        }
+
+        private void AddRoles()
+        {
+            foreach (FieldInfo info in typeof(GlobalConstants.Roles).GetFields().Where(x => x.IsStatic && x.IsLiteral))
+            {
+                var role = new ApplicationRole(info.GetValue(null) as string);
+                this.DbContext.Add(role);
+            }
         }
 
         private void AddUsers()
@@ -31,8 +45,7 @@ namespace Vxp.Services.Data.Tests
             {
                 Email = "test@email.com",
                 UserName = "test@email.com",
-                BankAccounts = new[]
-                            {
+                BankAccounts = new[] {
                     new BankAccount {
                         AccountNumber = "1234",
                         BankName = "Fibank",
@@ -42,7 +55,50 @@ namespace Vxp.Services.Data.Tests
                 }
             };
 
+            var aUserWithoutBankAccount = new ApplicationUser
+            {
+                Email = "nobank@user.com",
+                UserName = "nobank@user.com"
+            };
+
+            var userDistributor = new ApplicationUser
+            {
+                Email = TestDistributorName,
+                UserName = TestDistributorName,
+                BankAccounts = new[] {
+                    new BankAccount {
+                        AccountNumber = "1234",
+                        BankName = "Fibank",
+                        BicCode = "222333df54",
+                        SwiftCode = "qweqweqwe",
+                        DistributorKeys = new[]
+                        {
+                            new DistributorKey
+                            {
+                                KeyCode = new Guid(TestDistributorKey)
+                            }
+                        }
+                    }
+                }
+            };
+
+            var userCustomer = new ApplicationUser
+            {
+                Email = this.TestCustomerName,
+                UserName = this.TestCustomerName
+            };
+
+            userCustomer.Distributors.Add(new DistributorUser
+            {
+                ApplicationUser = userDistributor,
+                DistributorKey = userDistributor
+                    .BankAccounts.First().DistributorKeys.First()
+            });
+
             this.DbContext.Add(aUser);
+            this.DbContext.Add(aUserWithoutBankAccount);
+            this.DbContext.Add(userDistributor);
+            this.DbContext.Add(userCustomer);
 
         }
 
