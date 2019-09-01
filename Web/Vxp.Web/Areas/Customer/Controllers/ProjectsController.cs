@@ -1,4 +1,10 @@
-﻿namespace Vxp.Web.Areas.Customer.Controllers
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Vxp.Data.Common.Enums;
+using Vxp.Web.Infrastructure.Extensions;
+
+namespace Vxp.Web.Areas.Customer.Controllers
 {
     using Vxp.Services.Data.Users;
     using Infrastructure.Attributes.ActionFilters;
@@ -48,8 +54,24 @@
                 return this.NotFound();
             }
 
-            inputModel.UploadInputModel.ProjectId = inputModel.Id;
+            foreach (var order in inputModel.Orders)
+            {
+                foreach (var product in order.Products)
+                {
+                    var priceModifierData = product.PriceModifierData.ToObject<Dictionary<string, string>>();
 
+                    Enum.TryParse(priceModifierData[nameof(product.PriceModifierType)], true,
+                        out PriceModifierType modifierType);
+
+                    decimal.TryParse(priceModifierData[nameof(product.ModifierValue)], out var modifierValue);
+
+                    product.ModifierValue = modifierValue;
+                    product.PriceModifierType = modifierType;
+                }
+            }
+
+            inputModel.UploadInputModel.ProjectId = inputModel.Id;
+            inputModel.Orders = inputModel.Orders.OrderByDescending(o => o.ModifiedOn).ToList();
             return this.View(inputModel);
         }
     }
