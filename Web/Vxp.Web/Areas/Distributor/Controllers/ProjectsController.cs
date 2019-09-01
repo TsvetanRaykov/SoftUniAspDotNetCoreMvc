@@ -1,15 +1,18 @@
-﻿using System.Linq;
-using Vxp.Common;
-using Vxp.Services.Data.Users;
-
-namespace Vxp.Web.Areas.Distributor.Controllers
+﻿namespace Vxp.Web.Areas.Distributor.Controllers
 {
+    using System;
+    using System.Linq;
+    using Vxp.Common;
+    using Vxp.Data.Common.Enums;
+    using Vxp.Services.Data.Users;
+    using Vxp.Web.Infrastructure.Extensions;
     using Infrastructure.Attributes.ActionFilters;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Vxp.Services.Data.Projects;
     using ViewModels.Projects;
+    using System.Collections.Generic;
 
     public class ProjectsController : DistributorsController
     {
@@ -51,8 +54,23 @@ namespace Vxp.Web.Areas.Distributor.Controllers
                 return this.NotFound();
             }
 
-            inputModel.UploadInputModel.ProjectId = inputModel.Id;
+            foreach (var order in inputModel.Orders)
+            {
+                foreach (var product in order.Products)
+                {
+                    var priceModifierData = product.PriceModifierData.ToObject<Dictionary<string, string>>();
 
+                    Enum.TryParse(priceModifierData[nameof(product.PriceModifierType)], true,
+                        out PriceModifierType modifierType);
+
+                    decimal.TryParse(priceModifierData[nameof(product.ModifierValue)], out var modifierValue);
+
+                    product.ModifierValue = modifierValue;
+                    product.PriceModifierType = modifierType;
+                }
+            }
+
+            inputModel.UploadInputModel.ProjectId = inputModel.Id;
             inputModel.Orders = inputModel.Orders.OrderByDescending(o => o.ModifiedOn).ToList();
 
             return this.View(inputModel);
